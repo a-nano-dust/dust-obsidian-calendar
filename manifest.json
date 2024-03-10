@@ -1,0 +1,11 @@
+{
+	"id": "dust-obsidian-diary",
+	"name": "Dust Obsidian Diary",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Manage periodic notes more elegantly",
+	"author": "Nano Dust",
+	"authorUrl": "",
+	"fundingUrl": "",
+	"isDesktopOnly": true
+}

@@ -1,0 +1,85 @@
+.month-view {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.month-view-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 3px
+}
+
+.month-view-item {
+    text-align: center;
+    min-width: 70px;
+}
+
+.month-view-item:hover {
+    background-color: var(--color-base-50);
+    /*border-color: var(--color-base-50);*/
+}
+
+.month-view-item-selected {
+    text-align: center;
+    min-width: 70px;
+    background-color: var(--color-blue);
+}
+
+.month-view-non-current-month-item {
+    opacity: 0.2;
+}
+
+.month-view-item-body {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.month-view-item-body-selected {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--color-base-100);
+}
+
+.month-view-day-item-body-today {
+    color: var(--color-blue);
+}
+
+.month-view-day-item-sup {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.month-view-day-item-sup-working-day {
+    color: var(--color-red);
+}
+
+.month-view-day-item-sup-rest-day {
+    color: var(--color-green);
+}
+
+.month-view-day-item-footer {
+    font-size: 14px;
+}
+
+.month-view-day-item-footer-selected {
+    color: var(--color-base-100);
+}
+
+.month-view-day-item-footer-important {
+    color: var(--color-blue);
+}
+
+.month-view-day-item-footer-non-current-month {
+    opacity: 0.2;
+}
+
+.month-view-dot {
+    height: 5px;
+    width: 5px;
+    background-color: var(--color-base-100);
+    border-radius: 50%;
+    display: inline-block;
+}

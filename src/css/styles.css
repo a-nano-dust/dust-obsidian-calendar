@@ -2,29 +2,35 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 4px;
 }
 
 .month-view-row {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    gap: 3px
+    gap: 1px;
 }
 
 .month-view-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
     text-align: center;
-    min-width: 70px;
+    min-width: 40px;
+    border-radius: 2px;
 }
 
 .month-view-item:hover {
     background-color: var(--color-base-50);
-    /*border-color: var(--color-base-50);*/
 }
 
 .month-view-item-selected {
-    text-align: center;
-    min-width: 70px;
+    background-color: var(--color-blue);
+}
+
+.month-view-item-selected:hover {
     background-color: var(--color-blue);
 }
 
@@ -33,13 +39,11 @@
 }
 
 .month-view-item-body {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
 }
 
 .month-view-item-body-selected {
-    font-size: 20px;
-    font-weight: bold;
     color: var(--color-base-100);
 }
 
@@ -48,7 +52,7 @@
 }
 
 .month-view-day-item-sup {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: normal;
 }
 
@@ -61,7 +65,7 @@
 }
 
 .month-view-day-item-footer {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .month-view-day-item-footer-selected {
@@ -81,5 +85,10 @@
     width: 5px;
     background-color: var(--color-base-100);
     border-radius: 50%;
-    display: inline-block;
+    /*align-self: center;*/
+    /*display: inline-block;*/
+}
+
+.month-view-no-dot {
+    font-size: 2px;
 }

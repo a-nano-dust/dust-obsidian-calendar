@@ -18,7 +18,7 @@ function DayItemBody({targetDay, dayListOfMonthView, isSelected} : {targetDay : 
 
     let style = "month-view-item-body";
     if (isSelected) {
-        style = "month-view-item-body-selected";
+        style = "month-view-item-body month-view-item-body-selected";
     }
     else if (targetDay.month !== dayListOfMonthView.month) {
         style = "month-view-item-body month-view-non-current-month-item";
@@ -81,7 +81,7 @@ export default function DayItem({targetDay, dayListOfMonthView} : {targetDay : D
     let style = "month-view-item";
     let isSelected : boolean = selectedItem.type === SelectedItemType.DAY_ITEM && selectedItem.date.equals(targetDay);
     if (isSelected) {
-        style = "month-view-item-selected";
+        style = "month-view-item month-view-item-selected";
     }
     let newSelectItem = new SelectedItem();
     newSelectItem.type = SelectedItemType.DAY_ITEM;
@@ -102,13 +102,12 @@ export default function DayItem({targetDay, dayListOfMonthView} : {targetDay : D
             <DayItemBody targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected} />
             <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected} />
             <div className="month-view-dot"></div>
-
         </div>
     }
 
     return <div className={style} onClick={onClickCallback} onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
         <DayItemBody targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected} />
-        <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected} />
-        <div>&nbsp;</div>
+        <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
+        <div className="month-view-no-dot">&nbsp;</div>
     </div>
 }

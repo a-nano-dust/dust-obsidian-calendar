@@ -1,9 +1,9 @@
 import MonthViewHeader from "./MonthViewHeader";
-import DayListOfMonthView from "../entity/DayListOfMonthView";
-import {range} from "../util/util";
+import DayListOfMonthView from "../../entity/DayListOfMonthView";
+import {range} from "../../util/util";
 import MonthViewRow from "./MonthViewRow";
 
-export default function MonthView({dayListOfMonthView}: { dayListOfMonthView: DayListOfMonthView}) {
+export default function MonthView({dayListOfMonthView}: { dayListOfMonthView: DayListOfMonthView }) {
 
     let totalWeeks: number = dayListOfMonthView.totalWeeks;
 

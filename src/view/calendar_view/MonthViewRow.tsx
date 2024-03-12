@@ -1,5 +1,5 @@
-import DayListOfMonthView from "../entity/DayListOfMonthView";
-import {WeekEnum} from "../base/enum";
+import DayListOfMonthView from "../../entity/DayListOfMonthView";
+import {WeekEnum} from "../../base/enum";
 import DayItem from "./DayItem";
 import WeekIndexItem from "./WeekIndexItem";
 

@@ -1,10 +1,10 @@
-import {useAppDispatch, useAppSelector} from "../redux/hooks";
-import {selectSelectedItem, updateSelectedItem} from "../redux/selectedItemSlice";
-import {SelectedItemType} from "../base/enum";
-import SelectedItem from "../entity/SelectedItem";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
+import {SelectedItemType} from "../../base/enum";
+import SelectedItem from "../../entity/SelectedItem";
 import {DateTime} from "luxon";
 
-export default function WeekIndexItem({targetDay}: {targetDay: DateTime}) {
+export default function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
     let dispatch = useAppDispatch();
     let selectedItem = useAppSelector(selectSelectedItem);
 

@@ -1,5 +1,5 @@
 import {App, Notice, Plugin, PluginManifest, WorkspaceLeaf} from 'obsidian';
-import {CalendarRootView, VIEW_TYPE_CALENDAR} from './view/CalendarRootView';
+import {CalendarView, VIEW_TYPE_CALENDAR} from './view/CalendarView';
 import MainSettingTable from "./setting/MainSettingTable";
 import MainController from "./core/MainController";
 
@@ -19,7 +19,7 @@ export default class DustDiaryPlugin extends Plugin {
         // 加载插件设置
         await this.mainController.loadSettings();
         // 注册日历视图
-        this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarRootView(leaf, this.mainController));
+        this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.mainController));
 
         // 在左侧工具栏添加一个图标
         const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {

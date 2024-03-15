@@ -1,41 +1,82 @@
 import {useState} from 'react';
 import {ChevronLeft, ChevronRight} from 'lucide-react';
-import {useAppSelector} from "../../redux/hooks";
-import {selectShowItem} from "../../redux/showItemSlice";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {selectShowItem, updateShowItem} from "../../redux/showItemSlice";
+import {DateTime} from "luxon";
 
-function YearItem({year}: { year: number }) {
+function YearItem({date}: { date: DateTime }) {
 
     const [hidden, setHidden] = useState(true);
+    const dispatch = useAppDispatch();
+
+    const toLastYear = () => {
+        const newDate = date.minus({years: 1});
+        dispatch(updateShowItem(newDate));
+    }
+
+    const toNextYear = () => {
+        const newDate = date.plus({years: 1});
+        dispatch(updateShowItem(newDate));
+    }
 
     return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
                 onMouseLeave={() => setHidden(true)}>
-        <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}/>
-        <div>{year}年</div>
-        <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}/>
+        <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                     onClick={toLastYear}/>
+        <div>{date.year}年</div>
+        <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                      onClick={toNextYear}/>
     </div>
 }
 
-function MonthItem({month}: { month: number }) {
+function MonthItem({date}: { date: DateTime }) {
 
     const [hidden, setHidden] = useState(true);
+    const dispatch = useAppDispatch();
+
+    const toLastMonth = () => {
+        const newDate = date.minus({months: 1});
+        dispatch(updateShowItem(newDate));
+    }
+
+    const toNextMonth = () => {
+        const newDate = date.plus({months: 1});
+        dispatch(updateShowItem(newDate));
+    }
 
     return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
                 onMouseLeave={() => setHidden(true)}>
-        <ChevronLeft className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}/>
-        <div>{month}月</div>
-        <ChevronRight className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}/>
+        <ChevronLeft className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                     onClick={toLastMonth}/>
+        <div>{date.month}月</div>
+        <ChevronRight className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                      onClick={toNextMonth}/>
+        {/*<ChevronRight className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={() => dispatch(updateShowItem(date.plus({months: 1})))}/>*/}
     </div>
 }
 
-function QuarterItem({quarter}: { quarter: number }) {
+function QuarterItem({date}: { date: DateTime }) {
 
     const [hidden, setHidden] = useState(true);
+    const dispatch = useAppDispatch();
+
+    const toLastQuarter = () => {
+        const newDate = date.minus({months: 3});
+        dispatch(updateShowItem(newDate));
+    }
+
+    const toNextQuarter = () => {
+        const newDate = date.plus({months: 3});
+        dispatch(updateShowItem(newDate));
+    }
 
     return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
                 onMouseLeave={() => setHidden(true)}>
-        <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}/>
-        <div>{quarter}季度</div>
-        <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}/>
+        <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                     onClick={toLastQuarter}/>
+        <div>{date.quarter}季度</div>
+        <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                      onClick={toNextQuarter}/>
     </div>
 }
 
@@ -54,9 +95,9 @@ export default function CalendarViewHeader() {
             display: "flex",
             flexGrow: 1,
         }}>
-            <YearItem year={showItem.year}/>
-            <MonthItem month={showItem.month}/>
-            <QuarterItem quarter={showItem.quarter}/>
+            <YearItem date={showItem}/>
+            <MonthItem date={showItem}/>
+            <QuarterItem date={showItem}/>
         </div>
         <div style={{
             display: "flex",

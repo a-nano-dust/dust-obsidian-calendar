@@ -7,7 +7,8 @@ export default function MonthView({dayListOfMonthView}: { dayListOfMonthView: Da
 
     let totalWeeks: number = dayListOfMonthView.totalWeeks;
 
-    return <div className="month-view">
+    return <div className="month-view"
+                style={{width: "100%", paddingTop: "15px", display: "flex", flexDirection: "column", gap: "4px"}}>
         <MonthViewHeader/>
         {
             range(0, totalWeeks).map((v, i, a) => {

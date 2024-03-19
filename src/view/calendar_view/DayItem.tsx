@@ -83,7 +83,7 @@ export default function DayItem({targetDay, dayListOfMonthView} : {targetDay : D
 
 
     let style = "month-view-item";
-    let isSelected : boolean = selectedItem.type === SelectedItemType.DAY_ITEM && selectedItem.date.equals(targetDay);
+    let isSelected: boolean = selectedItem.type === SelectedItemType.DAY_ITEM && selectedItem.date.year === targetDay.year && selectedItem.date.month === targetDay.month && selectedItem.date.day === targetDay.day;
     if (isSelected) {
         style = "month-view-item month-view-item-selected";
     }

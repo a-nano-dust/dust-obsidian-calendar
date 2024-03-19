@@ -103,6 +103,14 @@
     padding: 0 6px 0 6px;
 }
 
+.circular-label {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+}
+
 .d-hover-bold:hover {
     font-weight: bold;
 }
@@ -133,6 +141,10 @@
 
 .d-color-base-100 {
     color: var(--color-base-100);
+}
+
+.d-bg-color-blue {
+    background-color: var(--color-blue);
 }
 
 .d-hover-bg-color-blue:hover {

@@ -3,6 +3,9 @@ import {ChevronLeft, ChevronRight} from 'lucide-react';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {selectShowItem, updateShowItem} from "../../redux/showItemSlice";
 import {DateTime} from "luxon";
+import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
+import SelectedItem from "../../entity/SelectedItem";
+import {SelectedItemType} from "../../base/enum";
 
 function YearItem({date}: { date: DateTime }) {
 
@@ -80,6 +83,38 @@ function QuarterItem({date}: { date: DateTime }) {
     </div>
 }
 
+function TodayItem() {
+
+    const dispatch = useAppDispatch();
+    const {date} = useAppSelector(selectSelectedItem)
+
+
+    const today = DateTime.now();
+
+    const isSelected: boolean = date.year === today.year && date.month === today.month && date.day === today.day;
+
+    const clickCallback = () => {
+        dispatch(updateShowItem(today));
+        const selectedItem = new SelectedItem();
+        selectedItem.date = today;
+        selectedItem.type = SelectedItemType.DAY_ITEM;
+        dispatch(updateSelectedItem(selectedItem));
+    }
+
+    if (isSelected) {
+        // console.log("selected: ", selected, " true");
+        return <div className="d-bg-color-blue circular-label">今</div>
+    } else {
+        // console.log("selected: ", selected, " false");
+        return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickCallback}>今</div>
+    }
+}
+
+function ViewSelector() {
+
+    return <div className="d-hover-bg-color-base-50 circular-label">月</div>
+}
+
 
 export default function CalendarViewHeader() {
 
@@ -105,12 +140,8 @@ export default function CalendarViewHeader() {
             flexBasis: "60px",
             alignItems: "center"
         }}>
-            <div className="d-hover-bg-color-base-50"
-                 style={{width: "20px", height: "20px", lineHeight: "20px", textAlign: "center", borderRadius: "50%"}}>今
-            </div>
-            <div className="d-hover-bg-color-base-50"
-                 style={{width: "20px", height: "20px", lineHeight: "20px", textAlign: "center", borderRadius: "50%"}}>月
-            </div>
+            <TodayItem/>
+            <ViewSelector/>
         </div>
     </div>
 

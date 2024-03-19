@@ -6,7 +6,7 @@ export default class SelectedItem {
     date : DateTime;
 
     constructor() {
-        this.type = SelectedItemType.NONE;
+        this.type = SelectedItemType.DAY_ITEM;
         this.date = DateTime.now();
     }
 }

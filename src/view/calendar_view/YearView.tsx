@@ -2,7 +2,7 @@ import {useContext} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
 import {MainControllerContext} from "../../base/context";
-import {SelectedItemType} from "../../base/enum";
+import {NoteType, SelectedItemType} from "../../base/enum";
 import {DateTime} from "luxon";
 import SelectedItem from "../../entity/SelectedItem";
 
@@ -24,10 +24,15 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
         bodyStyle = "calendar-view-item d-bg-color-blue";
     }
 
-    // 有关联笔记的月份会使用一个点进行标注
-    let dotStyle = "calendar-view-dot";
 
-    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}>
+    // 有关联笔记的日期会使用一个点进行标注
+    let dotStyle = "calendar-view-no-dot";
+    if (mainController.hasNote(DateTime.local(showYear, showMonth), NoteType.MONTHLY)) {
+        dotStyle = "calendar-view-dot";
+    }
+
+    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+                onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
         <div>{showMonth}月</div>
         <div className={dotStyle}/>
     </div>
@@ -50,10 +55,14 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
         bodyStyle = "calendar-view-item d-bg-color-blue";
     }
 
-    // 有关联笔记的月份会使用一个点进行标注
-    let dotStyle = "calendar-view-dot";
+    // 有关联笔记的日期会使用一个点进行标注
+    let dotStyle = "calendar-view-no-dot";
+    if (mainController.hasNote(DateTime.local(showYear, showQuarter * 3 - 2), NoteType.QUARTERLY)) {
+        dotStyle = "calendar-view-dot";
+    }
 
-    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}>
+    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+                onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
         <div>{showQuarter}季度</div>
         <div className={dotStyle}/>
     </div>

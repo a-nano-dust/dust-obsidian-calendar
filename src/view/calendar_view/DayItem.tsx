@@ -6,7 +6,7 @@ import {MainControllerContext} from "../../base/context";
 import {DateTime} from "luxon";
 import {HolidayUtil} from "lunar-typescript";
 import DayListOfMonthView from "../../entity/DayListOfMonthView";
-import {DayItemFooterType, SelectedItemType} from "../../base/enum";
+import {DayItemFooterType, NoteType, SelectedItemType} from "../../base/enum";
 import SelectedItem from "../../entity/SelectedItem";
 import {DayItemFooterEntity} from "../../entity/DayItemFooterEntity";
 
@@ -107,7 +107,7 @@ export default function DayItem({
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.hasDailyNote(DateTime.local(targetDay.year, targetDay.month, targetDay.day))) {
+    if (mainController.hasNote(DateTime.local(targetDay.year, targetDay.month, targetDay.day), NoteType.DAILY)) {
         dotStyle = "calendar-view-dot";
     }
 

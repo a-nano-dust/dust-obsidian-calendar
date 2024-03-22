@@ -1,6 +1,6 @@
 import {MarkdownView, Notice, TFile} from "obsidian";
 import SelectedItem from "../entity/SelectedItem";
-import {SelectedItemType} from "../base/enum";
+import {NoteType, SelectedItemType} from "../base/enum";
 import Path from "../util/Path";
 import ConfirmCreatingNoteModal from "../view/modal/ConfirmCreatingNoteModal";
 import {DateTime} from "luxon";
@@ -26,13 +26,59 @@ export default class MainController {
         await this._plugin.saveData(this._setting);
     }
 
-    hasDailyNote(dateTime : DateTime) : boolean {
-        const {dailyNotePattern} = this._setting;
-        let dailyNotePath = dateTime.toFormat(dailyNotePattern).concat(".md");
-        return this.plugin.app.vault.getAbstractFileByPath(dailyNotePath) instanceof TFile;
+    hasNote(dateTime: DateTime, noteType: NoteType): boolean {
+        let noteOption = this._setting.dailyNoteOption;
+        let notePattern = this._setting.dailyNotePattern;
+        if (noteType === NoteType.WEEKLY) {
+            noteOption = this._setting.weeklyNoteOption;
+            notePattern = this._setting.weeklyNotePattern;
+        } else if (noteType === NoteType.MONTHLY) {
+            noteOption = this._setting.monthlyNoteOption;
+            notePattern = this._setting.monthlyNotePattern;
+        } else if (noteType === NoteType.QUARTERLY) {
+            noteOption = this._setting.quarterlyNoteOption;
+            notePattern = this._setting.quarterlyNotePattern;
+        } else if (noteType === NoteType.YEARLY) {
+            noteOption = this._setting.yearlyNoteOption;
+            notePattern = this._setting.yearlyNotePattern;
+        }
+
+        if (!noteOption || notePattern.length === 0) {
+            return false;
+        }
+
+        const notePath = dateTime.toFormat(notePattern).concat(".md");
+        return this.plugin.app.vault.getAbstractFileByPath(notePath) instanceof TFile;
     }
 
-    getDailyNote(dateTime : DateTime) : TFile | null {
+
+    // hasDailyNote(dateTime : DateTime) : boolean {
+    //     const {dailyNotePattern} = this._setting;
+    //     let dailyNotePath = dateTime.toFormat(dailyNotePattern).concat(".md");
+    //     return this.plugin.app.vault.getAbstractFileByPath(dailyNotePath) instanceof TFile;
+    // }
+    // hasWeeklyNote(dateTime : DateTime) : boolean {
+    //     const {dailyNotePattern} = this._setting;
+    //     let dailyNotePath = dateTime.toFormat(dailyNotePattern).concat(".md");
+    //     return this.plugin.app.vault.getAbstractFileByPath(dailyNotePath) instanceof TFile;
+    // }
+    // hasMonthlyNote(dateTime : DateTime) : boolean {
+    //     const {dailyNotePattern} = this._setting;
+    //     let dailyNotePath = dateTime.toFormat(dailyNotePattern).concat(".md");
+    //     return this.plugin.app.vault.getAbstractFileByPath(dailyNotePath) instanceof TFile;
+    // }
+    // hasQuarterlyNote(dateTime : DateTime) : boolean {
+    //     const {dailyNotePattern} = this._setting;
+    //     let dailyNotePath = dateTime.toFormat(dailyNotePattern).concat(".md");
+    //     return this.plugin.app.vault.getAbstractFileByPath(dailyNotePath) instanceof TFile;
+    // }
+    // hasYearlyNote(dateTime : DateTime) : boolean {
+    //     const {dailyNotePattern} = this._setting;
+    //     let dailyNotePath = dateTime.toFormat(dailyNotePattern).concat(".md");
+    //     return this.plugin.app.vault.getAbstractFileByPath(dailyNotePath) instanceof TFile;
+    // }
+
+    getDailyNote(dateTime: DateTime): TFile | null {
         const {dailyNotePattern} = this._setting;
         let dailyNotePath = dateTime.toFormat(dailyNotePattern);
         let abstractFile = this.plugin.app.vault.getAbstractFileByPath(dailyNotePath);
@@ -49,11 +95,43 @@ export default class MainController {
         const {app} = this._plugin;
         const {dailyNotePattern} = this._setting;
 
-        if (selectedItem.type === SelectedItemType.DAY_ITEM) {
-            let path = selectedItem.date.toFormat(dailyNotePattern).concat(".md");
-            // let filename: string = "".concat(selectedItem.date.year.toString(), "-", selectedItem.date.month.toString(), "-", selectedItem.date.dayInMonth.toString(), ".md");
-            this.openFile(new Path(app, path));
+        console.log("daily");
+        let noteOption = this._setting.dailyNoteOption;
+        let notePattern = this._setting.dailyNotePattern;
+        if (selectedItem.type === SelectedItemType.WEEK_INDEX_ITEM) {
+            console.log("weekly");
+            noteOption = this._setting.weeklyNoteOption;
+            notePattern = this._setting.weeklyNotePattern;
+        } else if (selectedItem.type === SelectedItemType.MONTH_ITEM) {
+            console.log("monthly");
+            noteOption = this._setting.monthlyNoteOption;
+            notePattern = this._setting.monthlyNotePattern;
+        } else if (selectedItem.type === SelectedItemType.QUARTER_ITEM) {
+            console.log("quarterly");
+            noteOption = this._setting.quarterlyNoteOption;
+            notePattern = this._setting.quarterlyNotePattern;
+        } else if (selectedItem.type === SelectedItemType.YEAR_ITEM) {
+            console.log("yearly");
+            noteOption = this._setting.yearlyNoteOption;
+            notePattern = this._setting.yearlyNotePattern;
         }
+
+        console.log(noteOption)
+        console.log(notePattern)
+        if (!noteOption || notePattern.length === 0) {
+            return;
+        }
+
+        let notePath = selectedItem.date.toFormat(notePattern).concat(".md");
+        console.log(notePath);
+        this.openFile(new Path(app, notePath));
+
+        //
+        // if (selectedItem.type === SelectedItemType.DAY_ITEM) {
+        //     let path = selectedItem.date.toFormat(dailyNotePattern).concat(".md");
+        //     // let filename: string = "".concat(selectedItem.date.year.toString(), "-", selectedItem.date.month.toString(), "-", selectedItem.date.dayInMonth.toString(), ".md");
+        //     this.openFile(new Path(app, path));
+        // }
     }
 
     public openFile(filename: Path): void {
@@ -100,12 +178,16 @@ export default class MainController {
         app.workspace.revealLeaf(targetView.leaf);
     }
 
-    get plugin() : DustDiaryPlugin {
+    get plugin(): DustDiaryPlugin {
         return this._plugin;
     }
 
     get setting(): PluginSetting {
         return this._setting;
+    }
+
+    set setting(pluginSetting: PluginSetting) {
+        this._setting = pluginSetting;
     }
 
 }

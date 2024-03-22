@@ -1,25 +1,41 @@
-import {App, PluginSettingTab, Setting} from "obsidian";
+import {PluginSettingTab, Setting} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
 import DailyNotePattern from "./DailyNotePattern";
 import MainController from "../core/MainController";
+import WeeklyNotePattern from "./WeeklyNotePattern";
+import QuarterlyNotePattern from "./QuarterlyNotePattern";
+import MonthlyNotePattern from "./MonthlyNotePattern";
+import YearlyNotePattern from "./YearlyNotePattern";
 
 
 export default class MainSettingTable extends PluginSettingTab {
 
-    mainController : MainController;
-    dairyPatternRoot: Root | null;
+    mainController: MainController;
+    dailyNotePatternRoot: Root | null;
+    weeklyNotePatternRoot: Root | null;
+    monthlyNotePatternRoot: Root | null;
+    quarterlyNotePatternRoot: Root | null;
+    yearlyNotePatternRoot: Root | null;
 
-    constructor(mainController : MainController) {
+    constructor(mainController: MainController) {
         super(mainController.plugin.app, mainController.plugin);
         this.mainController = mainController;
-        this.dairyPatternRoot = null;
+        this.dailyNotePatternRoot = null;
+        this.weeklyNotePatternRoot = null;
+        this.monthlyNotePatternRoot = null;
+        this.quarterlyNotePatternRoot = null;
+        this.yearlyNotePatternRoot = null;
     }
 
     display(): any {
         const {containerEl} = this;
         containerEl.empty();
         new Setting(containerEl).nameEl.createEl("h1", {text: "日历配置"});
-        this.dairySetting();
+        this.dailyNoteSetting();
+        this.weeklyNoteSetting();
+        this.monthlyNoteSetting();
+        this.quarterlyNoteSetting();
+        this.yearlyNoteSetting();
     }
 
     hide(): any {
@@ -27,20 +43,108 @@ export default class MainSettingTable extends PluginSettingTab {
         return super.hide();
     }
 
-    private dairySetting(): void {
+    private dailyNoteSetting(): void {
 
         const {containerEl} = this;
 
         let dairyOption = new Setting(containerEl);
-        dairyOption.nameEl.createEl("h2", {text: "日记"});
+        dairyOption.nameEl.createEl("h2", {text: "每日笔记"});
         dairyOption.addToggle(toggle => {
+            toggle.setValue(this.mainController.setting.dailyNoteOption);
+            toggle.onChange(async (value) => {
+                this.mainController.setting.dailyNoteOption = value;
+            });
         });
 
         let dairyPattern = new Setting(containerEl);
         dairyPattern.settingEl.empty();
-        this.dairyPatternRoot = createRoot(dairyPattern.settingEl);
-        this.dairyPatternRoot.render(
+        this.dailyNotePatternRoot = createRoot(dairyPattern.settingEl);
+        this.dailyNotePatternRoot.render(
             <DailyNotePattern mainController={this.mainController}/>
+        );
+    }
+
+    private weeklyNoteSetting(): void {
+
+        const {containerEl} = this;
+
+        let dairyOption = new Setting(containerEl);
+        dairyOption.nameEl.createEl("h2", {text: "每周笔记"});
+        dairyOption.addToggle(toggle => {
+            toggle.setValue(this.mainController.setting.weeklyNoteOption);
+            toggle.onChange(async (value) => {
+                this.mainController.setting.weeklyNoteOption = value;
+            });
+        });
+
+        let dairyPattern = new Setting(containerEl);
+        dairyPattern.settingEl.empty();
+        this.weeklyNotePatternRoot = createRoot(dairyPattern.settingEl);
+        this.weeklyNotePatternRoot.render(
+            <WeeklyNotePattern mainController={this.mainController}/>
+        );
+    }
+
+    private monthlyNoteSetting(): void {
+
+        const {containerEl} = this;
+
+        let dairyOption = new Setting(containerEl);
+        dairyOption.nameEl.createEl("h2", {text: "每月笔记"});
+        dairyOption.addToggle(toggle => {
+            toggle.setValue(this.mainController.setting.monthlyNoteOption);
+            toggle.onChange(async (value) => {
+                this.mainController.setting.monthlyNoteOption = value;
+            });
+        });
+
+        let dairyPattern = new Setting(containerEl);
+        dairyPattern.settingEl.empty();
+        this.weeklyNotePatternRoot = createRoot(dairyPattern.settingEl);
+        this.weeklyNotePatternRoot.render(
+            <MonthlyNotePattern mainController={this.mainController}/>
+        );
+    }
+
+    private quarterlyNoteSetting(): void {
+
+        const {containerEl} = this;
+
+        let dairyOption = new Setting(containerEl);
+        dairyOption.nameEl.createEl("h2", {text: "季度笔记"});
+        dairyOption.addToggle(toggle => {
+            toggle.setValue(this.mainController.setting.quarterlyNoteOption);
+            toggle.onChange(async (value) => {
+                this.mainController.setting.quarterlyNoteOption = value;
+            });
+        });
+
+        let dairyPattern = new Setting(containerEl);
+        dairyPattern.settingEl.empty();
+        this.quarterlyNotePatternRoot = createRoot(dairyPattern.settingEl);
+        this.quarterlyNotePatternRoot.render(
+            <QuarterlyNotePattern mainController={this.mainController}/>
+        );
+    }
+
+    private yearlyNoteSetting(): void {
+
+        const {containerEl} = this;
+
+        let dairyOption = new Setting(containerEl);
+        dairyOption.nameEl.createEl("h2", {text: "年度笔记"});
+        dairyOption.addToggle(toggle => {
+            toggle.setValue(this.mainController.setting.yearlyNoteOption);
+            toggle.onChange(async (value) => {
+                this.mainController.setting.yearlyNoteOption = value;
+            });
+        });
+
+        let dairyPattern = new Setting(containerEl);
+        dairyPattern.settingEl.empty();
+        this.yearlyNotePatternRoot = createRoot(dairyPattern.settingEl);
+        this.yearlyNotePatternRoot.render(
+            <YearlyNotePattern mainController={this.mainController}/>
         );
     }
 }

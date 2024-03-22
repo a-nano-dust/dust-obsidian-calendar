@@ -17,7 +17,7 @@ export default function MonthViewRow({
     let sunday = dayListOfMonthView.getDayByWeek(weekIndex, WeekEnum.SUNDAY);
 
 
-    return <div className='month-view-row'>
+    return <div className='calendar-view-row'>
         <WeekIndexItem targetDay={monday}/>
         <DayItem targetDay={monday} dayListOfMonthView={dayListOfMonthView}/>
         <DayItem targetDay={tuesday} dayListOfMonthView={dayListOfMonthView}/>

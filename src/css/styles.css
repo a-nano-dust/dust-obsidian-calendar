@@ -74,7 +74,33 @@
     opacity: 0.2;
 }
 
-.month-view-dot {
+
+.calendar-view-body {
+    width: 100%;
+    padding-top: 15px;;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.calendar-view-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1px;
+}
+
+.calendar-view-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-align: center;
+    min-width: 40px;
+    border-radius: 2px;
+}
+
+.calendar-view-dot {
     height: 5px;
     width: 5px;
     background-color: var(--color-base-100);
@@ -82,7 +108,7 @@
     border-radius: 50%;
 }
 
-.month-view-no-dot {
+.calendar-view-no-dot {
     height: 5px;
     width: 5px;
     margin-bottom: 2px;

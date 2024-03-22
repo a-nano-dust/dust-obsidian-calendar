@@ -1,5 +1,15 @@
+export enum NoteType {
+    DAILY = 1,                  // 日更笔记
+    WEEKLY = 2,                 // 周更笔记
+    MONTHLY = 3,                // 月更笔记
+    QUARTERLY = 4,              // 季更笔记
+    YEARLY = 5                  // 年更笔记
+}
 
-
+export enum CalendarViewType {
+    MONTH = 1,
+    YEAR = 2
+}
 
 export enum WeekEnum {
     MONDAY = 1,
@@ -20,13 +30,6 @@ export enum SelectedItemType {
     YEAR_ITEM = 5
 }
 
-export enum NoteType {
-    DAILY = 1,                  // 日更笔记
-    WEEKLY = 2,                 // 周更笔记
-    MONTHLY = 3,                // 月更笔记
-    QUARTERLY = 4,              // 季更笔记
-    YEARLY = 5                  // 年更笔记
-}
 
 export enum DayItemFooterType {
     MONTH = 1,

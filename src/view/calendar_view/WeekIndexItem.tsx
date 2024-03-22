@@ -8,10 +8,10 @@ export default function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
     let dispatch = useAppDispatch();
     let selectedItem = useAppSelector(selectSelectedItem);
 
-    let itemStyle = "month-view-item";
+    let itemStyle = "calendar-view-item d-hover-bg-color-base-50";
     let itemBodyStyle = "month-view-item-body";
     if (selectedItem.type === SelectedItemType.WEEK_INDEX_ITEM && selectedItem.date.weekNumber === targetDay.weekNumber) {
-        itemStyle = "month-view-item month-view-item-selected";
+        itemStyle = "calendar-view-item d-bg-color-blue";
         itemBodyStyle = "month-view-item-body month-view-item-body-selected";
     }
     let newSelectItem = new SelectedItem();
@@ -20,6 +20,6 @@ export default function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
 
     return <div className={itemStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}>
         <div className={itemBodyStyle}>{targetDay.weekNumber}</div>
-        <div className="month-view-no-dot">&nbsp;</div>
+        <div className="calendar-view-no-dot">&nbsp;</div>
     </div>
 }

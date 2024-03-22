@@ -1,83 +1,100 @@
 import {useState} from 'react';
-import {ChevronLeft, ChevronRight} from 'lucide-react';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {selectShowItem, updateShowItem} from "../../redux/showItemSlice";
-import {DateTime} from "luxon";
 import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
+import {selectCalendarViewType, updateCalendarViewType} from "../../redux/calendarViewType";
+import {DateTime} from "luxon";
+import {ChevronLeft, ChevronRight} from 'lucide-react';
 import SelectedItem from "../../entity/SelectedItem";
-import {SelectedItemType} from "../../base/enum";
+import {CalendarViewType, SelectedItemType} from "../../base/enum";
 
-function YearItem({date}: { date: DateTime }) {
+function YearItem() {
 
     const [hidden, setHidden] = useState(true);
     const dispatch = useAppDispatch();
+    const selectedItem = useAppSelector(selectSelectedItem);
+    const selectedDate = selectedItem.date;
 
     const toLastYear = () => {
-        const newDate = date.minus({years: 1});
-        dispatch(updateShowItem(newDate));
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.minus({years: 1});
+        dispatch(updateSelectedItem(newSelectedItem));
     }
 
     const toNextYear = () => {
-        const newDate = date.plus({years: 1});
-        dispatch(updateShowItem(newDate));
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.plus({years: 1});
+        dispatch(updateSelectedItem(newSelectedItem));
     }
 
     return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
                 onMouseLeave={() => setHidden(true)}>
         <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                      onClick={toLastYear}/>
-        <div>{date.year}年</div>
+        <div>{selectedDate.year}年</div>
         <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                       onClick={toNextYear}/>
     </div>
 }
 
-function MonthItem({date}: { date: DateTime }) {
+function MonthItem() {
 
     const [hidden, setHidden] = useState(true);
     const dispatch = useAppDispatch();
+    const selectedItem = useAppSelector(selectSelectedItem);
+    const selectedDate = selectedItem.date;
 
     const toLastMonth = () => {
-        const newDate = date.minus({months: 1});
-        dispatch(updateShowItem(newDate));
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.minus({months: 1});
+        dispatch(updateSelectedItem(newSelectedItem));
     }
 
     const toNextMonth = () => {
-        const newDate = date.plus({months: 1});
-        dispatch(updateShowItem(newDate));
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.plus({months: 1});
+        dispatch(updateSelectedItem(newSelectedItem));
     }
 
     return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
                 onMouseLeave={() => setHidden(true)}>
         <ChevronLeft className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}
                      onClick={toLastMonth}/>
-        <div>{date.month}月</div>
+        <div>{selectedDate.month}月</div>
         <ChevronRight className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}
                       onClick={toNextMonth}/>
-        {/*<ChevronRight className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={() => dispatch(updateShowItem(date.plus({months: 1})))}/>*/}
     </div>
 }
 
-function QuarterItem({date}: { date: DateTime }) {
+function QuarterItem() {
 
     const [hidden, setHidden] = useState(true);
     const dispatch = useAppDispatch();
+    const selectedItem = useAppSelector(selectSelectedItem);
+    const selectedDate = selectedItem.date;
 
     const toLastQuarter = () => {
-        const newDate = date.minus({months: 3});
-        dispatch(updateShowItem(newDate));
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.minus({months: 3});
+        dispatch(updateSelectedItem(newSelectedItem));
     }
 
     const toNextQuarter = () => {
-        const newDate = date.plus({months: 3});
-        dispatch(updateShowItem(newDate));
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.plus({months: 3});
+        dispatch(updateSelectedItem(newSelectedItem));
     }
 
     return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
                 onMouseLeave={() => setHidden(true)}>
         <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                      onClick={toLastQuarter}/>
-        <div>{date.quarter}季度</div>
+        <div>{selectedDate.quarter}季度</div>
         <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                       onClick={toNextQuarter}/>
     </div>
@@ -86,40 +103,74 @@ function QuarterItem({date}: { date: DateTime }) {
 function TodayItem() {
 
     const dispatch = useAppDispatch();
-    const {date} = useAppSelector(selectSelectedItem)
-
+    const selectedItem = useAppSelector(selectSelectedItem);
+    const selectedType = selectedItem.type;
+    const selectedDate = selectedItem.date;
 
     const today = DateTime.now();
 
-    const isSelected: boolean = date.year === today.year && date.month === today.month && date.day === today.day;
+    let isSelected: boolean = false;
+    if (selectedType === SelectedItemType.DAY_ITEM) {
+        isSelected = selectedDate.year === today.year && selectedDate.month === today.month && selectedDate.day === today.day;
+    } else if (selectedType === SelectedItemType.WEEK_INDEX_ITEM) {
+        isSelected = selectedDate.year === today.year && selectedDate.weekNumber === today.weekNumber;
+    } else if (selectedType === SelectedItemType.MONTH_ITEM) {
+        isSelected = selectedDate.year === today.year && selectedDate.month === today.month;
+    } else if (selectedType === SelectedItemType.QUARTER_ITEM) {
+        isSelected = selectedDate.year === today.year && selectedDate.quarter === today.quarter;
+    } else if (selectedType === SelectedItemType.YEAR_ITEM) {
+        isSelected = selectedDate.year === today.year;
+    }
+
+    // const isSelected: boolean = selectedDate.year === today.year && selectedDate.month === today.month && selectedDate.day === today.day;
 
     const clickCallback = () => {
-        dispatch(updateShowItem(today));
-        const selectedItem = new SelectedItem();
-        selectedItem.date = today;
-        selectedItem.type = SelectedItemType.DAY_ITEM;
-        dispatch(updateSelectedItem(selectedItem));
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = today;
+        dispatch(updateSelectedItem(newSelectedItem));
     }
 
     if (isSelected) {
-        // console.log("selected: ", selected, " true");
         return <div className="d-bg-color-blue circular-label">今</div>
     } else {
-        // console.log("selected: ", selected, " false");
         return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickCallback}>今</div>
     }
 }
 
 function ViewSelector() {
 
-    return <div className="d-hover-bg-color-base-50 circular-label">月</div>
+    const dispatch = useAppDispatch();
+    const calendarViewType = useAppSelector(selectCalendarViewType);
+    const selectedItem = useAppSelector(selectSelectedItem);
+
+    const clickMonthCallback = () => {
+        dispatch(updateCalendarViewType(CalendarViewType.YEAR));
+
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = SelectedItemType.MONTH_ITEM
+        newSelectedItem.date = selectedItem.date;
+        dispatch(updateSelectedItem(newSelectedItem));
+    }
+
+    const clickYearCallback = () => {
+        dispatch(updateCalendarViewType(CalendarViewType.MONTH));
+
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = SelectedItemType.DAY_ITEM
+        newSelectedItem.date = selectedItem.date;
+        dispatch(updateSelectedItem(newSelectedItem));
+    }
+
+    if (calendarViewType === CalendarViewType.MONTH) {
+        return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickMonthCallback}>月</div>
+    } else {
+        return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickYearCallback}>年</div>
+    }
+
 }
 
-
 export default function CalendarViewHeader() {
-
-    let showItem = useAppSelector(selectShowItem);
-
     return <div style={{
         height: "40px",
         display: "flex",
@@ -130,9 +181,9 @@ export default function CalendarViewHeader() {
             display: "flex",
             flexGrow: 1,
         }}>
-            <YearItem date={showItem}/>
-            <MonthItem date={showItem}/>
-            <QuarterItem date={showItem}/>
+            <YearItem/>
+            <MonthItem/>
+            <QuarterItem/>
         </div>
         <div style={{
             display: "flex",
@@ -144,5 +195,4 @@ export default function CalendarViewHeader() {
             <ViewSelector/>
         </div>
     </div>
-
 }

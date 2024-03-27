@@ -44,6 +44,21 @@ export class CalendarView extends ItemView {
         );
     }
 
+    public flush() {
+        if (this.root === null) {
+            return;
+        }
+        this.root.render(
+            <StrictMode>
+                <MainControllerContext.Provider value={this.mainController}>
+                    <Provider store={store}>
+                        <CalendarViewImpl/>
+                    </Provider>
+                </MainControllerContext.Provider>
+            </StrictMode>,
+        );
+    }
+
     // 关闭时的资源释放操作
     async onClose() {
         this.root?.unmount();

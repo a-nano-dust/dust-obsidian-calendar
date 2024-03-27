@@ -1,10 +1,4 @@
 
-.month-view-row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 1px;
-}
 
 .month-view-item {
     display: flex;
@@ -18,14 +12,6 @@
 
 .month-view-item:hover {
     background-color: var(--color-base-50);
-}
-
-.month-view-item-selected {
-    background-color: var(--color-blue);
-}
-
-.month-view-item-selected:hover {
-    background-color: var(--color-blue);
 }
 
 .month-view-non-current-month-item {

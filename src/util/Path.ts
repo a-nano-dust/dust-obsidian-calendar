@@ -1,33 +1,18 @@
-import {App, TAbstractFile} from "obsidian";
-
-
 export default class Path {
 
-    private _app: App;
     private _path: string;
     private _parent: string | null;
     private _filename: string | null;
     private _extension: string | null;
-    private _exists: boolean | null;
-    private _abstractFile : TAbstractFile | null;
 
-    constructor(app: App, path: string) {
-        this._app = app;
+    constructor(path: string) {
         this._path = path;
 
         this._parent = null;
         this._filename = null;
         this._extension = null;
 
-        this._exists = null;
-
-        this._abstractFile = null;
-
         this.normalize();
-    }
-
-    get app(): App {
-        return this._app;
     }
 
     get string(): string {
@@ -36,12 +21,12 @@ export default class Path {
 
     get parent(): Path {
         this.parseFilename();
-        return new Path(this._app, this._parent!);
+        return new Path(this._parent!);
     }
 
     get filename(): Path {
         this.parseFilename();
-        return new Path(this._app, this._filename!);
+        return new Path(this._filename!);
     }
 
     get pureFilename(): Path {
@@ -49,17 +34,17 @@ export default class Path {
         this.parseExtension();
         let pattern: RegExp = new RegExp("".concat(this._extension!, "$"));
         let newPath = this._filename!.replace(pattern, "");
-        return new Path(this._app, newPath);
+        return new Path(newPath);
     }
 
     get extension(): Path {
         this.parseExtension();
-        return new Path(this._app, this._extension!);
+        return new Path(this._extension!);
     }
 
     get isFolder(): boolean {
         this.parseExtension();
-        return this.extension.string.length == 0;
+        return this.extension.string.length === 0;
     }
 
     get isFile(): boolean {
@@ -68,27 +53,9 @@ export default class Path {
 
     public append(path: Path): Path {
         if (path.string.startsWith("/")) {
-            return new Path(this._app, this.string.concat(path.string));
+            return new Path(this.string.concat(path.string));
         }
-        return new Path(this._app, this.string.concat("/", path.string));
-    }
-
-    public exists(): boolean {
-        this.parseAbstractFile();
-        return this._exists!;
-    }
-
-    public createIfNotExist(): Promise<TAbstractFile> {
-        this.parseAbstractFile();
-        if (this._exists) {
-            return new Promise<TAbstractFile>(resolve => resolve(this._abstractFile!));
-        }
-        if (this.isFolder) {
-            return this._app.vault.createFolder(this._path);
-        }
-        else {
-            return this._app.vault.create(this._path, "");
-        }
+        return new Path(this.string.concat("/", path.string));
     }
 
     private normalize(): void {
@@ -123,15 +90,8 @@ export default class Path {
         let index = this._path.lastIndexOf(".");
         if (index === -1) {
             this._extension = "";
-        }
-        this._extension = this._path.substring(index);
-    }
-
-    private parseAbstractFile(): void {
-        if (this._exists !== null) {
             return;
         }
-        this._abstractFile = this._app.vault.getAbstractFileByPath(this._path);
-        this._exists = this._abstractFile !== null;
+        this._extension = this._path.substring(index);
     }
 }

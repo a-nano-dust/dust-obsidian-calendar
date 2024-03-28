@@ -1,7 +1,5 @@
 import {configureStore} from "@reduxjs/toolkit";
 import selectedItemSlice from "./selectedItemSlice";
-import showItemSlice from "./showItemSlice";
-import todaySlice from "./todaySlice";
 import calendarViewTypeSlice from "./calendarViewType";
 
 export const store = configureStore({
@@ -14,9 +12,7 @@ export const store = configureStore({
         });
     },
     reducer: {
-        showItem: showItemSlice.reducer,
         selectedItem: selectedItemSlice.reducer,
-        today: todaySlice.reducer,
         calendarViewType: calendarViewTypeSlice.reducer
     }
 });

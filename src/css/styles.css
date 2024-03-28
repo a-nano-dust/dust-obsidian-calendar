@@ -1,65 +1,4 @@
 
-
-.month-view-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    text-align: center;
-    min-width: 40px;
-    border-radius: 2px;
-}
-
-.month-view-item:hover {
-    background-color: var(--color-base-50);
-}
-
-.month-view-non-current-month-item {
-    opacity: 0.2;
-}
-
-.month-view-item-body {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.month-view-item-body-selected {
-    color: var(--color-base-100);
-}
-
-.month-view-day-item-body-today {
-    color: var(--color-blue);
-}
-
-.month-view-day-item-sup {
-    font-size: 10px;
-    font-weight: normal;
-}
-
-.month-view-day-item-sup-working-day {
-    color: var(--color-red);
-}
-
-.month-view-day-item-sup-rest-day {
-    color: var(--color-green);
-}
-
-.month-view-day-item-footer {
-    font-size: 12px;
-}
-
-.month-view-day-item-footer-selected {
-    color: var(--color-base-100);
-}
-
-.month-view-day-item-footer-important {
-    color: var(--color-blue);
-}
-
-.month-view-day-item-footer-non-current-month {
-    opacity: 0.2;
-}
-
 .calendar-header-item {
     display: flex;
     flex-direction: column;
@@ -93,6 +32,11 @@
     text-align: center;
     min-width: 40px;
     border-radius: 2px;
+}
+
+.calendar-view-item-body {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .calendar-view-dot {
@@ -134,6 +78,10 @@
 
 .d-hover-bold:hover {
     font-weight: bold;
+}
+
+.d-opacity-20 {
+    opacity: 0.2;
 }
 
 .d-color-blue {

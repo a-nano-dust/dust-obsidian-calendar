@@ -1,13 +1,13 @@
 import {MarkdownView, Notice, TFile, WorkspaceLeaf} from "obsidian";
 import {DateTime} from "luxon";
-import SelectedItem from "../entity/SelectedItem";
-import {NoteType, SelectedItemType} from "../base/enum";
-import Path from "../util/Path";
-import ConfirmCreatingNoteModal from "../view/modal/ConfirmCreatingNoteModal";
 import DustDiaryPlugin from "../main";
+import SelectedItem from "../entity/SelectedItem";
 import PluginSetting from "../entity/PluginSetting";
-import PathUtil from "../util/PathUtil";
 import {CalendarView, VIEW_TYPE_CALENDAR} from "../view/CalendarView";
+import ConfirmCreatingNoteModal from "../view/modal/ConfirmCreatingNoteModal";
+import Path from "../util/Path";
+import PathUtil from "../util/PathUtil";
+import {NoteType, SelectedItemType} from "../base/enum";
 
 
 export default class MainController {

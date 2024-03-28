@@ -28,54 +28,17 @@ export default class MainController {
         await this._plugin.saveData(this._setting);
     }
 
-    public hasNote(dateTime: DateTime, noteType: NoteType): boolean {
-        // let noteOption = this._setting.dailyNoteOption;
-        // let notePattern = this._setting.dailyNotePattern;
-        // if (noteType === NoteType.WEEKLY) {
-        //     noteOption = this._setting.weeklyNoteOption;
-        //     notePattern = this._setting.weeklyNotePattern;
-        // } else if (noteType === NoteType.MONTHLY) {
-        //     noteOption = this._setting.monthlyNoteOption;
-        //     notePattern = this._setting.monthlyNotePattern;
-        // } else if (noteType === NoteType.QUARTERLY) {
-        //     noteOption = this._setting.quarterlyNoteOption;
-        //     notePattern = this._setting.quarterlyNotePattern;
-        // } else if (noteType === NoteType.YEARLY) {
-        //     noteOption = this._setting.yearlyNoteOption;
-        //     notePattern = this._setting.yearlyNotePattern;
-        // }
-        //
-        // if (!noteOption || notePattern.length === 0) {
-        //     return false;
-        // }
-        //
-        // const notePath = dateTime.toFormat(notePattern).concat(".md");
-        // return this.plugin.app.vault.getAbstractFileByPath(notePath) instanceof TFile;
-        return this.getNoteFilename(dateTime, noteType) !== null;
+    public hasNote(date: DateTime, noteType: NoteType): boolean {
+        return this.getNoteFilename(date, noteType) !== null;
     }
 
-    public getNoteFilename(dateTime: DateTime, noteType: NoteType): string | null {
-        let noteOption = this._setting.dailyNoteOption;
-        let notePattern = this._setting.dailyNotePattern;
-        if (noteType === NoteType.WEEKLY) {
-            noteOption = this._setting.weeklyNoteOption;
-            notePattern = this._setting.weeklyNotePattern;
-        } else if (noteType === NoteType.MONTHLY) {
-            noteOption = this._setting.monthlyNoteOption;
-            notePattern = this._setting.monthlyNotePattern;
-        } else if (noteType === NoteType.QUARTERLY) {
-            noteOption = this._setting.quarterlyNoteOption;
-            notePattern = this._setting.quarterlyNotePattern;
-        } else if (noteType === NoteType.YEARLY) {
-            noteOption = this._setting.yearlyNoteOption;
-            notePattern = this._setting.yearlyNotePattern;
-        }
-
-        if (!noteOption || notePattern.length === 0) {
+    public getNoteFilename(date: DateTime, noteType: NoteType): string | null {
+        const notePattern: string | null = this.getNotePattern(noteType);
+        if (notePattern === null) {
             return null;
         }
 
-        const notePath = dateTime.toFormat(notePattern).concat(".md");
+        const notePath = date.toFormat(notePattern).concat(".md");
         const abstractFile = this.plugin.app.vault.getAbstractFileByPath(notePath);
         if (!(abstractFile instanceof TFile)) {
             return null;
@@ -83,9 +46,9 @@ export default class MainController {
         return abstractFile.path;
     }
 
-    public getDailyNote(dateTime: DateTime): TFile | null {
+    public getDailyNote(date: DateTime): TFile | null {
         const {dailyNotePattern} = this._setting;
-        let dailyNotePath = dateTime.toFormat(dailyNotePattern);
+        let dailyNotePath = date.toFormat(dailyNotePattern);
         let abstractFile = this.plugin.app.vault.getAbstractFileByPath(dailyNotePath);
 
         if (abstractFile instanceof TFile) {
@@ -95,31 +58,32 @@ export default class MainController {
         return null;
     }
 
-    public openFileBySelectedItem(selectedItem: SelectedItem): Promise<string> {
+    public openFileBySelectedItem(selectedItem: SelectedItem): void {
+        if (selectedItem.type === SelectedItemType.DAY_ITEM) {
+            this.openFileByNoteType(selectedItem.date, NoteType.DAILY);
+        }
+        else if (selectedItem.type === SelectedItemType.WEEK_INDEX_ITEM) {
+            this.openFileByNoteType(selectedItem.date, NoteType.WEEKLY)
+        }
+        else if (selectedItem.type === SelectedItemType.MONTH_ITEM) {
+            this.openFileByNoteType(selectedItem.date, NoteType.MONTHLY)
+        }
+        else if (selectedItem.type === SelectedItemType.QUARTER_ITEM) {
+            this.openFileByNoteType(selectedItem.date, NoteType.QUARTERLY)
+        }
+        else if (selectedItem.type === SelectedItemType.YEAR_ITEM) {
+            this.openFileByNoteType(selectedItem.date, NoteType.YEARLY)
+        }
+    }
 
-        let noteOption = this._setting.dailyNoteOption;
-        let notePattern = this._setting.dailyNotePattern;
-        if (selectedItem.type === SelectedItemType.WEEK_INDEX_ITEM) {
-            noteOption = this._setting.weeklyNoteOption;
-            notePattern = this._setting.weeklyNotePattern;
-        } else if (selectedItem.type === SelectedItemType.MONTH_ITEM) {
-            noteOption = this._setting.monthlyNoteOption;
-            notePattern = this._setting.monthlyNotePattern;
-        } else if (selectedItem.type === SelectedItemType.QUARTER_ITEM) {
-            noteOption = this._setting.quarterlyNoteOption;
-            notePattern = this._setting.quarterlyNotePattern;
-        } else if (selectedItem.type === SelectedItemType.YEAR_ITEM) {
-            noteOption = this._setting.yearlyNoteOption;
-            notePattern = this._setting.yearlyNotePattern;
+    public openFileByNoteType(date: DateTime, noteType: NoteType): void {
+        const notePattern: string | null = this.getNotePattern(noteType);
+        if (notePattern === null) {
+            return;
         }
 
-        if (!noteOption || notePattern.length === 0) {
-            return new Promise((resolve, reject) => reject());
-        }
-
-        const notePath = selectedItem.date.toFormat(notePattern).concat(".md");
+        const notePath = date.toFormat(notePattern).concat(".md");
         this.openFile(new Path(notePath));
-        return new Promise(resolve => resolve(notePath));
     }
 
     public openFile(filename: Path): void {
@@ -187,6 +151,39 @@ export default class MainController {
 
     set setting(pluginSetting: PluginSetting) {
         this._setting = pluginSetting;
+    }
+
+    private getNotePattern(noteType: NoteType): string | null {
+
+        let noteOption: boolean = false;
+        let notePattern: string = "";
+
+        if (noteType === NoteType.DAILY) {
+            noteOption = this._setting.dailyNoteOption;
+            notePattern = this._setting.dailyNotePattern;
+        }
+        else if (noteType === NoteType.WEEKLY) {
+            noteOption = this._setting.weeklyNoteOption;
+            notePattern = this._setting.weeklyNotePattern;
+        }
+        else if (noteType === NoteType.MONTHLY) {
+            noteOption = this._setting.monthlyNoteOption;
+            notePattern = this._setting.monthlyNotePattern;
+        }
+        else if (noteType === NoteType.QUARTERLY) {
+            noteOption = this._setting.quarterlyNoteOption;
+            notePattern = this._setting.quarterlyNotePattern;
+        }
+        else if (noteType === NoteType.YEARLY) {
+            noteOption = this._setting.yearlyNoteOption;
+            notePattern = this._setting.yearlyNotePattern;
+        }
+
+        if (!noteOption || notePattern.length === 0) {
+            return null;
+        }
+
+        return notePattern;
     }
 
 }

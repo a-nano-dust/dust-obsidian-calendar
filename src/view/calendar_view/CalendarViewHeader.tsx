@@ -1,11 +1,12 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
 import {selectCalendarViewType, updateCalendarViewType} from "../../redux/calendarViewType";
 import {DateTime} from "luxon";
 import {ChevronLeft, ChevronRight} from 'lucide-react';
 import SelectedItem from "../../entity/SelectedItem";
-import {CalendarViewType, SelectedItemType} from "../../base/enum";
+import {CalendarViewType, NoteType, SelectedItemType} from "../../base/enum";
+import {MainControllerContext} from "../../base/context";
 
 function YearItem() {
 
@@ -13,6 +14,13 @@ function YearItem() {
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
+    const mainController = useContext(MainControllerContext)!;
+
+    // 有关联笔记的日期会使用一个点进行标注
+    let dotStyle = "calendar-view-no-dot";
+    if (mainController.hasNote(DateTime.local(selectedDate.year), NoteType.YEARLY)) {
+        dotStyle = "calendar-view-dot";
+    }
 
     const toLastYear = () => {
         const newSelectedItem = new SelectedItem();
@@ -32,7 +40,11 @@ function YearItem() {
                 onMouseLeave={() => setHidden(true)}>
         <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                      onClick={toLastYear}/>
-        <div>{selectedDate.year}年</div>
+        <div className="calendar-header-item d-hover-bg-color-base-50"
+             onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
+            <div>{selectedDate.year}年</div>
+            <div className={dotStyle}></div>
+        </div>
         <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                       onClick={toNextYear}/>
     </div>
@@ -44,6 +56,13 @@ function MonthItem() {
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
+    const mainController = useContext(MainControllerContext)!;
+
+    // 有关联笔记的日期会使用一个点进行标注
+    let dotStyle = "calendar-view-no-dot";
+    if (mainController.hasNote(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)) {
+        dotStyle = "calendar-view-dot";
+    }
 
     const toLastMonth = () => {
         const newSelectedItem = new SelectedItem();
@@ -63,7 +82,11 @@ function MonthItem() {
                 onMouseLeave={() => setHidden(true)}>
         <ChevronLeft className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}
                      onClick={toLastMonth}/>
-        <div>{selectedDate.month}月</div>
+        <div className="calendar-header-item d-hover-bg-color-base-50"
+             onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
+            <div>{selectedDate.month}月</div>
+            <div className={dotStyle}></div>
+        </div>
         <ChevronRight className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}
                       onClick={toNextMonth}/>
     </div>
@@ -75,6 +98,13 @@ function QuarterItem() {
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
+    const mainController = useContext(MainControllerContext)!;
+
+    // 有关联笔记的日期会使用一个点进行标注
+    let dotStyle = "calendar-view-no-dot";
+    if (mainController.hasNote(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)) {
+        dotStyle = "calendar-view-dot";
+    }
 
     const toLastQuarter = () => {
         const newSelectedItem = new SelectedItem();
@@ -94,7 +124,11 @@ function QuarterItem() {
                 onMouseLeave={() => setHidden(true)}>
         <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                      onClick={toLastQuarter}/>
-        <div>{selectedDate.quarter}季度</div>
+        <div className="calendar-header-item d-hover-bg-color-base-50"
+             onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
+            <div>{selectedDate.quarter}季度</div>
+            <div className={dotStyle}></div>
+        </div>
         <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                       onClick={toNextQuarter}/>
     </div>
@@ -112,17 +146,19 @@ function TodayItem() {
     let isSelected: boolean = false;
     if (selectedType === SelectedItemType.DAY_ITEM) {
         isSelected = selectedDate.year === today.year && selectedDate.month === today.month && selectedDate.day === today.day;
-    } else if (selectedType === SelectedItemType.WEEK_INDEX_ITEM) {
+    }
+    else if (selectedType === SelectedItemType.WEEK_INDEX_ITEM) {
         isSelected = selectedDate.year === today.year && selectedDate.weekNumber === today.weekNumber;
-    } else if (selectedType === SelectedItemType.MONTH_ITEM) {
+    }
+    else if (selectedType === SelectedItemType.MONTH_ITEM) {
         isSelected = selectedDate.year === today.year && selectedDate.month === today.month;
-    } else if (selectedType === SelectedItemType.QUARTER_ITEM) {
+    }
+    else if (selectedType === SelectedItemType.QUARTER_ITEM) {
         isSelected = selectedDate.year === today.year && selectedDate.quarter === today.quarter;
-    } else if (selectedType === SelectedItemType.YEAR_ITEM) {
+    }
+    else if (selectedType === SelectedItemType.YEAR_ITEM) {
         isSelected = selectedDate.year === today.year;
     }
-
-    // const isSelected: boolean = selectedDate.year === today.year && selectedDate.month === today.month && selectedDate.day === today.day;
 
     const clickCallback = () => {
         const newSelectedItem = new SelectedItem();
@@ -133,7 +169,8 @@ function TodayItem() {
 
     if (isSelected) {
         return <div className="d-bg-color-blue circular-label">今</div>
-    } else {
+    }
+    else {
         return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickCallback}>今</div>
     }
 }
@@ -164,7 +201,8 @@ function ViewSelector() {
 
     if (calendarViewType === CalendarViewType.MONTH) {
         return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickMonthCallback}>月</div>
-    } else {
+    }
+    else {
         return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickYearCallback}>年</div>
     }
 

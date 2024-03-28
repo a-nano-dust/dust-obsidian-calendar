@@ -60,6 +60,15 @@
     opacity: 0.2;
 }
 
+.calendar-header-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-align: center;
+    min-width: 40px;
+    border-radius: 4px;
+}
 
 .calendar-view-body {
     width: 100%;

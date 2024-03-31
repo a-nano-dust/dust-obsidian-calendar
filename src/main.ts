@@ -1,4 +1,4 @@
-import {App, Notice, Plugin, PluginManifest, WorkspaceLeaf} from 'obsidian';
+import {App, Plugin, PluginManifest} from 'obsidian';
 import {CalendarView, VIEW_TYPE_CALENDAR} from './view/CalendarView';
 import MainSettingTable from "./setting/MainSettingTable";
 import MainController from "./core/MainController";
@@ -7,7 +7,7 @@ import MainController from "./core/MainController";
 // 插件对象
 export default class DustDiaryPlugin extends Plugin {
 
-    private readonly mainController : MainController;
+    private readonly mainController: MainController;
 
     constructor(app: App, manifest: PluginManifest) {
         super(app, manifest);
@@ -21,44 +21,21 @@ export default class DustDiaryPlugin extends Plugin {
         // 注册日历视图
         this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.mainController));
 
-        // 在左侧工具栏添加一个图标
-        const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
-            new Notice('Hello World!');
-            this.activateView();
+        this.addCommand({
+            id: "dust-calendar-active-calendar-view",
+            name: "Dust Calendar: 打开日历视图",
+            callback: () => {
+                this.mainController.activateCalendarView();
+            }
         });
-        ribbonIconEl.addClass('my-plugin-ribbon-class');
 
-        // 在底部状态条添加一个组件
-        const statusBarItemEl = this.addStatusBarItem();
-        statusBarItemEl.setText('Status Bar Text');
-
-        // 在插件设置界面添加一项
         this.addSettingTab(new MainSettingTable(this.mainController));
-        // this.addSettingTab(new DustDiarySettingTab(this.app, this));
+        this.mainController.activateCalendarView();
     }
 
     // 关闭插件的时候执行释放资源的操作
     onunload() {
 
     }
-
-    async activateView() {
-    	const { workspace } = this.app;
-
-        // 检查该类型的视图是否存在，如果不存在，则创建
-    	let leaf: WorkspaceLeaf | null = null;
-    	const leaves = workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
-    	if (leaves.length > 0) {
-    		leaf = leaves[0];
-    	}
-    	else {
-    		leaf = workspace.getRightLeaf(false);
-    		await leaf.setViewState({ type: VIEW_TYPE_CALENDAR, active: true });
-    	}
-
-    	// 显示视图
-    	workspace.revealLeaf(leaf);
-    }
-
 }
 

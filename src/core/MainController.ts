@@ -92,6 +92,7 @@ export default class MainController {
             PathUtil.create(filename, this.plugin.app.vault).then(abstractFIle => {
                 this.openFileTabView(<TFile>abstractFIle);
             });
+            return;
         }
 
         const modal = new ConfirmCreatingNoteModal(filename, this);
@@ -101,7 +102,7 @@ export default class MainController {
     public createFile(filename: Path): void {
         PathUtil.create(filename, this.plugin.app.vault).then(abstractFile => {
             this.openFileTabView(<TFile>abstractFile);
-            this.activeCalendarView();
+            this.flushCalendarView();
         }, () => new Notice("".concat('创建"', filename.string, '"失败')));
     }
 
@@ -123,13 +124,34 @@ export default class MainController {
         //
         if (targetView === null) {
             targetView = new MarkdownView(app.workspace.getLeaf("tab"));
-            targetView.leaf.openFile(tFile).then(() => {
-            })
+            const targetLeaf: WorkspaceLeaf = targetView.leaf;
+            targetLeaf.openFile(tFile).then(() => {
+            });
         }
         app.workspace.revealLeaf(targetView.leaf);
     }
 
-    public activeCalendarView(): void {
+    activateCalendarView(): void {
+        const {workspace} = this.plugin.app;
+
+        // 检查该类型的视图是否存在，如果不存在，则创建
+        let leaf: WorkspaceLeaf | null = null;
+        const leaves = workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
+        if (leaves.length > 0) {
+            leaf = leaves[0];
+        }
+        else {
+            leaf = workspace.getRightLeaf(false);
+            leaf.setViewState({type: VIEW_TYPE_CALENDAR, active: true}).then(() => {
+            });
+        }
+
+        // 显示视图
+        workspace.revealLeaf(leaf);
+    }
+
+    // 强制刷新日历页面
+    public flushCalendarView(): void {
         const {workspace} = this.plugin.app;
 
         // 检查该类型的视图是否存在，如果不存在，则创建

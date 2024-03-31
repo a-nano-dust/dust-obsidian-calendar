@@ -17,7 +17,7 @@ export default class ConfirmCreatingNoteModal extends Modal {
 
     onOpen(): void {
         this.titleEl.createEl("h1", {text: "创建新笔记"});
-        this.contentEl.createEl("p", {text: "".concat("创建一个新笔记，名为", this._filename.string)})
+        this.contentEl.createEl("p", {text: "".concat("是否要创建一个路径为 ", this._filename.string, " 的笔记")})
         let setting = new Setting(this.contentEl);
         setting.addButton((btn) => {
             btn.setButtonText("取消");

@@ -13,7 +13,7 @@
     "isolatedModules": true,
     "strict": true,
     "strictNullChecks": true,
-	"jsx": "preserve",
+    "jsx": "preserve",
     "lib": [
       "DOM",
       "ES5",
@@ -22,5 +22,7 @@
     ],
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/main.ts"]
+  "include": [
+    "./src/main.ts"
+  ]
 }

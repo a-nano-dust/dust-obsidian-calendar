@@ -1,10 +1,10 @@
 {
-	"id": "dust-obsidian-diary",
-	"name": "Dust Obsidian Diary",
+	"id": "dust-obsidian-calendar",
+	"name": "Dust Obsidian Calendar",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Manage periodic notes more elegantly",
-	"author": "Nano Dust",
+	"description": "一款更适合中国人的日历插件，可以显示农历、节气、节假日、调休信息，支持月视图和年视图切换，支持关联创建周期性笔记。",
+	"author": "纳米级尘埃",
 	"authorUrl": "",
 	"fundingUrl": "",
 	"isDesktopOnly": true

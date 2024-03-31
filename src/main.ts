@@ -5,7 +5,7 @@ import MainController from "./core/MainController";
 
 
 // 插件对象
-export default class DustDiaryPlugin extends Plugin {
+export default class Main extends Plugin {
 
     private readonly mainController: MainController;
 

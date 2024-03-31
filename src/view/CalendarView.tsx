@@ -19,6 +19,7 @@ export class CalendarView extends ItemView {
     constructor(leaf: WorkspaceLeaf, mainController: MainController) {
         super(leaf);
         this.mainController = mainController;
+        this.icon = "lucide-calendar-check";
     }
 
     // 视图类型
@@ -32,6 +33,9 @@ export class CalendarView extends ItemView {
 
     // 打开时的初始化操作
     async onOpen() {
+
+        console.log(this.getIcon());
+
         this.root = createRoot(this.containerEl.children[1]);
         this.root.render(
             <StrictMode>

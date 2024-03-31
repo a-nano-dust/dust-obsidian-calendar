@@ -1,6 +1,6 @@
 import {MarkdownView, Notice, TFile, WorkspaceLeaf} from "obsidian";
 import {DateTime} from "luxon";
-import DustDiaryPlugin from "../main";
+import DustObsidianCalendaarPlugin from "../main";
 import SelectedItem from "../entity/SelectedItem";
 import PluginSetting from "../entity/PluginSetting";
 import {CalendarView, VIEW_TYPE_CALENDAR} from "../view/CalendarView";
@@ -12,10 +12,10 @@ import {NoteType, SelectedItemType} from "../base/enum";
 
 export default class MainController {
 
-    private readonly _plugin: DustDiaryPlugin;
+    private readonly _plugin: DustObsidianCalendaarPlugin;
     private _setting: PluginSetting;
 
-    constructor(plugin: DustDiaryPlugin) {
+    constructor(plugin: DustObsidianCalendaarPlugin) {
         this._plugin = plugin;
         this._setting = new PluginSetting();
     }
@@ -163,7 +163,7 @@ export default class MainController {
         }
     }
 
-    get plugin(): DustDiaryPlugin {
+    get plugin(): DustObsidianCalendaarPlugin {
         return this._plugin;
     }
 

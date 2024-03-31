@@ -31,8 +31,11 @@
 
 首先，我们需要在插件设置中打开对应的选项。
 
-然后，我们需要配置周期性笔记的模板路径（包含笔记所在文件夹和笔记文件名），模板控制字符与 [luxon](https://moment.github.io/luxon/#/formatting?id=table-of-tokens)
-相同。
+然后，我们需要配置周期性笔记的模板路径（包含笔记所在文件夹和笔记文件名），模板控制字符与 [luxon](https://moment.github.io/luxon/#/formatting?id=table-of-tokens) 相同。
+
+如下展示了一个可能的配置内容：
+
+![](./resource/setting.jpg)
 
 配置完成后，按照如下方式进行操作即可创建笔记：
 
@@ -48,5 +51,4 @@
 
 ## 联系和反馈
 
-如果你在使用该插件过程中，遇到各种问题、或有什么好的建议，欢迎在 [GitHub issues](https://github.com/a-nano-dust/dust-obsidian-calendar/issues)
-中提出。
+如果你在使用该插件过程中，遇到各种问题、或有什么好的建议，欢迎在 [GitHub issues](https://github.com/a-nano-dust/dust-obsidian-calendar/issues) 中提出。

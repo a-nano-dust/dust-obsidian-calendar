@@ -47,8 +47,6 @@
 
 如果与日历关联的每日笔记、每周笔记、每月笔记、季度笔记、年度笔记存在，日历视图会在关联的显示区域下方标注一个 **·** 。
 
-## 安装
-
 ## 联系和反馈
 
 如果你在使用该插件过程中，遇到各种问题、或有什么好的建议，欢迎在 [GitHub issues](https://github.com/a-nano-dust/dust-obsidian-calendar/issues) 中提出。

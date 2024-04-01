@@ -1,7 +1,7 @@
 <h1 align="center">Dust Obsidian Calendar</h1>
 
 <p align="center">
-    <img alt="Release version" src="https://img.shields.io/github/v/releasea-nano-dust/dust-obsidian-calendar?style=for-the-badge">
+    <img alt="Release version" src="https://img.shields.io/github/v/release/a-nano-dust/dust-obsidian-calendar?style=for-the-badge">
     <img alt="Download count" src="https://img.shields.io/github/downloads/a-nano-dust/dust-obsidian-calendar/total?style=for-the-badge">
 </p>
 <p align="center">
@@ -13,6 +13,14 @@
 更符合中国习惯的日历插件，支持同时显示公历、农历、星期、节气、节假日、调休等信息，支持切换月视图和年视图，支持关联创建周期性笔记。周期性笔记包括：每日笔记、每周笔记、每月笔记、季度笔记、年度笔记。
 
 ![](./resource/overview.jpg)
+
+## 安装
+
+### 手动安装
+
+1. 下载 [latest release](https://github.com/a-nano-dust/dust-obsidian-calendar/releases/latest)；
+2. 解压并提取 dust-obsidian-calendar 文件夹，然后放到你 Obsidian 库中的插件目录中 `<仓库根目录>/.obsidian/plugins/` (注意: `.obsidian` 文件夹可能被隐藏了，你需要先将该文件夹展示出来)
+3. 打开 `设置/第三方插件`，启用该插件。
 
 ## 日历视图
 
@@ -27,7 +35,7 @@
 
 点击日历顶部的 `月` 或 `年`，可以从月视图切换到年视图，或从年视图切换到月视图。
 
-## 如何创建周期性笔记
+## 周期性笔记
 
 首先，我们需要在插件设置中打开对应的选项。
 

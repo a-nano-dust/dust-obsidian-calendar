@@ -5,7 +5,7 @@ import MainController from "./core/MainController";
 
 
 // 插件对象
-export default class Main extends Plugin {
+export default class DustCalendarPlugin extends Plugin {
 
     private readonly mainController: MainController;
 
@@ -23,7 +23,7 @@ export default class Main extends Plugin {
 
         this.addCommand({
             id: "dust-calendar-active-calendar-view",
-            name: "Dust Calendar: 打开日历视图",
+            name: "打开日历视图",
             callback: () => {
                 this.mainController.activateCalendarView();
             }

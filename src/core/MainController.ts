@@ -1,6 +1,6 @@
-import {MarkdownView, Notice, TFile, WorkspaceLeaf} from "obsidian";
+import {MarkdownView, Notice, TAbstractFile, TFile, WorkspaceLeaf} from "obsidian";
 import {DateTime} from "luxon";
-import DustObsidianCalendaarPlugin from "../main";
+import DustCalendarPlugin from "../main";
 import SelectedItem from "../entity/SelectedItem";
 import PluginSetting from "../entity/PluginSetting";
 import {CalendarView, VIEW_TYPE_CALENDAR} from "../view/CalendarView";
@@ -12,10 +12,10 @@ import {NoteType, SelectedItemType} from "../base/enum";
 
 export default class MainController {
 
-    private readonly _plugin: DustObsidianCalendaarPlugin;
+    private readonly _plugin: DustCalendarPlugin;
     private _setting: PluginSetting;
 
-    constructor(plugin: DustObsidianCalendaarPlugin) {
+    constructor(plugin: DustCalendarPlugin) {
         this._plugin = plugin;
         this._setting = new PluginSetting();
     }
@@ -46,13 +46,13 @@ export default class MainController {
         return abstractFile.path;
     }
 
-    public getDailyNote(date: DateTime): TFile | null {
+    public getDailyNote(date: DateTime): TAbstractFile | null {
         const {dailyNotePattern} = this._setting;
         let dailyNotePath = date.toFormat(dailyNotePattern);
         let abstractFile = this.plugin.app.vault.getAbstractFileByPath(dailyNotePath);
 
         if (abstractFile instanceof TFile) {
-            return abstractFile as TFile;
+            return abstractFile;
         }
 
         return null;
@@ -163,7 +163,7 @@ export default class MainController {
         }
     }
 
-    get plugin(): DustObsidianCalendaarPlugin {
+    get plugin(): DustCalendarPlugin {
         return this._plugin;
     }
 

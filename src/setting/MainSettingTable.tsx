@@ -30,7 +30,6 @@ export default class MainSettingTable extends PluginSettingTab {
     display(): any {
         const {containerEl} = this;
         containerEl.empty();
-        new Setting(containerEl).nameEl.createEl("h1", {text: "日历配置"});
         this.dailyNoteSetting();
         this.weeklyNoteSetting();
         this.monthlyNoteSetting();
@@ -48,7 +47,7 @@ export default class MainSettingTable extends PluginSettingTab {
         const {containerEl} = this;
 
         let dairyOption = new Setting(containerEl);
-        dairyOption.nameEl.createEl("h2", {text: "每日笔记"});
+        dairyOption.setName("每日笔记").setHeading();
         dairyOption.addToggle(toggle => {
             toggle.setValue(this.mainController.setting.dailyNoteOption);
             toggle.onChange(async (value) => {
@@ -69,7 +68,7 @@ export default class MainSettingTable extends PluginSettingTab {
         const {containerEl} = this;
 
         let dairyOption = new Setting(containerEl);
-        dairyOption.nameEl.createEl("h2", {text: "每周笔记"});
+        dairyOption.setName("每周笔记").setHeading();
         dairyOption.addToggle(toggle => {
             toggle.setValue(this.mainController.setting.weeklyNoteOption);
             toggle.onChange(async (value) => {
@@ -90,7 +89,7 @@ export default class MainSettingTable extends PluginSettingTab {
         const {containerEl} = this;
 
         let dairyOption = new Setting(containerEl);
-        dairyOption.nameEl.createEl("h2", {text: "每月笔记"});
+        dairyOption.setName("每月笔记").setHeading();
         dairyOption.addToggle(toggle => {
             toggle.setValue(this.mainController.setting.monthlyNoteOption);
             toggle.onChange(async (value) => {
@@ -111,7 +110,7 @@ export default class MainSettingTable extends PluginSettingTab {
         const {containerEl} = this;
 
         let dairyOption = new Setting(containerEl);
-        dairyOption.nameEl.createEl("h2", {text: "季度笔记"});
+        dairyOption.setName("季度笔记").setHeading();
         dairyOption.addToggle(toggle => {
             toggle.setValue(this.mainController.setting.quarterlyNoteOption);
             toggle.onChange(async (value) => {
@@ -132,7 +131,7 @@ export default class MainSettingTable extends PluginSettingTab {
         const {containerEl} = this;
 
         let dairyOption = new Setting(containerEl);
-        dairyOption.nameEl.createEl("h2", {text: "年度笔记"});
+        dairyOption.setName("年度笔记").setHeading();
         dairyOption.addToggle(toggle => {
             toggle.setValue(this.mainController.setting.yearlyNoteOption);
             toggle.onChange(async (value) => {

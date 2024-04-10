@@ -22,7 +22,7 @@ export default class DustCalendarPlugin extends Plugin {
         this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.mainController));
 
         this.addCommand({
-            id: "dust-calendar-active-calendar-view",
+            id: "active-calendar-view",
             name: "打开日历视图",
             callback: () => {
                 this.mainController.activateCalendarView();

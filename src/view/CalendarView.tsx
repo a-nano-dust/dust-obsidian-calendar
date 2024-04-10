@@ -28,7 +28,7 @@ export class CalendarView extends ItemView {
     }
 
     getDisplayText() {
-        return "Calendar view";
+        return "日历";
     }
 
     // 打开时的初始化操作

@@ -1,4 +1,9 @@
+import {FontSizeChangeMode} from "../base/enum";
+
 export default class PluginSetting {
+
+    fontSizeChangeMode: FontSizeChangeMode;
+    immutableFontSizeFactor: number;
 
     dailyNoteOption: boolean;
     dailyNotePattern: string;
@@ -16,6 +21,11 @@ export default class PluginSetting {
     yearlyNotePattern: string;
 
     constructor() {
+
+        this.fontSizeChangeMode = FontSizeChangeMode.IMMUTABLE;
+        this.immutableFontSizeFactor = 1;
+
+
         this.dailyNoteOption = false;
         this.dailyNotePattern = "";
 

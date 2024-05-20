@@ -24,6 +24,11 @@ export default class MainController {
         this._setting = Object.assign({}, this._setting, await this._plugin.loadData());
     }
 
+    // saveSettings(): void {
+    //     this._plugin.saveData(this._setting).then(() => {
+    //         this.flushCalendarView();
+    //     });
+    // }
     async saveSettings() {
         await this._plugin.saveData(this._setting);
     }

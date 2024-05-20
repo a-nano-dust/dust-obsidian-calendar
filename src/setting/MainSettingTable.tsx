@@ -6,11 +6,15 @@ import WeeklyNotePattern from "./WeeklyNotePattern";
 import QuarterlyNotePattern from "./QuarterlyNotePattern";
 import MonthlyNotePattern from "./MonthlyNotePattern";
 import YearlyNotePattern from "./YearlyNotePattern";
+import ImmutableFontSizeSlider from "./ImmutableFontSizeSlider";
+import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
 
 
 export default class MainSettingTable extends PluginSettingTab {
 
     mainController: MainController;
+    fontSizeChangeModeSelectRoot: Root | null;
+    immutableFontSizeSliderRoot: Root | null;
     dailyNotePatternRoot: Root | null;
     weeklyNotePatternRoot: Root | null;
     monthlyNotePatternRoot: Root | null;
@@ -20,6 +24,8 @@ export default class MainSettingTable extends PluginSettingTab {
     constructor(mainController: MainController) {
         super(mainController.plugin.app, mainController.plugin);
         this.mainController = mainController;
+        this.fontSizeChangeModeSelectRoot = null;
+        this.immutableFontSizeSliderRoot = null;
         this.dailyNotePatternRoot = null;
         this.weeklyNotePatternRoot = null;
         this.monthlyNotePatternRoot = null;
@@ -30,6 +36,8 @@ export default class MainSettingTable extends PluginSettingTab {
     display(): any {
         const {containerEl} = this;
         containerEl.empty();
+        this.fontSizeChangeModeSelect();
+        this.immutableFontSizeSlider();
         this.dailyNoteSetting();
         this.weeklyNoteSetting();
         this.monthlyNoteSetting();
@@ -38,8 +46,26 @@ export default class MainSettingTable extends PluginSettingTab {
     }
 
     hide(): any {
-        this.mainController.saveSettings().then(() => {});
+        this.mainController.saveSettings().then(() => this.mainController.flushCalendarView());
         return super.hide();
+    }
+
+    private fontSizeChangeModeSelect(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.fontSizeChangeModeSelectRoot = createRoot(settingComponent.settingEl);
+        this.fontSizeChangeModeSelectRoot.render(
+            <FontSizeChangeModeSelect mainController={this.mainController}/>
+        );
+    }
+
+    private immutableFontSizeSlider(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.immutableFontSizeSliderRoot = createRoot(settingComponent.settingEl);
+        this.immutableFontSizeSliderRoot.render(
+            <ImmutableFontSizeSlider mainController={this.mainController}/>
+        );
     }
 
     private dailyNoteSetting(): void {
@@ -146,4 +172,6 @@ export default class MainSettingTable extends PluginSettingTab {
             <YearlyNotePattern mainController={this.mainController}/>
         );
     }
+
+
 }

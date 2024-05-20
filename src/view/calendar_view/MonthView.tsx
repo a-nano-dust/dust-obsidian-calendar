@@ -19,7 +19,8 @@ function DayItemBody({
 
     const today = DateTime.now();
 
-    let style = "calendar-view-item-body";
+    let style = "d-normal-font";
+    // let style = "calendar-view-item-body";
     if (isSelected) {
         style = style.concat(" d-color-base-100");
     }
@@ -48,10 +49,11 @@ function DayItemSuperscript({
     }
 
 
-    let style = "";
+    let style = "d-script-font";
+    // let style = "";
     let text: string;
     if (targetDate.month !== dayListOfMonthView.month) {
-        style = style.concat("d-opacity-20");
+        style = style.concat(" d-opacity-20");
     }
 
     if (holiday.isWork()) {
@@ -63,7 +65,7 @@ function DayItemSuperscript({
         text = "休";
     }
 
-    return <sup className={style} style={{fontSize: "10px", fontWeight: "normal"}}>{text}</sup>
+    return <sup className={style}>{text}</sup>
 }
 
 function DayItemFooter({
@@ -75,18 +77,20 @@ function DayItemFooter({
 
     let dayItemFooter = new DayItemFooterEntity(targetDay);
 
-    let style = "";
+    let style = "d-script-font";
+    // let style = "";
     if (isSelected) {
         style = style.concat(" d-color-base-100");
     }
     else if (targetDay.month !== dayListOfMonthView.month) {
-        style = "d-opacity-20";
+        style = style.concat(" d-opacity-20");
     }
     else if (dayItemFooter.type === DayItemFooterType.FESTIVAL || dayItemFooter.type === DayItemFooterType.SOLAR_TERM) {
-        style = "d-color-blue";
+        style = style.concat(" d-color-blue");
     }
 
-    return <div className={style} style={{fontSize: "10px"}}>{dayItemFooter.text}</div>
+    return <div className={style}>{dayItemFooter.text}</div>
+    // return <div className={style} style={{fontSize: "10px"}}>{dayItemFooter.text}</div>
 }
 
 function DayItem({
@@ -140,7 +144,8 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
 
 
     let itemStyle = "calendar-view-item d-hover-bg-color-base-50";
-    let itemBodyStyle = "calendar-view-item-body";
+    let itemBodyStyle = "d-bold-font";
+    // let itemBodyStyle = "calendar-view-item-body";
     if (selectedItem.type === SelectedItemType.WEEK_INDEX_ITEM && selectedItem.date.weekNumber === targetDay.weekNumber) {
         itemStyle = "calendar-view-item d-bg-color-blue";
     }
@@ -151,7 +156,8 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
         dotStyle = "calendar-view-dot";
     }
 
-    return <div className={itemStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    return <div className={itemStyle} style={{fontWeight: "bold"}}
+                onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
         <div className={itemBodyStyle}>{targetDay.weekNumber}</div>
         <div className={dotStyle}/>
@@ -186,15 +192,16 @@ function MonthViewRow({
 }
 
 function MonthViewHeader() {
+    // return <div className='calendar-view-row' style={{fontSize: "12px", fontWeight: "bold"}}>
     return <div className='calendar-view-row'>
-        <div className="calendar-view-item d-hover-bg-color-base-50">周</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50">一</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50">二</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50">三</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50">四</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50">五</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50">六</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50">日</div>
+        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">周</div>
+        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">一</div>
+        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">二</div>
+        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">三</div>
+        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">四</div>
+        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">五</div>
+        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">六</div>
+        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">日</div>
     </div>
 }
 

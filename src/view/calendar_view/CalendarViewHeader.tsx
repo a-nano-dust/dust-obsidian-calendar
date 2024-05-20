@@ -36,17 +36,19 @@ function YearItem() {
         dispatch(updateSelectedItem(newSelectedItem));
     }
 
-    return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
-                onMouseLeave={() => setHidden(true)}>
-        <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                     onClick={toLastYear}/>
-        <div className="calendar-header-item d-hover-bg-color-base-50"
-             onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
-            <div>{selectedDate.year}年</div>
-            <div className={dotStyle}></div>
+    return <div className="calendar-header-item">
+        <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
+             onMouseLeave={() => setHidden(true)}>
+            <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                         onClick={toLastYear}/>
+            <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
+                 onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
+                <div style={{width: "4em"}}>{selectedDate.year}年</div>
+            </div>
+            <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                          onClick={toNextYear}/>
         </div>
-        <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                      onClick={toNextYear}/>
+        <div className={dotStyle}></div>
     </div>
 }
 
@@ -78,17 +80,20 @@ function MonthItem() {
         dispatch(updateSelectedItem(newSelectedItem));
     }
 
-    return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
-                onMouseLeave={() => setHidden(true)}>
-        <ChevronLeft className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                     onClick={toLastMonth}/>
-        <div className="calendar-header-item d-hover-bg-color-base-50"
-             onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
-            <div>{selectedDate.month}月</div>
-            <div className={dotStyle}></div>
+    return <div className="calendar-header-item">
+        <div className="d-header-font" style={{display: "flex", alignItems: "center"}}
+             onMouseEnter={() => setHidden(false)}
+             onMouseLeave={() => setHidden(true)}>
+            <ChevronLeft className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                         onClick={toLastMonth}/>
+            <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
+                 onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
+                <div style={{width: "4em"}}>{selectedDate.month}月</div>
+            </div>
+            <ChevronRight className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                          onClick={toNextMonth}/>
         </div>
-        <ChevronRight className="d-hover-color-blue" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                      onClick={toNextMonth}/>
+        <div className={dotStyle}></div>
     </div>
 }
 
@@ -120,17 +125,19 @@ function QuarterItem() {
         dispatch(updateSelectedItem(newSelectedItem));
     }
 
-    return <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
-                onMouseLeave={() => setHidden(true)}>
-        <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                     onClick={toLastQuarter}/>
-        <div className="calendar-header-item d-hover-bg-color-base-50"
-             onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
-            <div>{selectedDate.quarter}季度</div>
-            <div className={dotStyle}></div>
+    return <div className="calendar-header-item">
+        <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
+             onMouseLeave={() => setHidden(true)}>
+            <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                         onClick={toLastQuarter}/>
+            <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
+                 onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
+                <div style={{width: "3em"}}>{selectedDate.quarter}季度</div>
+            </div>
+            <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+                          onClick={toNextQuarter}/>
         </div>
-        <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                      onClick={toNextQuarter}/>
+        <div className={dotStyle}></div>
     </div>
 }
 
@@ -168,10 +175,10 @@ function TodayItem() {
     }
 
     if (isSelected) {
-        return <div className="d-bg-color-blue circular-label">今</div>
+        return <div className="d-normal-font d-bg-color-blue circular-label">今</div>
     }
     else {
-        return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickCallback}>今</div>
+        return <div className="d-normal-font d-hover-bg-color-base-50 circular-label" onClick={clickCallback}>今</div>
     }
 }
 
@@ -200,37 +207,32 @@ function ViewSelector() {
     }
 
     if (calendarViewType === CalendarViewType.MONTH) {
-        return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickMonthCallback}>月</div>
+        return <div className="d-normal-font d-hover-bg-color-base-50 circular-label"
+                    onClick={clickMonthCallback}>月</div>
     }
     else {
-        return <div className="d-hover-bg-color-base-50 circular-label" onClick={clickYearCallback}>年</div>
+        return <div className="d-normal-font d-hover-bg-color-base-50 circular-label"
+                    onClick={clickYearCallback}>年</div>
     }
 
 }
 
 export default function CalendarViewHeader() {
-    return <div style={{
-        height: "40px",
+    return <div className="d-header-font" style={{
         display: "flex",
-        justifyContent: "space-between"
+        flexDirection: "column",
+        justifyContent: "space-between",
     }}>
-        <div style={{
-            fontSize: "22.5px",
-            display: "flex",
-            flexGrow: 1,
-        }}>
+        <div style={{display: "flex", justifyContent: "space-around", flexWrap: "wrap"}}>
             <YearItem/>
-            <MonthItem/>
             <QuarterItem/>
         </div>
-        <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexBasis: "60px",
-            alignItems: "center"
-        }}>
-            <TodayItem/>
-            <ViewSelector/>
+        <div style={{display: "flex", justifyContent: "space-around", flexWrap: "wrap"}}>
+            <MonthItem/>
+            <div style={{display: "flex", justifyContent: "space-around", width: "5em", alignItems: "center"}}>
+                <TodayItem/>
+                <ViewSelector/>
+            </div>
         </div>
     </div>
 }

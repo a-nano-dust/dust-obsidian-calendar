@@ -28,17 +28,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /*gap: 2px;*/
     text-align: center;
     min-width: 25px;
-    /*min-width: 40px;*/
     border-radius: 2px;
 }
 
 .calendar-view-item-body {
     font-size: 12px;
-    /*font-size: 16px;*/
-    /*font-weight: bold;*/
 }
 
 .calendar-view-dot {
@@ -71,15 +67,15 @@
 }
 
 .circular-label {
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
     text-align: center;
     border-radius: 50%;
 }
 
 .d-header-font {
-    font-size: calc((16px + var(--d-font-size-factor) * 5px) * var(--d-font-size-custom-enable) + (11px + 0.5 * var(--font-text-size)) * var(--d-font-size-follow-obsidian));
+    font-size: calc((15px + var(--d-font-size-factor) * 5px) * var(--d-font-size-custom-enable) + (10px + 0.5 * var(--font-text-size)) * var(--d-font-size-follow-obsidian));
 }
 
 .d-normal-font {

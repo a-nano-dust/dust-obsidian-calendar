@@ -19,13 +19,10 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
     newSelectItem.date = DateTime.local(showYear, showMonth);
 
     // 被选中和未被选中月份的背景颜色不同
-    let bodyStyle = "d-normal-font d-hover-bg-color-base-50";
-    // let bodyStyle = "calendar-view-item d-hover-bg-color-base-50";
+    let bodyStyle = "d-normal-font calendar-view-item d-hover-bg-color-base-50";
     if (selectedItem.type === SelectedItemType.MONTH_ITEM && selectedItem.date.year === showYear && selectedItem.date.month === showMonth) {
-        bodyStyle = "d-normal-font d-bg-color-blue";
-        // bodyStyle = "calendar-view-item d-bg-color-blue";
+        bodyStyle = "d-normal-font calendar-view-item d-bg-color-blue";
     }
-
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
@@ -52,11 +49,9 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
     newSelectItem.date = DateTime.local(showYear, showQuarter * 3 - 2);
 
     // 被选中和未被选中月份的背景颜色不同
-    let bodyStyle = "d-normal-font d-hover-bg-color-base-50";
-    // let bodyStyle = "calendar-view-item d-hover-bg-color-base-50";
+    let bodyStyle = "d-normal-font calendar-view-item d-hover-bg-color-base-50";
     if (selectedItem.type === SelectedItemType.QUARTER_ITEM && selectedItem.date.year === showYear && selectedItem.date.quarter === showQuarter) {
-        bodyStyle = "d-normal-font d-bg-color-blue";
-        // bodyStyle = "calendar-view-item d-bg-color-blue";
+        bodyStyle = "d-normal-font calendar-view-item d-bg-color-blue";
     }
 
     // 有关联笔记的日期会使用一个点进行标注

@@ -30,7 +30,7 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
         dotStyle = "calendar-view-dot";
     }
 
-    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
         <div>{showMonth}月</div>
         <div className={dotStyle}/>
@@ -60,7 +60,7 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
         dotStyle = "calendar-view-dot";
     }
 
-    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
         <div>{mainController.getQuarterName(showQuarter)}</div>
         <div className={dotStyle}/>

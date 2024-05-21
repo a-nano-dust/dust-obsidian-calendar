@@ -33,9 +33,6 @@ export class CalendarView extends ItemView {
 
     // 打开时的初始化操作
     async onOpen() {
-
-        console.log(this.getIcon());
-
         this.root = createRoot(this.containerEl.children[1]);
         this.root.render(
             <StrictMode>

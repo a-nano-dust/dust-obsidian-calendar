@@ -37,3 +37,17 @@ export enum DayItemFooterType {
     SOLAR_TERM = 3,
     FESTIVAL = 4
 }
+
+/**
+ * 日历界面字体大小调整方式
+ */
+export enum FontSizeChangeMode {
+    FOLLOW_OBSIDIAN = 1,            // 跟随 Obsidian 的字体大小
+    FOLLOW_WIDGET = 2,              // 跟随侧边栏大小
+    IMMUTABLE = 3                   // 固定大小
+}
+
+export enum QuarterNameMode {
+    NUMBER = 1,                     // 数字：1、2、3、4
+    CHINESE = 2                     // 中文：春、夏、秋、冬
+}

@@ -7,7 +7,7 @@ import {CalendarView, VIEW_TYPE_CALENDAR} from "../view/CalendarView";
 import ConfirmCreatingNoteModal from "../view/modal/ConfirmCreatingNoteModal";
 import Path from "../util/Path";
 import PathUtil from "../util/PathUtil";
-import {NoteType, SelectedItemType} from "../base/enum";
+import {NoteType, QuarterNameMode, SelectedItemType} from "../base/enum";
 
 
 export default class MainController {
@@ -15,17 +15,23 @@ export default class MainController {
     private readonly _plugin: DustCalendarPlugin;
     private _setting: PluginSetting;
 
+    private _quarterNameMap: Map<number, string> | null;
+
     constructor(plugin: DustCalendarPlugin) {
         this._plugin = plugin;
         this._setting = new PluginSetting();
+
+        this._quarterNameMap = null;
     }
 
     async loadSettings() {
         this._setting = Object.assign({}, this._setting, await this._plugin.loadData());
+        this.updateQuarterNameMap();
     }
 
     async saveSettings() {
         await this._plugin.saveData(this._setting);
+        this.updateQuarterNameMap();
     }
 
     public hasNote(date: DateTime, noteType: NoteType): boolean {
@@ -213,6 +219,27 @@ export default class MainController {
         }
 
         return notePattern;
+    }
+
+    private updateQuarterNameMap() {
+        let newQuarterNameMap = new Map();
+        if (this.setting.quarterNameMode === QuarterNameMode.NUMBER) {
+            newQuarterNameMap.set(1, "1季度");
+            newQuarterNameMap.set(2, "2季度");
+            newQuarterNameMap.set(3, "3季度");
+            newQuarterNameMap.set(4, "4季度");
+        }
+        else {
+            newQuarterNameMap.set(1, "春");
+            newQuarterNameMap.set(2, "夏");
+            newQuarterNameMap.set(3, "秋");
+            newQuarterNameMap.set(4, "冬");
+        }
+        this._quarterNameMap = newQuarterNameMap;
+    }
+
+    public getQuarterName(quarterIndex: number): string {
+        return this._quarterNameMap?.get(quarterIndex)!;
     }
 
 }

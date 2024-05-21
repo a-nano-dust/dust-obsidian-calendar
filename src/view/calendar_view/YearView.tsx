@@ -62,7 +62,7 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
 
     return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
-        <div>{showQuarter}季度</div>
+        <div>{mainController.getQuarterName(showQuarter)}</div>
         <div className={dotStyle}/>
     </div>
 }

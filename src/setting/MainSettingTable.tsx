@@ -9,6 +9,7 @@ import YearlyNotePattern from "./YearlyNotePattern";
 import ImmutableFontSizeSlider from "./ImmutableFontSizeSlider";
 import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
 import {FontSizeChangeMode} from "../base/enum";
+import QuarterNameModeSelect from "./QuarterNameModeSelect";
 
 
 export default class MainSettingTable extends PluginSettingTab {
@@ -16,6 +17,7 @@ export default class MainSettingTable extends PluginSettingTab {
     mainController: MainController;
     fontSizeChangeModeSelectRoot: Root | null;
     immutableFontSizeSliderRoot: Root | null;
+    quarterNameModeSelectRoot: Root | null;
     dailyNotePatternRoot: Root | null;
     weeklyNotePatternRoot: Root | null;
     monthlyNotePatternRoot: Root | null;
@@ -27,6 +29,7 @@ export default class MainSettingTable extends PluginSettingTab {
         this.mainController = mainController;
         this.fontSizeChangeModeSelectRoot = null;
         this.immutableFontSizeSliderRoot = null;
+        this.quarterNameModeSelectRoot = null;
         this.dailyNotePatternRoot = null;
         this.weeklyNotePatternRoot = null;
         this.monthlyNotePatternRoot = null;
@@ -39,6 +42,7 @@ export default class MainSettingTable extends PluginSettingTab {
         containerEl.empty();
         this.displayFontSizeChangeModeSelect();
         this.displayImmutableFontSizeSlider();
+        this.displayQuarterNameModeSelect();
         this.displayDailyNoteSetting();
         this.displayWeeklyNoteSetting();
         this.displayMonthlyNoteSetting();
@@ -71,6 +75,15 @@ export default class MainSettingTable extends PluginSettingTab {
         this.immutableFontSizeSliderRoot = createRoot(settingComponent.settingEl);
         this.immutableFontSizeSliderRoot.render(
             <ImmutableFontSizeSlider mainController={this.mainController}/>
+        );
+    }
+
+    private displayQuarterNameModeSelect(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.quarterNameModeSelectRoot = createRoot(settingComponent.settingEl);
+        this.quarterNameModeSelectRoot.render(
+            <QuarterNameModeSelect mainController={this.mainController}/>
         );
     }
 

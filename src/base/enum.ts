@@ -46,3 +46,8 @@ export enum FontSizeChangeMode {
     FOLLOW_WIDGET = 2,              // 跟随侧边栏大小
     IMMUTABLE = 3                   // 固定大小
 }
+
+export enum QuarterNameMode {
+    NUMBER = 1,                     // 数字：1、2、3、4
+    CHINESE = 2                     // 中文：春、夏、秋、冬
+}

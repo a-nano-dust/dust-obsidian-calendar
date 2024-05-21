@@ -144,9 +144,17 @@ export default class MainController {
         const leaves = workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
         if (leaves.length > 0) {
             leaf = leaves[0];
+            console.log('leaves.length > 0')
         }
         else {
+            console.log('else')
             leaf = workspace.getRightLeaf(false);
+            if (leaf === null) {
+                console.log('leaf is null')
+            }
+            else {
+                console.log('leaf is not null')
+            }
             leaf.setViewState({type: VIEW_TYPE_CALENDAR, active: true}).then(() => {
             });
         }

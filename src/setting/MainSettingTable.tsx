@@ -8,6 +8,7 @@ import MonthlyNotePattern from "./MonthlyNotePattern";
 import YearlyNotePattern from "./YearlyNotePattern";
 import ImmutableFontSizeSlider from "./ImmutableFontSizeSlider";
 import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
+import {FontSizeChangeMode} from "../base/enum";
 
 
 export default class MainSettingTable extends PluginSettingTab {
@@ -36,13 +37,13 @@ export default class MainSettingTable extends PluginSettingTab {
     display(): any {
         const {containerEl} = this;
         containerEl.empty();
-        this.fontSizeChangeModeSelect();
-        this.immutableFontSizeSlider();
-        this.dailyNoteSetting();
-        this.weeklyNoteSetting();
-        this.monthlyNoteSetting();
-        this.quarterlyNoteSetting();
-        this.yearlyNoteSetting();
+        this.displayFontSizeChangeModeSelect();
+        this.displayImmutableFontSizeSlider();
+        this.displayDailyNoteSetting();
+        this.displayWeeklyNoteSetting();
+        this.displayMonthlyNoteSetting();
+        this.displayQuarterlyNoteSetting();
+        this.displayYearlyNoteSetting();
     }
 
     hide(): any {
@@ -50,16 +51,21 @@ export default class MainSettingTable extends PluginSettingTab {
         return super.hide();
     }
 
-    private fontSizeChangeModeSelect(): void {
+    private displayFontSizeChangeModeSelect(): void {
         const {containerEl} = this;
         let settingComponent = new Setting(containerEl);
         this.fontSizeChangeModeSelectRoot = createRoot(settingComponent.settingEl);
         this.fontSizeChangeModeSelectRoot.render(
-            <FontSizeChangeModeSelect mainController={this.mainController}/>
+            <FontSizeChangeModeSelect mainController={this.mainController} mainSettingTable={this}/>
         );
     }
 
-    private immutableFontSizeSlider(): void {
+    private displayImmutableFontSizeSlider(): void {
+
+        if (this.mainController.setting.fontSizeChangeMode !== FontSizeChangeMode.IMMUTABLE) {
+            return;
+        }
+
         const {containerEl} = this;
         let settingComponent = new Setting(containerEl);
         this.immutableFontSizeSliderRoot = createRoot(settingComponent.settingEl);
@@ -68,7 +74,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private dailyNoteSetting(): void {
+    private displayDailyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -89,7 +95,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private weeklyNoteSetting(): void {
+    private displayWeeklyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -110,7 +116,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private monthlyNoteSetting(): void {
+    private displayMonthlyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -131,7 +137,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private quarterlyNoteSetting(): void {
+    private displayQuarterlyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -152,7 +158,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private yearlyNoteSetting(): void {
+    private displayYearlyNoteSetting(): void {
 
         const {containerEl} = this;
 

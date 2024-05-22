@@ -19,11 +19,10 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
     newSelectItem.date = DateTime.local(showYear, showMonth);
 
     // 被选中和未被选中月份的背景颜色不同
-    let bodyStyle = "calendar-view-item d-hover-bg-color-base-50";
+    let bodyStyle = "d-normal-font calendar-view-item d-hover-bg-color-base-50";
     if (selectedItem.type === SelectedItemType.MONTH_ITEM && selectedItem.date.year === showYear && selectedItem.date.month === showMonth) {
-        bodyStyle = "calendar-view-item d-bg-color-blue";
+        bodyStyle = "d-normal-font calendar-view-item d-bg-color-blue";
     }
-
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
@@ -31,7 +30,7 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
         dotStyle = "calendar-view-dot";
     }
 
-    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
         <div>{showMonth}月</div>
         <div className={dotStyle}/>
@@ -50,9 +49,9 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
     newSelectItem.date = DateTime.local(showYear, showQuarter * 3 - 2);
 
     // 被选中和未被选中月份的背景颜色不同
-    let bodyStyle = "calendar-view-item d-hover-bg-color-base-50";
+    let bodyStyle = "d-normal-font calendar-view-item d-hover-bg-color-base-50";
     if (selectedItem.type === SelectedItemType.QUARTER_ITEM && selectedItem.date.year === showYear && selectedItem.date.quarter === showQuarter) {
-        bodyStyle = "calendar-view-item d-bg-color-blue";
+        bodyStyle = "d-normal-font calendar-view-item d-bg-color-blue";
     }
 
     // 有关联笔记的日期会使用一个点进行标注
@@ -61,9 +60,9 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
         dotStyle = "calendar-view-dot";
     }
 
-    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
-        <div>{showQuarter}季度</div>
+        <div>{mainController.getQuarterName(showQuarter)}</div>
         <div className={dotStyle}/>
     </div>
 }

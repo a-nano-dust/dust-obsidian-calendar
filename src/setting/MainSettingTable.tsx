@@ -6,11 +6,18 @@ import WeeklyNotePattern from "./WeeklyNotePattern";
 import QuarterlyNotePattern from "./QuarterlyNotePattern";
 import MonthlyNotePattern from "./MonthlyNotePattern";
 import YearlyNotePattern from "./YearlyNotePattern";
+import ImmutableFontSizeSlider from "./ImmutableFontSizeSlider";
+import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
+import {FontSizeChangeMode} from "../base/enum";
+import QuarterNameModeSelect from "./QuarterNameModeSelect";
 
 
 export default class MainSettingTable extends PluginSettingTab {
 
     mainController: MainController;
+    fontSizeChangeModeSelectRoot: Root | null;
+    immutableFontSizeSliderRoot: Root | null;
+    quarterNameModeSelectRoot: Root | null;
     dailyNotePatternRoot: Root | null;
     weeklyNotePatternRoot: Root | null;
     monthlyNotePatternRoot: Root | null;
@@ -20,6 +27,9 @@ export default class MainSettingTable extends PluginSettingTab {
     constructor(mainController: MainController) {
         super(mainController.plugin.app, mainController.plugin);
         this.mainController = mainController;
+        this.fontSizeChangeModeSelectRoot = null;
+        this.immutableFontSizeSliderRoot = null;
+        this.quarterNameModeSelectRoot = null;
         this.dailyNotePatternRoot = null;
         this.weeklyNotePatternRoot = null;
         this.monthlyNotePatternRoot = null;
@@ -30,19 +40,54 @@ export default class MainSettingTable extends PluginSettingTab {
     display(): any {
         const {containerEl} = this;
         containerEl.empty();
-        this.dailyNoteSetting();
-        this.weeklyNoteSetting();
-        this.monthlyNoteSetting();
-        this.quarterlyNoteSetting();
-        this.yearlyNoteSetting();
+        this.displayFontSizeChangeModeSelect();
+        this.displayImmutableFontSizeSlider();
+        this.displayQuarterNameModeSelect();
+        this.displayDailyNoteSetting();
+        this.displayWeeklyNoteSetting();
+        this.displayMonthlyNoteSetting();
+        this.displayQuarterlyNoteSetting();
+        this.displayYearlyNoteSetting();
     }
 
     hide(): any {
-        this.mainController.saveSettings().then(() => {});
+        this.mainController.saveSettings().then(() => this.mainController.flushCalendarView());
         return super.hide();
     }
 
-    private dailyNoteSetting(): void {
+    private displayFontSizeChangeModeSelect(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.fontSizeChangeModeSelectRoot = createRoot(settingComponent.settingEl);
+        this.fontSizeChangeModeSelectRoot.render(
+            <FontSizeChangeModeSelect mainController={this.mainController} mainSettingTable={this}/>
+        );
+    }
+
+    private displayImmutableFontSizeSlider(): void {
+
+        if (this.mainController.setting.fontSizeChangeMode !== FontSizeChangeMode.IMMUTABLE) {
+            return;
+        }
+
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.immutableFontSizeSliderRoot = createRoot(settingComponent.settingEl);
+        this.immutableFontSizeSliderRoot.render(
+            <ImmutableFontSizeSlider mainController={this.mainController}/>
+        );
+    }
+
+    private displayQuarterNameModeSelect(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.quarterNameModeSelectRoot = createRoot(settingComponent.settingEl);
+        this.quarterNameModeSelectRoot.render(
+            <QuarterNameModeSelect mainController={this.mainController}/>
+        );
+    }
+
+    private displayDailyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -63,7 +108,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private weeklyNoteSetting(): void {
+    private displayWeeklyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -84,7 +129,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private monthlyNoteSetting(): void {
+    private displayMonthlyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -105,7 +150,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private quarterlyNoteSetting(): void {
+    private displayQuarterlyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -126,7 +171,7 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
-    private yearlyNoteSetting(): void {
+    private displayYearlyNoteSetting(): void {
 
         const {containerEl} = this;
 
@@ -146,4 +191,6 @@ export default class MainSettingTable extends PluginSettingTab {
             <YearlyNotePattern mainController={this.mainController}/>
         );
     }
+
+
 }

@@ -8,7 +8,7 @@ import { MainControllerContext } from "../base/context";
 import Calendar from "./component/Calendar";
 import MainController from "../core/MainController";
 import { ConfigProvider } from "antd";
-import zhCN from 'antd/locale/zh_CN';
+import zhCN from "antd/locale/zh_CN";
 
 export const VIEW_TYPE_CALENDAR = "calendar-view";
 
@@ -21,18 +21,18 @@ export class CalendarView extends ItemView {
     super(leaf);
     this.mainController = mainController;
     this.icon = "lucide-calendar-check";
-		// console.log(this.app.getTheme());
+    // console.log(this.app.getTheme());
     this.theme = {
-			token: {
-				colorPrimary: this.app.getAccentColor(),
-			},
-			components: {
-				Calendar: {
-					fullBg: 'transparent',
-					fullPanelBg: 'transparent',
-				},
-			},
-		};
+      token: {
+        colorPrimary: this.app.getAccentColor(),
+      },
+      components: {
+        Calendar: {
+          fullBg: "transparent",
+          fullPanelBg: "transparent",
+        },
+      },
+    };
   }
 
   // 视图类型

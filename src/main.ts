@@ -30,12 +30,15 @@ export default class DustCalendarPlugin extends Plugin {
         });
 
         this.addSettingTab(new MainSettingTable(this.mainController));
-        this.mainController.activateCalendarView();
+
+        if (this.app.workspace.layoutReady) {
+            this.mainController.activateCalendarView();
+        }
     }
 
     // 关闭插件的时候执行释放资源的操作
     onunload() {
-
+        this.app.workspace.getLeavesOfType(VIEW_TYPE_CALENDAR).forEach((leaf) => leaf.detach());
     }
 }
 

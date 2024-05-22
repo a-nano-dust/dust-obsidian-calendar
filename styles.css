@@ -1,0 +1,170 @@
+.dust-calendar-header-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+  min-width: 40px;
+  border-radius: 4px;
+
+  /* font-size: 1.5em; */
+  position: relative;
+
+  font-variant: var(--h3-variant);
+  letter-spacing: -0.015em;
+  line-height: var(--h3-line-height);
+  font-size: var(--h3-size);
+  color: var(--h3-color);
+  font-weight: var(--h3-weight);
+  font-style: var(--h3-style);
+  font-family: var(--h3-font);
+}
+
+.calendar-view-body {
+  width: 100%;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.calendar-view-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1px;
+}
+
+.calendar-view-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+  min-width: 40px;
+  border-radius: 2px;
+
+  position: relative;
+}
+
+.calendar-view-item-body {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.calendar-view-dot {
+  height: 5px;
+  width: 5px;
+  background-color: var(--interactive-accent);
+  margin-bottom: 2px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -5px;
+}
+
+.calendar-view-no-dot {
+  height: 5px;
+  width: 5px;
+  margin-bottom: 2px;
+  border-radius: 50%;
+  display: none;
+}
+
+.enable-label {
+  border-width: 3px;
+  border-start-start-radius: 4px;
+  border-color: var(--color-base-50);
+  padding: 0 6px 0 6px;
+}
+
+.disable-label {
+  border-width: 1px 1px 1px 0;
+  border-radius: 0 10% 0 10%;
+  border-color: var(--color-base-50);
+  padding: 0 6px 0 6px;
+}
+
+.circular-label {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.d-hover-bold:hover {
+  font-weight: bold;
+}
+
+.d-opacity-20 {
+  opacity: 0.2;
+}
+
+.d-color-blue {
+  color: var(--color-blue);
+}
+
+.d-color-interactive {
+  color: var(--interactive-accent);
+}
+
+.d-hover-color-interactive:hover {
+  color: var(--interactive-accent);
+}
+
+.d-hover-color-blue:hover {
+  color: var(--color-blue);
+}
+
+.d-color-green {
+  color: var(--color-green);
+}
+
+.d-hover-color-green:hover {
+  color: var(--color-green);
+}
+
+.d-color-red {
+  color: var(--color-red);
+}
+
+.d-hover-color-red:hover {
+  color: var(--color-red);
+}
+
+.d-color-base-100 {
+  color: var(--color-base-100);
+}
+
+.d-bg-color-blue {
+  background-color: var(--color-blue);
+}
+
+.d-hover-bg-color-blue:hover {
+  background-color: var(--color-blue);
+}
+
+.d-bg-color-base-00 {
+  background-color: var(--color-base-00);
+}
+
+.d-bg-color-base-10 {
+  background-color: var(--color-base-10);
+}
+
+.d-bg-color-base-50 {
+  background-color: var(--color-base-50);
+}
+
+.d-hover-bg-color-base-50:hover {
+  background-color: var(--color-base-50);
+}
+
+.d-bg-color-base-100 {
+  background-color: var(--color-base-100);
+}
+
+.d-icon {
+  width: 1em;
+  height: 1em;
+}

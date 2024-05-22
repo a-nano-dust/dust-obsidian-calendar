@@ -1,1 +1,5 @@
 /dist/main.js
+
+node_modules
+
+main.js

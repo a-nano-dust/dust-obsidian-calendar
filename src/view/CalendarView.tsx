@@ -24,7 +24,7 @@ export class CalendarView extends ItemView {
     // console.log(this.app.getTheme());
     this.theme = {
       token: {
-        colorPrimary: this.app.getAccentColor(),
+        colorPrimary: (this.app as any).getAccentColor(),
       },
       components: {
         Calendar: {

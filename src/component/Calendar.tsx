@@ -1,24 +1,18 @@
 import React, { useMemo, useState } from "react";
-import { Button, Calendar, Col, Radio, Row, Select } from "antd";
-import type { CalendarProps } from "antd";
-import { createStyles } from "antd-style";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import type { Dayjs, ManipulateType } from "dayjs";
-import * as weekOfYear from "dayjs/plugin/weekOfYear"; // 导入插件
-import * as advancedFormat from "dayjs/plugin/advancedFormat"; // 导入插件
 import { HolidayUtil, Lunar } from "lunar-typescript";
-import "dayjs/locale/zh-cn";
+import { Calendar, Col, Radio, Row } from "antd";
+import type { CalendarProps } from "antd";
+import { createStyles } from "antd-style";
 import {
   DoubleLeftOutlined,
   DoubleRightOutlined,
   LeftOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-
-dayjs.extend(weekOfYear);
-dayjs.extend(advancedFormat);
-dayjs.locale("zh-CN");
+import { useApp, useMain } from "../base/hooks";
 
 const useStyle = createStyles(({ token, css, cx }) => {
   const lunar = css`
@@ -68,6 +62,7 @@ const useStyle = createStyles(({ token, css, cx }) => {
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-right: 4px;
       border-right: 1px solid rgba(5, 5, 5, 0.06);
     `,
     extraQ: css`
@@ -158,9 +153,12 @@ const useStyle = createStyles(({ token, css, cx }) => {
 const App: React.FC = () => {
   const { styles } = useStyle({ test: true });
 
+  const app = useApp();
+  const main = useMain();
+
   const [selectDate, setSelectDate] = React.useState<Dayjs>(dayjs());
 
-  const [mode, setMode] = useState<CalendarProps<Dayjs>["mode"]>("year");
+  const [mode, setMode] = useState<CalendarProps<Dayjs>["mode"]>("month");
   const changeMode = (mode: CalendarProps<Dayjs>["mode"] & "today") => {
     if (mode === "today") {
       setSelectDate(dayjs());
@@ -169,23 +167,25 @@ const App: React.FC = () => {
     setMode(mode);
   };
 
-  // const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>["mode"]) => {
-  //   console.log("onPanelChange", value.format("YYYY-MM-DD"), mode);
-  // };
-
-  // const onDateChange: CalendarProps<Dayjs>["onSelect"] = (
-  //   value,
-  //   selectInfo
-  // ) => {
-  //   console.log("onDateChange", value.format("YYYY-MM-DD"), selectInfo);
-  //   if (selectInfo.source === "date") {
-  //     setSelectDate(value);
-  //   }
-  // };
+  const onDateChange: CalendarProps<Dayjs>["onSelect"] = (
+    value,
+    selectInfo
+  ) => {
+    console.log(
+      "onDateChange",
+      app,
+      main,
+      value.format("YYYY-MM-DD"),
+      selectInfo
+    );
+    if (selectInfo.source === "date") {
+      // setSelectDate(value);
+    } else {
+    }
+  };
 
   const cellRender: CalendarProps<Dayjs>["fullCellRender"] = (date, info) => {
     const d = Lunar.fromDate(date.toDate());
-    const lunar = d.getDayInChinese();
     const solarTerm = d.getJieQi();
     const h = HolidayUtil.getHoliday(
       date.get("year"),
@@ -194,6 +194,10 @@ const App: React.FC = () => {
     );
     const displayHoliday =
       h?.getTarget() === h?.getDay() ? h?.getName() : undefined;
+    const dispalyDay =
+      d.getDay() === 1
+        ? d.getMonthInChinese().concat("月")
+        : d.getDayInChinese();
     if (info.type === "date") {
       return React.cloneElement(info.originNode, {
         ...info.originNode.props,
@@ -205,7 +209,7 @@ const App: React.FC = () => {
             {date.get("date")}
             {info.type === "date" && (
               <div className={styles.lunar}>
-                {displayHoliday || solarTerm || lunar}
+                {displayHoliday || solarTerm || dispalyDay}
               </div>
             )}
           </div>
@@ -377,9 +381,8 @@ const App: React.FC = () => {
           fullCellRender={cellRender}
           fullscreen={false}
           mode={mode}
-          // onPanelChange={onPanelChange}
-          // onSelect={onDateChange}
           value={selectDate}
+          onSelect={onDateChange}
           headerRender={({ value, type, onChange, onTypeChange }) => null}
         />
       </div>

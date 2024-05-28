@@ -1,0 +1,27 @@
+{
+  "daily": {
+    "open": true,
+    "format": "YYYY-MM-DD",
+    "folder": "日记"
+  },
+  "weekly": {
+    "open": true,
+    "format": "YYYY-[W]ww",
+    "folder": "周记"
+  },
+  "monthly": {
+    "open": true,
+    "format": "YYYY-MM",
+    "folder": "月度总结"
+  },
+  "quarterly": {
+    "open": true,
+    "format": "YYYY-[Q]Q",
+    "folder": "季度总结"
+  },
+  "yearly": {
+    "open": true,
+    "format": "YYYY",
+    "folder": "年度总结"
+  }
+}

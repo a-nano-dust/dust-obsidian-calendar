@@ -1,25 +1,23 @@
 import { StrictMode } from "react";
 import { createRoot, Root } from "react-dom/client";
-// import {Provider} from "react-redux";
 import { ItemView, WorkspaceLeaf } from "obsidian";
-import { MainControllerContext } from "../base/context";
-// import {store} from "../redux/store";
-// import CalendarViewImpl from "./calendar_view/CalendarViewImpl";
-import Calendar from "./component/Calendar";
-import MainController from "../core/MainController";
+import { ControllerContext, AppContext } from "../base/context";
+import Controller from "../base/Controller";
+// 配置 antd
 import { ConfigProvider } from "antd";
 import zhCN from "antd/locale/zh_CN";
+import Calendar from "../component/Calendar";
 
 export const VIEW_TYPE_CALENDAR = "calendar-view";
 
 export class CalendarView extends ItemView {
-  private readonly mainController: MainController;
+  private readonly controller: Controller;
   private root: Root | null = null;
   theme: {};
 
-  constructor(leaf: WorkspaceLeaf, mainController: MainController) {
+  constructor(leaf: WorkspaceLeaf, controller: Controller) {
     super(leaf);
-    this.mainController = mainController;
+    this.controller = controller;
     this.icon = "lucide-calendar-check";
     // console.log(this.app.getTheme());
     this.theme = {
@@ -49,11 +47,13 @@ export class CalendarView extends ItemView {
     this.root = createRoot(this.containerEl.children[1]);
     this.root.render(
       <StrictMode>
-        <MainControllerContext.Provider value={this.mainController}>
-          <ConfigProvider theme={this.theme} locale={zhCN}>
-            <Calendar />
-          </ConfigProvider>
-        </MainControllerContext.Provider>
+        <AppContext.Provider value={this.app}>
+          <ControllerContext.Provider value={this.controller}>
+            <ConfigProvider theme={this.theme} locale={zhCN}>
+              <Calendar />
+            </ConfigProvider>
+          </ControllerContext.Provider>
+        </AppContext.Provider>
       </StrictMode>
     );
   }
@@ -64,11 +64,13 @@ export class CalendarView extends ItemView {
     }
     this.root.render(
       <StrictMode>
-        <MainControllerContext.Provider value={this.mainController}>
-          <ConfigProvider theme={this.theme} locale={zhCN}>
-            <Calendar />
-          </ConfigProvider>
-        </MainControllerContext.Provider>
+        <AppContext.Provider value={this.app}>
+          <ControllerContext.Provider value={this.controller}>
+            <ConfigProvider theme={this.theme} locale={zhCN}>
+              <Calendar />
+            </ConfigProvider>
+          </ControllerContext.Provider>
+        </AppContext.Provider>
       </StrictMode>
     );
   }

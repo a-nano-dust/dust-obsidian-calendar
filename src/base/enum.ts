@@ -51,3 +51,12 @@ export enum QuarterNameMode {
     NUMBER = 1,                     // 数字：1、2、3、4
     CHINESE = 2                     // 中文：春、夏、秋、冬
 }
+
+/**
+ * 模板插件
+ */
+export enum TemplatePlugin {
+    NONE = 0,
+    OBSIDIAN = 1,
+    TEMPLATER = 2
+}

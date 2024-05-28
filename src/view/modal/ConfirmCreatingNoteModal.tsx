@@ -33,12 +33,11 @@ export default class ConfirmCreatingNoteModal extends Modal {
         });
     }
 
-    onClose(): void {
+    async onClose(): Promise<void> {
         if (this._canCreateFile) {
-            setTimeout(() => this._dairyController.createFile(this._filename), 100);
+            // setTimeout(() => this._dairyController.createFile(this._filename), 100);
+            await this._dairyController.createFile(this._filename);
         }
     }
-
-
 
 }

@@ -1,4 +1,4 @@
-import {MarkdownView, Notice, TAbstractFile, TFile, WorkspaceLeaf} from "obsidian";
+import {MarkdownView, TAbstractFile, TFile, WorkspaceLeaf} from "obsidian";
 import {DateTime} from "luxon";
 import DustCalendarPlugin from "../main";
 import SelectedItem from "../entity/SelectedItem";
@@ -105,14 +105,20 @@ export default class MainController {
         modal.open();
     }
 
-    public createFile(filename: Path): void {
-        PathUtil.create(filename, this.plugin.app.vault).then(abstractFile => {
-            this.openFileTabView(<TFile>abstractFile);
-            this.flushCalendarView();
-        }, () => new Notice("".concat('创建"', filename.string, '"失败')));
+    public async createFile(filename: Path): Promise<void> {
+        let abstractFile: TAbstractFile = await PathUtil.create(filename, this.plugin.app.vault);
+        await this.openFileTabView(<TFile>abstractFile);
+        this.flushCalendarView();
     }
 
-    public openFileTabView(tFile: TFile): void {
+    // public createFile(filename: Path): void {
+    //     PathUtil.create(filename, this.plugin.app.vault).then(abstractFile => {
+    //         this.openFileTabView(<TFile>abstractFile);
+    //         this.flushCalendarView();
+    //     }, () => new Notice("".concat('创建"', filename.string, '"失败')));
+    // }
+
+    public async openFileTabView(tFile: TFile): Promise<void> {
 
         const {app} = this._plugin;
 
@@ -133,7 +139,40 @@ export default class MainController {
             targetLeaf.openFile(tFile).then(() => {
             });
         }
+        console.log("app.workspace.activeEditor: ", app.workspace.activeEditor);
         app.workspace.revealLeaf(targetView.leaf);
+        app.workspace.setActiveLeaf(targetView.leaf, {focus: true});
+
+        console.log("app.workspace.activeEditor: ", app.workspace.activeEditor);
+
+        this.insertTemplateExecutor(this);
+
+        // while (app.workspace.activeEditor === null) {
+        //     await interrupt();
+        // }
+        // console.log("app.workspace.activeEditor: ", app.workspace.activeEditor);
+        // let realApp = (this._plugin.app as any);
+        // let templatesPlugin = realApp.internalPlugins.plugins.templates;
+        // let templateFile = realApp.vault.fileMap["模板/dust.md"];
+        // templatesPlugin.instance.insertTemplate(templateFile);
+
+
+        // let realApp = (this._plugin.app as any);
+        // console.log(realApp);
+        // let templatesPlugin = realApp.internalPlugins.plugins.templates;
+        // console.log(templatesPlugin);
+        // console.log(templatesPlugin.instance);
+        // // console.log(templatesPlugin.instance.prototype);
+        // let templateFile = realApp.vault.fileMap["模板/dust.md"];
+        // console.log(templateFile);
+        // // let insertTemplateRes = templatesPlugin.instance.insertTemplate(templateFile);
+        // // console.log(insertTemplateRes)
+        // // templatesPlugin.instance.prototype.insertTemplate(templateFile);
+        //
+        // setTimeout(() => {
+        //     templatesPlugin.instance.insertTemplate(templateFile);
+        // }, 5000);
+
     }
 
     activateCalendarView(): void {
@@ -161,6 +200,26 @@ export default class MainController {
 
         // 显示视图
         workspace.revealLeaf(leaf);
+    }
+
+    insertTemplateExecutor(mainController: MainController): void {
+
+        console.log("insertTemplateExecutor")
+        if (app.workspace.activeEditor !== null) {
+            mainController.insertTemplateA();
+        }
+        else {
+            setTimeout(() => mainController.insertTemplateExecutor(mainController), 100);
+        }
+
+    }
+
+    insertTemplateA(): void {
+        console.log("insertTemplateA")
+        let realApp = (this._plugin.app as any);
+        let templatesPlugin = realApp.internalPlugins.plugins.templates;
+        let templateFile = realApp.vault.fileMap["模板/dust.md"];
+        templatesPlugin.instance.insertTemplate(templateFile);
     }
 
     // 强制刷新日历页面

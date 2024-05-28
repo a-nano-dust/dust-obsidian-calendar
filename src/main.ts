@@ -34,6 +34,24 @@ export default class DustCalendarPlugin extends Plugin {
         if (this.app.workspace.layoutReady) {
             this.mainController.activateCalendarView();
         }
+
+        // const commandId = "ID";
+        // const commands = (this.app as any).commands;
+        // const commandExist = commands.listCommands().some((cmd: any) => cmd.id === commandId);
+        // commands.executeCommandById("ID");
+
+        // console.log("app: ",this.app);
+        // console.log("app.commands: ",(this.app as any).commands);
+        // console.log("app.commands.commands: ",(this.app as any).commands.commands);
+        //
+        // for (let key of Object.keys((this.app as any).commands.commands)) {
+        //     console.log(key);
+        // }
+
+        // const commands = (this.app as any).commands.commands;
+        //
+        // console.log(commands.commands);
+        // commands.forEach((e: any) => console.log(e.id));
     }
 
     // 关闭插件的时候执行释放资源的操作

@@ -18,7 +18,7 @@ function YearItem() {
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.hasNote(DateTime.local(selectedDate.year), NoteType.YEARLY)) {
+    if (mainController.noteController.hasNote(DateTime.local(selectedDate.year), NoteType.YEARLY)) {
         dotStyle = "calendar-view-dot";
     }
 
@@ -42,7 +42,7 @@ function YearItem() {
             <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastYear}/>
             <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
-                 onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
+                 onDoubleClick={() => mainController.noteController.openNoteByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
                 <div style={{width: "4em"}}>{selectedDate.year}年</div>
             </div>
             <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
@@ -62,7 +62,7 @@ function MonthItem() {
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.hasNote(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)) {
+    if (mainController.noteController.hasNote(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)) {
         dotStyle = "calendar-view-dot";
     }
 
@@ -87,7 +87,7 @@ function MonthItem() {
             <ChevronLeft className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastMonth}/>
             <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
-                 onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
+                 onDoubleClick={() => mainController.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
                 <div style={{width: "4em"}}>{selectedDate.month}月</div>
             </div>
             <ChevronRight className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
@@ -107,7 +107,7 @@ function QuarterItem() {
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.hasNote(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)) {
+    if (mainController.noteController.hasNote(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)) {
         dotStyle = "calendar-view-dot";
     }
 
@@ -131,7 +131,7 @@ function QuarterItem() {
             <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastQuarter}/>
             <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
-                 onDoubleClick={() => mainController.openFileByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
+                 onDoubleClick={() => mainController.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
                 <div style={{width: "3em"}}>{mainController.getQuarterName(selectedDate.quarter)}</div>
             </div>
             <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}

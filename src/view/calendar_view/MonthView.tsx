@@ -117,12 +117,12 @@ function DayItem({
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.hasNote(DateTime.local(targetDay.year, targetDay.month, targetDay.day), NoteType.DAILY)) {
+    if (mainController.noteController.hasNote(DateTime.local(targetDay.year, targetDay.month, targetDay.day), NoteType.DAILY)) {
         dotStyle = "calendar-view-dot";
     }
 
     return <div className={bodyStyle} onClick={onClickCallback}
-                onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
+                onDoubleClick={() => mainController.noteController.openNoteBySelectedItem(newSelectItem)}>
         <DayItemBody targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
         <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
         <div className={dotStyle}></div>
@@ -147,13 +147,13 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.hasNote(DateTime.local(targetDay.year, targetDay.month, targetDay.day), NoteType.WEEKLY)) {
+    if (mainController.noteController.hasNote(DateTime.local(targetDay.year, targetDay.month, targetDay.day), NoteType.WEEKLY)) {
         dotStyle = "calendar-view-dot";
     }
 
     return <div className={itemStyle} style={{fontWeight: "bold"}}
                 onClick={() => dispatch(updateSelectedItem(newSelectItem))}
-                onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
+                onDoubleClick={() => mainController.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div className={itemBodyStyle}>{targetDay.weekNumber}</div>
         <div className={dotStyle}/>
     </div>

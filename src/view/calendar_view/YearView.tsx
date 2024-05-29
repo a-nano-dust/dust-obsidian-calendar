@@ -26,12 +26,12 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.hasNote(DateTime.local(showYear, showMonth), NoteType.MONTHLY)) {
+    if (mainController.noteController.hasNote(DateTime.local(showYear, showMonth), NoteType.MONTHLY)) {
         dotStyle = "calendar-view-dot";
     }
 
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
-                onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
+                onDoubleClick={() => mainController.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div>{showMonth}月</div>
         <div className={dotStyle}/>
     </div>
@@ -56,12 +56,12 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.hasNote(DateTime.local(showYear, showQuarter * 3 - 2), NoteType.QUARTERLY)) {
+    if (mainController.noteController.hasNote(DateTime.local(showYear, showQuarter * 3 - 2), NoteType.QUARTERLY)) {
         dotStyle = "calendar-view-dot";
     }
 
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
-                onDoubleClick={() => mainController.openFileBySelectedItem(newSelectItem)}>
+                onDoubleClick={() => mainController.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div>{mainController.getQuarterName(showQuarter)}</div>
         <div className={dotStyle}/>
     </div>

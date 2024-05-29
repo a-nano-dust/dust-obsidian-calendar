@@ -1,18 +1,18 @@
 import {Modal, Setting} from "obsidian";
 import Path from "../../util/Path";
-import MainController from "../../core/MainController";
+import NoteController from "../../core/NoteController"
 
 export default class ConfirmCreatingNoteModal extends Modal {
 
     private _filename: Path;       // 要创建的文件名，可以包含路径
     private _canCreateFile: boolean;
-    private _dairyController: MainController;
+    private _noteController: NoteController;
 
-    constructor(filename: Path, dairyController: MainController) {
-        super(dairyController.plugin.app);
+    constructor(filename: Path, noteController: NoteController) {
+        super(noteController.mainController.app);
         this._filename = filename;
         this._canCreateFile = false;
-        this._dairyController = dairyController;
+        this._noteController = noteController;
     }
 
     onOpen(): void {
@@ -36,7 +36,7 @@ export default class ConfirmCreatingNoteModal extends Modal {
     async onClose(): Promise<void> {
         if (this._canCreateFile) {
             // setTimeout(() => this._dairyController.createFile(this._filename), 100);
-            await this._dairyController.createFile(this._filename);
+            await this._noteController.createNote(this._filename);
         }
     }
 

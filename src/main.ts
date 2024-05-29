@@ -1,4 +1,4 @@
-import {App, Plugin, PluginManifest} from 'obsidian';
+import {App, Plugin, PluginManifest, WorkspaceLeaf} from 'obsidian';
 import {CalendarView, VIEW_TYPE_CALENDAR} from './view/CalendarView';
 import MainSettingTable from "./setting/MainSettingTable";
 import MainController from "./core/MainController";
@@ -25,14 +25,14 @@ export default class DustCalendarPlugin extends Plugin {
             id: "active-calendar-view",
             name: "打开日历视图",
             callback: () => {
-                this.mainController.activateCalendarView();
+                DustCalendarPlugin.activateCalendarView(this);
             }
         });
 
         this.addSettingTab(new MainSettingTable(this.mainController));
 
         if (this.app.workspace.layoutReady) {
-            this.mainController.activateCalendarView();
+            await DustCalendarPlugin.activateCalendarView(this);
         }
 
         // const commandId = "ID";
@@ -58,5 +58,25 @@ export default class DustCalendarPlugin extends Plugin {
     onunload() {
         this.app.workspace.getLeavesOfType(VIEW_TYPE_CALENDAR).forEach((leaf) => leaf.detach());
     }
+
+
+    private static async activateCalendarView(plugin: Plugin): Promise<void> {
+        const {workspace} = plugin.app;
+
+        // 检查该类型的视图是否存在，如果不存在，则创建
+        let leaf: WorkspaceLeaf | null = null;
+        const leaves = workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
+        if (leaves.length > 0) {
+            leaf = leaves[0];
+        }
+        else {
+            leaf = workspace.getRightLeaf(false);
+            await leaf.setViewState({type: VIEW_TYPE_CALENDAR, active: true});
+        }
+
+        // 显示视图
+        workspace.revealLeaf(leaf);
+    }
+
 }
 

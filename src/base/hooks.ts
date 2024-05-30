@@ -7,6 +7,6 @@ export const useApp = (): App | undefined => {
   return useContext(AppContext);
 };
 
-export const useMain = (): Controller | undefined => {
+export const useController = (): Controller | undefined => {
   return useContext(ControllerContext);
 };

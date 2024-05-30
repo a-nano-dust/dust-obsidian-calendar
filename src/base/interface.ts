@@ -1,6 +1,6 @@
 import { NoteKey } from "./enum";
 
-interface noteConfig {
+export interface INoteConfig {
   open: boolean;
   format: string;
   folder: string;
@@ -8,9 +8,9 @@ interface noteConfig {
 }
 
 export interface IPluginSetting {
-  [NoteKey.DAILY]: noteConfig;
-  [NoteKey.WEEKLY]: noteConfig;
-  [NoteKey.MONTHLY]: noteConfig;
-  [NoteKey.QUARTERLY]: noteConfig;
-  [NoteKey.YEARLY]: noteConfig;
+  [NoteKey.DAILY]: INoteConfig;
+  [NoteKey.WEEKLY]: INoteConfig;
+  [NoteKey.MONTHLY]: INoteConfig;
+  [NoteKey.QUARTERLY]: INoteConfig;
+  [NoteKey.YEARLY]: INoteConfig;
 }

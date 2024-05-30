@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import type { Dayjs, ManipulateType } from "dayjs";
 import { HolidayUtil, Lunar } from "lunar-typescript";
-import { Calendar, Col, Radio, Row } from "antd";
+import { Calendar as AntCalendar, Col, Radio, Row } from "antd";
 import type { CalendarProps } from "antd";
 import { createStyles } from "antd-style";
 import {
@@ -12,12 +12,28 @@ import {
   LeftOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { useApp, useMain } from "../base/hooks";
+import { useApp, useController } from "../base/hooks";
+import { NoteKey } from "src/base/enum";
 
 const useStyle = createStyles(({ token, css, cx }) => {
   const lunar = css`
     color: ${token.colorTextTertiary};
     font-size: ${token.fontSizeSM}px;
+  `;
+  const exist = css`
+    position: relative;
+    &:after {
+      position: absolute;
+      z-index: 1;
+      content: "";
+      border-radius: 50%;
+      background-color: ${token.colorPrimary};
+      transform: translateX(-50%);
+      bottom: -6px;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+    }
   `;
   return {
     wrapper: css`
@@ -52,6 +68,11 @@ const useStyle = createStyles(({ token, css, cx }) => {
         &:hover {
           background: rgba(0, 0, 0, 0.08);
         }
+        &.${cx(exist)} {
+          &:after {
+            bottom: 0px;
+          }
+        }
       }
     `,
     content: css`
@@ -82,6 +103,11 @@ const useStyle = createStyles(({ token, css, cx }) => {
       font-weight: normal;
       margin: 6px !important;
       margin-left: 0 !important;
+      &.${cx(exist)} {
+        &:after {
+          bottom: 4px;
+        }
+      }
     `,
     extraQTd: css`
       font-weight: normal;
@@ -101,35 +127,18 @@ const useStyle = createStyles(({ token, css, cx }) => {
         background: rgba(0, 0, 0, 0.08);
       }
     `,
+    exist,
     lunar,
     text: css`
       position: relative;
       z-index: 1;
     `,
     today: css`
-      color: ${token.colorTextLightSolid};
-      background: ${token.colorPrimary};
-      &:hover {
-        background: ${token.colorPrimary};
-        opacity: 0.8;
-      }
+      color: ${token.colorPrimary};
       .${cx(lunar)} {
-        color: ${token.colorTextLightSolid};
-        opacity: 0.9;
+        color: ${token.colorPrimary};
       }
     `,
-    // current: css`
-    //   color: ${token.colorTextLightSolid};
-    //   background: ${token.colorPrimary};
-    //   &:hover {
-    //     background: ${token.colorPrimary};
-    //     opacity: 0.8;
-    //   }
-    //   .${cx(lunar)} {
-    //     color: ${token.colorTextLightSolid};
-    //     opacity: 0.9;
-    //   }
-    // `,
     monthCell: css`
       width: 120px;
       color: ${token.colorTextBase};
@@ -140,21 +149,16 @@ const useStyle = createStyles(({ token, css, cx }) => {
       }
     `,
     monthCellCurrent: css`
-      color: ${token.colorTextLightSolid};
-      background: ${token.colorPrimary};
-      &:hover {
-        background: ${token.colorPrimary};
-        opacity: 0.8;
-      }
+      color: ${token.colorPrimary} !important;
     `,
   };
 });
 
-const App: React.FC = () => {
+const Calendar: React.FC<{ time: number }> = ({ time }) => {
   const { styles } = useStyle({ test: true });
 
-  const app = useApp();
-  const main = useMain();
+  // const app = useApp();
+  const controller = useController();
 
   const [selectDate, setSelectDate] = React.useState<Dayjs>(dayjs());
 
@@ -165,23 +169,6 @@ const App: React.FC = () => {
       return;
     }
     setMode(mode);
-  };
-
-  const onDateChange: CalendarProps<Dayjs>["onSelect"] = (
-    value,
-    selectInfo
-  ) => {
-    console.log(
-      "onDateChange",
-      app,
-      main,
-      value.format("YYYY-MM-DD"),
-      selectInfo
-    );
-    if (selectInfo.source === "date") {
-      // setSelectDate(value);
-    } else {
-    }
   };
 
   const cellRender: CalendarProps<Dayjs>["fullCellRender"] = (date, info) => {
@@ -203,9 +190,13 @@ const App: React.FC = () => {
         ...info.originNode.props,
         className: classNames(styles.dateCell, {
           [styles.today]: date.isSame(dayjs(), "date"),
+          [styles.exist]: controller?.noteIsExists(date, NoteKey.DAILY),
         }),
         children: (
-          <div className={styles.text}>
+          <div
+            className={styles.text}
+            onClick={() => controller?.openOrCreatFile(date, NoteKey.DAILY)}
+          >
             {date.get("date")}
             {info.type === "date" && (
               <div className={styles.lunar}>
@@ -226,7 +217,9 @@ const App: React.FC = () => {
         <div
           className={classNames(styles.monthCell, {
             [styles.monthCellCurrent]: date.isSame(dayjs(), "month"),
+            [styles.exist]: controller?.noteIsExists(date, NoteKey.MONTHLY),
           })}
+          onClick={() => controller?.openOrCreatFile(date, NoteKey.MONTHLY)}
         >
           {date.get("month") + 1}月（{month}月）
         </div>
@@ -265,9 +258,57 @@ const App: React.FC = () => {
   }, [selectDate]);
 
   const weeksArr = useMemo(() => {
-    const week = dayjs(`${selectDate.format("YYYY-MM")}-01`).week();
-    return new Array(6).fill(week).map((v, idx) => v + idx);
-  }, [selectDate]);
+    const firstWeek = dayjs(`${selectDate.format("YYYY-MM")}-01`);
+    return new Array(6)
+      .fill(firstWeek)
+      .map<Dayjs>((v, idx) => v.add(idx, "w"))
+      .map((v) => {
+        let week = v.week();
+        return (
+          <div
+            key={week}
+            className={classNames(
+              styles.extraWTd,
+              styles.flexCenter,
+              styles.dateCell,
+              {
+                [styles.exist]: controller?.noteIsExists(v, NoteKey.WEEKLY),
+              }
+            )}
+            onClick={() => controller?.openOrCreatFile(v, NoteKey.WEEKLY)}
+          >
+            {week}
+          </div>
+        );
+      });
+  }, [selectDate, time]);
+
+  const quartersArr = useMemo(() => {
+    const firstQuarter = dayjs(`${selectDate.format("YYYY")}-01-01`);
+    return new Array(4)
+      .fill(firstQuarter)
+      .map<Dayjs>((v, idx) => v.add(idx, "Q"))
+      .map((v) => {
+        let quarter = v.quarter();
+        return (
+          <div
+            key={quarter}
+            className={classNames(
+              styles.extraQTd,
+              styles.flexCenter,
+              styles.dateCell,
+              {
+                [styles.exist]: controller?.noteIsExists(v, NoteKey.QUARTERLY),
+              }
+            )}
+            onClick={() => controller?.openOrCreatFile(v, NoteKey.QUARTERLY)}
+          >
+            第{["一", "二", "三", "四"][quarter - 1]}
+            <div className={styles.text}>季度</div>
+          </div>
+        );
+      });
+  }, [selectDate, time]);
 
   return (
     <div className={styles.wrapper}>
@@ -313,9 +354,45 @@ const App: React.FC = () => {
           </Col>
           <Col flex="auto">
             <div className={classNames(styles.headerDate, styles.flexCenter)}>
-              <div>{yearLabel}</div>
-              <div>{monthlabel}</div>
-              <div>{quarterLabel}</div>
+              <div
+                onClick={() =>
+                  controller?.openOrCreatFile(selectDate, NoteKey.YEARLY)
+                }
+                className={classNames({
+                  [styles.exist]: controller?.noteIsExists(
+                    selectDate,
+                    NoteKey.YEARLY
+                  ),
+                })}
+              >
+                {yearLabel}
+              </div>
+              <div
+                onClick={() =>
+                  controller?.openOrCreatFile(selectDate, NoteKey.MONTHLY)
+                }
+                className={classNames({
+                  [styles.exist]: controller?.noteIsExists(
+                    selectDate,
+                    NoteKey.MONTHLY
+                  ),
+                })}
+              >
+                {monthlabel}
+              </div>
+              <div
+                onClick={() =>
+                  controller?.openOrCreatFile(selectDate, NoteKey.QUARTERLY)
+                }
+                className={classNames({
+                  [styles.exist]: controller?.noteIsExists(
+                    selectDate,
+                    NoteKey.QUARTERLY
+                  ),
+                })}
+              >
+                {quarterLabel}
+              </div>
             </div>
             <div className={classNames(styles.flexCenter)}>{chineseLabel}</div>
           </Col>
@@ -343,51 +420,22 @@ const App: React.FC = () => {
             <div className={classNames(styles.extraWTh, styles.flexCenter)}>
               周
             </div>
-            {weeksArr.map((v) => {
-              return (
-                <div
-                  key={v}
-                  className={classNames(
-                    styles.extraWTd,
-                    styles.flexCenter,
-                    styles.dateCell
-                  )}
-                >
-                  {v}
-                </div>
-              );
-            })}
+            {weeksArr}
           </div>
         ) : (
-          <div className={styles.extraQ}>
-            {["一", "二", "三", "四"].map((v) => {
-              return (
-                <div
-                  key={v}
-                  className={classNames(
-                    styles.extraQTd,
-                    styles.flexCenter,
-                    styles.dateCell
-                  )}
-                >
-                  第{v}
-                  <div className={styles.text}>季度</div>
-                </div>
-              );
-            })}
-          </div>
+          <div className={styles.extraQ}>{quartersArr}</div>
         )}
-        <Calendar
+        <AntCalendar
           fullCellRender={cellRender}
           fullscreen={false}
           mode={mode}
           value={selectDate}
-          onSelect={onDateChange}
-          headerRender={({ value, type, onChange, onTypeChange }) => null}
+          // onSelect={onDateChange}
+          headerRender={() => null}
         />
       </div>
     </div>
   );
 };
 
-export default App;
+export default Calendar;

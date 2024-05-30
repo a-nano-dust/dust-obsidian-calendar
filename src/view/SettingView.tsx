@@ -79,6 +79,7 @@ export default class MainSettingTable extends PluginSettingTab {
     const { containerEl } = this;
 
     containerEl.createEl("h3", { text: noteConfigItem.title });
+    // new Setting(containerEl).setName('your heading title').setHeading();
 
     new Setting(containerEl)
       .setName(`是否开启${noteConfigItem.title}`)

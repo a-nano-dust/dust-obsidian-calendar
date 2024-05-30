@@ -50,7 +50,7 @@ export class CalendarView extends ItemView {
         <AppContext.Provider value={this.app}>
           <ControllerContext.Provider value={this.controller}>
             <ConfigProvider theme={this.theme} locale={zhCN}>
-              <Calendar />
+              <Calendar time={0}/>
             </ConfigProvider>
           </ControllerContext.Provider>
         </AppContext.Provider>
@@ -62,12 +62,13 @@ export class CalendarView extends ItemView {
     if (this.root === null) {
       return;
     }
+    const time = Date.now();
     this.root.render(
       <StrictMode>
         <AppContext.Provider value={this.app}>
           <ControllerContext.Provider value={this.controller}>
             <ConfigProvider theme={this.theme} locale={zhCN}>
-              <Calendar />
+              <Calendar time={time}/>
             </ConfigProvider>
           </ControllerContext.Provider>
         </AppContext.Provider>

@@ -22,7 +22,7 @@
     "esbuild": "0.20.0",
     "lucide-react": "^0.356.0",
     "luxon": "^3.4.4",
-    "obsidian": "latest",
+    "obsidian": "^1.5.7-1",
     "react-redux": "^9.1.0",
     "redux": "^5.0.1",
     "ts-node": "^10.9.2",

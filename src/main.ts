@@ -5,20 +5,25 @@ import Controller from "./base/Controller";
 
 // 配置时间插件
 import dayjs from "dayjs";
-import * as weekOfYear from "dayjs/plugin/weekOfYear"; // 导入插件
-import * as advancedFormat from "dayjs/plugin/advancedFormat"; // 导入插件
+import quarterOfYear from "dayjs/plugin/quarterOfYear";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import weekOfYear from "dayjs/plugin/weekOfYear";
 import "dayjs/locale/zh-cn";
-dayjs.extend(weekOfYear);
+
 dayjs.extend(advancedFormat);
+dayjs.extend(quarterOfYear);
+dayjs.extend(weekOfYear);
 dayjs.locale("zh-CN");
 
 // 插件对象
 export default class DustCalendarPlugin extends Plugin {
   private readonly controller: Controller;
+  private flushCalendarView;
 
   constructor(app: App, manifest: PluginManifest) {
     super(app, manifest);
     this.controller = new Controller(this);
+    this.flushCalendarView = () => this.controller.flushCalendarView();
   }
 
   // 插件开启时执行初始化操作
@@ -44,6 +49,11 @@ export default class DustCalendarPlugin extends Plugin {
     if (this.app.workspace.layoutReady) {
       this.controller.activateCalendarView();
     }
+
+    // 添加监听
+    this.app.vault.on("create", this.flushCalendarView);
+    this.app.vault.on("delete", this.flushCalendarView);
+    this.app.vault.on("rename", this.flushCalendarView);
   }
 
   // 关闭插件的时候执行释放资源的操作
@@ -51,5 +61,9 @@ export default class DustCalendarPlugin extends Plugin {
     this.app.workspace
       .getLeavesOfType(VIEW_TYPE_CALENDAR)
       .forEach((leaf) => leaf.detach());
+    // 去除监听
+    this.app.vault.off("create", this.flushCalendarView);
+    this.app.vault.off("delete", this.flushCalendarView);
+    this.app.vault.off("rename", this.flushCalendarView);
   }
 }

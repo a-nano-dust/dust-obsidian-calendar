@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot, Root } from "react-dom/client";
 import { ItemView, WorkspaceLeaf } from "obsidian";
-import { ControllerContext, AppContext } from "../base/context";
+import { ControllerContext } from "../base/context";
 import Controller from "../base/Controller";
 // 配置 antd
 import { ConfigProvider } from "antd";
@@ -47,13 +47,11 @@ export class CalendarView extends ItemView {
     this.root = createRoot(this.containerEl.children[1]);
     this.root.render(
       <StrictMode>
-        <AppContext.Provider value={this.app}>
-          <ControllerContext.Provider value={this.controller}>
-            <ConfigProvider theme={this.theme} locale={zhCN}>
-              <Calendar time={0}/>
-            </ConfigProvider>
-          </ControllerContext.Provider>
-        </AppContext.Provider>
+        <ControllerContext.Provider value={this.controller}>
+          <ConfigProvider theme={this.theme} locale={zhCN}>
+            <Calendar time={0} />
+          </ConfigProvider>
+        </ControllerContext.Provider>
       </StrictMode>
     );
   }
@@ -65,13 +63,11 @@ export class CalendarView extends ItemView {
     const time = Date.now();
     this.root.render(
       <StrictMode>
-        <AppContext.Provider value={this.app}>
-          <ControllerContext.Provider value={this.controller}>
-            <ConfigProvider theme={this.theme} locale={zhCN}>
-              <Calendar time={time}/>
-            </ConfigProvider>
-          </ControllerContext.Provider>
-        </AppContext.Provider>
+        <ControllerContext.Provider value={this.controller}>
+          <ConfigProvider theme={this.theme} locale={zhCN}>
+            <Calendar time={time} />
+          </ConfigProvider>
+        </ControllerContext.Provider>
       </StrictMode>
     );
   }

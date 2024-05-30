@@ -18,19 +18,21 @@ export default class ConfirmCreatingNoteModal extends Modal {
     this.contentEl.createEl("p", {
       text: "".concat("是否要创建一个路径为 ", this._path, " 的笔记"),
     });
-    let setting = new Setting(this.contentEl);
-    setting.addButton((btn) => {
-      btn.setButtonText("取消");
-      btn.onClick(() => this.close());
-    });
-    setting.addButton((btn) => {
-      btn.setButtonText("确定");
-      btn.setCta();
-      btn.onClick(() => {
-        this._controller.createFile(this._path, this._folder);
-        this.close();
+    console.log('this.contentEl', [this.contentEl])
+    new Setting(this.contentEl)
+      .setClass("dust-calendar-modal")
+      .addButton((btn) => {
+        btn.setButtonText("取消");
+        btn.onClick(() => this.close());
+      })
+      .addButton((btn) => {
+        btn.setButtonText("确定");
+        btn.setCta();
+        btn.onClick(() => {
+          this._controller.createFile(this._path, this._folder);
+          this.close();
+        });
       });
-    });
   }
 
   onClose(): void {}

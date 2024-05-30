@@ -157,7 +157,6 @@ const useStyle = createStyles(({ token, css, cx }) => {
 const Calendar: React.FC<{ time: number }> = ({ time }) => {
   const { styles } = useStyle({ test: true });
 
-  // const app = useApp();
   const controller = useController();
 
   const [selectDate, setSelectDate] = React.useState<Dayjs>(dayjs());

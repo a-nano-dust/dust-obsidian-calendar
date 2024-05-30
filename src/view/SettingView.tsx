@@ -65,7 +65,7 @@ export default class MainSettingTable extends PluginSettingTab {
 
   saveSettings() {
     this.controller.saveSettings();
-    // this.containe
+    this.display()
   }
 
   hide(): any {
@@ -79,7 +79,6 @@ export default class MainSettingTable extends PluginSettingTab {
     const { containerEl } = this;
 
     containerEl.createEl("h3", { text: noteConfigItem.title });
-    // new Setting(containerEl).setName('your heading title').setHeading();
 
     new Setting(containerEl)
       .setName(`是否开启${noteConfigItem.title}`)
@@ -109,7 +108,6 @@ export default class MainSettingTable extends PluginSettingTab {
               &nbsp;指定笔记文件的文件名
             </div>
             <div>规则应用后的文件名为(基于当前日期)：<b>{text}</b></div>
-            <b>修改后生效，重新进入设置页面时刷新示例文件名</b>
           </>
         }
         value={format}

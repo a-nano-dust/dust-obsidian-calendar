@@ -99,6 +99,10 @@
     opacity: 0.2;
 }
 
+.d-color-error {
+    color: var(--text-error);
+}
+
 .d-color-blue {
     color: var(--color-blue);
 }

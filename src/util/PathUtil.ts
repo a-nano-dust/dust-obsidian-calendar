@@ -6,7 +6,7 @@ import {TAbstractFile, Vault} from "obsidian"
 export default class PathUtil {
 
     public static exists(path: Path, vault: Vault): boolean {
-        return vault.getAbstractFileByPath(path.string) != null;
+        return vault.getAbstractFileByPath(path.string) !== null;
     }
 
     public static async create(path: Path, vault: Vault): Promise<TAbstractFile> {

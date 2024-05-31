@@ -17,7 +17,12 @@ export default class NoteController {
     }
 
     public hasNote(date: DateTime, noteType: NoteType): boolean {
-        return this.getNoteByFilename(date, noteType) !== null;
+        const noteFilename = this.getNoteFilename(date, noteType);
+        if (noteFilename === null) {
+            return false;
+        }
+        const abstractFile = this._mainController.app.vault.getAbstractFileByPath(noteFilename);
+        return abstractFile instanceof TFile;
     }
 
     public openNoteBySelectedItem(selectedItem: SelectedItem): void {
@@ -39,16 +44,16 @@ export default class NoteController {
     }
 
     public openNoteByNoteType(date: DateTime, noteType: NoteType): void {
-        const notePattern: string | null = this.getNotePattern(noteType);
-        if (notePattern === null) {
+
+        const noteFilename = this.getNoteFilename(date, noteType);
+        if (noteFilename === null) {
             return;
         }
-
-        const notePath = date.toFormat(notePattern).concat(".md");
-        this.openNote(new Path(notePath));
+        this._mainController.templateController.noteType = noteType;
+        this.openNoteByFilename(new Path(noteFilename));
     }
 
-    public openNote(filename: Path): void {
+    public openNoteByFilename(filename: Path): void {
         const vault = this._mainController.app.vault;
         const file = vault.getAbstractFileByPath(filename.string);
         if (file !== null) {
@@ -64,6 +69,7 @@ export default class NoteController {
         let abstractFile: TAbstractFile = await PathUtil.create(filename, this._mainController.app.vault);
         this.openNoteTabView(abstractFile as TFile);
         this._mainController.flushCalendarView();
+        this._mainController.templateController.insertTemplate();
     }
 
     private openNoteTabView(tFile: TFile): void {
@@ -97,18 +103,13 @@ export default class NoteController {
         // this.insertTemplateExecutor(this);
     }
 
-    private getNoteByFilename(date: DateTime, noteType: NoteType): string | null {
+    private getNoteFilename(date: DateTime, noteType: NoteType): string | null {
         const notePattern: string | null = this.getNotePattern(noteType);
         if (notePattern === null) {
             return null;
         }
 
-        const notePath = date.toFormat(notePattern).concat(".md");
-        const abstractFile = this._mainController.app.vault.getAbstractFileByPath(notePath);
-        if (!(abstractFile instanceof TFile)) {
-            return null;
-        }
-        return abstractFile.path;
+        return date.toFormat(notePattern).concat(".md");
     }
 
     private getNotePattern(noteType: NoteType): string | null {

@@ -1,15 +1,17 @@
 import {PluginSettingTab, Setting} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
-import DailyNotePattern from "./DailyNotePattern";
 import MainController from "../core/MainController";
+import {FontSizeChangeMode, TemplatePlugin} from "../base/enum";
+import DailyNotePattern from "./DailyNotePattern";
 import WeeklyNotePattern from "./WeeklyNotePattern";
 import QuarterlyNotePattern from "./QuarterlyNotePattern";
 import MonthlyNotePattern from "./MonthlyNotePattern";
 import YearlyNotePattern from "./YearlyNotePattern";
 import ImmutableFontSizeSlider from "./ImmutableFontSizeSlider";
 import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
-import {FontSizeChangeMode} from "../base/enum";
 import QuarterNameModeSelect from "./QuarterNameModeSelect";
+import DailyNoteTemplate from "./DailyNoteTemplate";
+import TemplatePluginSelect from "./TemplatePluginSelect";
 
 
 export default class MainSettingTable extends PluginSettingTab {
@@ -18,19 +20,24 @@ export default class MainSettingTable extends PluginSettingTab {
     fontSizeChangeModeSelectRoot: Root | null;
     immutableFontSizeSliderRoot: Root | null;
     quarterNameModeSelectRoot: Root | null;
+    templatePluginSelectRoot: Root | null;
     dailyNotePatternRoot: Root | null;
+    dailyNoteTemplateRoot: Root | null;
     weeklyNotePatternRoot: Root | null;
     monthlyNotePatternRoot: Root | null;
     quarterlyNotePatternRoot: Root | null;
     yearlyNotePatternRoot: Root | null;
 
     constructor(mainController: MainController) {
+
         super(mainController.plugin.app, mainController.plugin);
         this.mainController = mainController;
         this.fontSizeChangeModeSelectRoot = null;
         this.immutableFontSizeSliderRoot = null;
         this.quarterNameModeSelectRoot = null;
+        this.templatePluginSelectRoot = null;
         this.dailyNotePatternRoot = null;
+        this.dailyNoteTemplateRoot = null;
         this.weeklyNotePatternRoot = null;
         this.monthlyNotePatternRoot = null;
         this.quarterlyNotePatternRoot = null;
@@ -43,6 +50,7 @@ export default class MainSettingTable extends PluginSettingTab {
         this.displayFontSizeChangeModeSelect();
         this.displayImmutableFontSizeSlider();
         this.displayQuarterNameModeSelect();
+        this.displayTemplatePluginSelect();
         this.displayDailyNoteSetting();
         this.displayWeeklyNoteSetting();
         this.displayMonthlyNoteSetting();
@@ -87,6 +95,18 @@ export default class MainSettingTable extends PluginSettingTab {
         );
     }
 
+    private displayTemplatePluginSelect(): void {
+
+        console.log("displayTemplatePluginSelect");
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.templatePluginSelectRoot = createRoot(settingComponent.settingEl);
+        this.templatePluginSelectRoot.render(
+            <TemplatePluginSelect mainController={this.mainController} mainSettingTable={this}/>
+        );
+    }
+
+
     private displayDailyNoteSetting(): void {
 
         const {containerEl} = this;
@@ -106,6 +126,15 @@ export default class MainSettingTable extends PluginSettingTab {
         this.dailyNotePatternRoot.render(
             <DailyNotePattern mainController={this.mainController}/>
         );
+
+        if (this.mainController.setting.templatePlugin !== TemplatePlugin.NONE) {
+            let dairyTemplate = new Setting(containerEl);
+            dairyTemplate.settingEl.empty();
+            this.dailyNoteTemplateRoot = createRoot(dairyTemplate.settingEl);
+            this.dailyNoteTemplateRoot.render(
+                <DailyNoteTemplate mainController={this.mainController}/>
+            );
+        }
     }
 
     private displayWeeklyNoteSetting(): void {

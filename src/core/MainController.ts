@@ -2,8 +2,9 @@ import {App, WorkspaceLeaf} from "obsidian";
 import DustCalendarPlugin from "../main";
 import PluginSetting from "../entity/PluginSetting";
 import {CalendarView, VIEW_TYPE_CALENDAR} from "../view/CalendarView";
-import {QuarterNameMode} from "../base/enum";
+import {QuarterNameMode, TemplatePlugin} from "../base/enum";
 import NoteController from "./NoteController";
+import TemplateController from "./TemplateController";
 
 
 export default class MainController {
@@ -12,6 +13,7 @@ export default class MainController {
     private readonly _plugin: DustCalendarPlugin;
     private _setting: PluginSetting;
     private _noteController: NoteController;
+    private _templateController: TemplateController;
     private _quarterNameMap: Map<number, string> | null;
 
     constructor(plugin: DustCalendarPlugin) {
@@ -19,6 +21,9 @@ export default class MainController {
         this._app = plugin.app;
         this._setting = new PluginSetting();
         this._noteController = new NoteController(this);
+        this._templateController = new TemplateController(this);
+        this._templateController.templatePlugin = TemplatePlugin.OBSIDIAN;
+
         this._quarterNameMap = null;
     }
 
@@ -63,6 +68,10 @@ export default class MainController {
 
     get noteController(): NoteController {
         return this._noteController;
+    }
+
+    get templateController(): TemplateController {
+        return this._templateController;
     }
 
     private updateQuarterNameMap() {

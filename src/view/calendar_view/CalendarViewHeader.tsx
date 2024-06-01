@@ -1,7 +1,7 @@
 import {useContext, useState} from 'react';
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
-import {selectCalendarViewType, updateCalendarViewType} from "../../redux/calendarViewType";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
+import {selectSelectedItem, updateSelectedItem} from "../redux/selectedItemSlice";
+import {selectCalendarViewType, updateCalendarViewType} from "../redux/calendarViewType";
 import {DateTime} from "luxon";
 import {ChevronLeft, ChevronRight} from 'lucide-react';
 import SelectedItem from "../../entity/SelectedItem";

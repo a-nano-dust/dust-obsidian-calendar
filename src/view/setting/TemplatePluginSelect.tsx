@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
-import DustCalendarPlugin from "../main";
+import DustCalendarPlugin from "../../main";
 
 
 export default function TemplatePluginSelect({plugin}: { plugin: DustCalendarPlugin }) {

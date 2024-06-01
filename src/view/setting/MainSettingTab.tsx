@@ -1,6 +1,6 @@
 import {PluginSettingTab, Setting} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
-import {FontSizeChangeMode, TemplatePlugin} from "../base/enum";
+import {FontSizeChangeMode, TemplatePlugin} from "../../base/enum";
 import DailyNotePattern from "./DailyNotePattern";
 import WeeklyNotePattern from "./WeeklyNotePattern";
 import QuarterlyNotePattern from "./QuarterlyNotePattern";
@@ -11,7 +11,7 @@ import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
 import QuarterNameModeSelect from "./QuarterNameModeSelect";
 import DailyNoteTemplate from "./DailyNoteTemplate";
 import TemplatePluginSelect from "./TemplatePluginSelect";
-import DustCalendarPlugin from "../main";
+import DustCalendarPlugin from "../../main";
 
 
 export default class MainSettingTab extends PluginSettingTab {

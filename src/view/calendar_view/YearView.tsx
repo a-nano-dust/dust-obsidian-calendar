@@ -1,6 +1,6 @@
 import {useContext} from "react";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
+import {selectSelectedItem, updateSelectedItem} from "../redux/selectedItemSlice";
 import {PluginContext} from "../context";
 import {NoteType, SelectedItemType} from "../../base/enum";
 import {DateTime} from "luxon";

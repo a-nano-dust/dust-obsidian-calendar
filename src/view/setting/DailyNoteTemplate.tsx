@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useState} from "react";
-import Path from "../util/Path";
-import DustCalendarPlugin from "../main";
+import Path from "../../util/Path";
+import DustCalendarPlugin from "../../main";
 
 
 export default function DailyNoteTemplate({plugin}: { plugin: DustCalendarPlugin }) {

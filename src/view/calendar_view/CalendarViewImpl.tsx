@@ -1,12 +1,12 @@
 import {useContext, useEffect, useRef, useState} from "react";
 import DayListOfMonthView from "../../entity/DayListOfMonthView";
 import MonthView from "./MonthView";
-import {useAppSelector} from "../../redux/hooks";
+import {useAppSelector} from "../redux/hooks";
 import CalendarViewHeader from "./CalendarViewHeader";
 import YearView from "./YearView";
-import {selectCalendarViewType} from "../../redux/calendarViewType";
+import {selectCalendarViewType} from "../redux/calendarViewType";
 import {CalendarViewType, FontSizeChangeMode} from "../../base/enum"
-import {selectSelectedItem} from "../../redux/selectedItemSlice";
+import {selectSelectedItem} from "../redux/selectedItemSlice";
 import {PluginContext} from "../context";
 
 export default function CalendarViewImpl() {

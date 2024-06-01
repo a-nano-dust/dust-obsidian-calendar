@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import SelectedItem from "../entity/SelectedItem";
+import SelectedItem from "../../entity/SelectedItem";
 import {RootState} from "./store";
 
 interface SelectedItemState {

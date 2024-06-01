@@ -3,7 +3,7 @@ import {CalendarView, VIEW_TYPE_CALENDAR} from './view/CalendarView';
 import Database from "./core/Database";
 import NoteController from "./core/NoteController";
 import TemplateController from "./core/TemplateController";
-import MainSettingTab from "./setting/MainSettingTab";
+import MainSettingTab from "./view/setting/MainSettingTab";
 
 
 // 插件对象

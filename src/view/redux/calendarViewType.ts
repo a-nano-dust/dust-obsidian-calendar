@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "./store";
-import {CalendarViewType} from "../base/enum"
+import {CalendarViewType} from "../../base/enum"
 
 interface CalendarViewTypeInterface {
     value: CalendarViewType

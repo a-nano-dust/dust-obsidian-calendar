@@ -1,8 +1,8 @@
 import {useContext} from "react";
 import {DateTime} from "luxon";
 import {HolidayUtil} from "lunar-typescript";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
+import {selectSelectedItem, updateSelectedItem} from "../redux/selectedItemSlice";
 import SelectedItem from "../../entity/SelectedItem";
 import {DayItemFooterEntity} from "../../entity/DayItemFooterEntity";
 import DayListOfMonthView from "../../entity/DayListOfMonthView";

@@ -2,7 +2,7 @@ import {StrictMode} from "react";
 import {createRoot, Root} from "react-dom/client";
 import {Provider} from "react-redux";
 import {ItemView, WorkspaceLeaf} from "obsidian";
-import {store} from "../redux/store";
+import {store} from "./redux/store";
 import CalendarViewImpl from "./calendar_view/CalendarViewImpl";
 import DustCalendarPlugin from "../main";
 import {PluginContext} from "./context";

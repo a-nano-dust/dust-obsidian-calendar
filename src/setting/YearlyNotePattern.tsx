@@ -1,15 +1,15 @@
 import React, {ChangeEvent, useState} from "react";
 import {DateTime} from "luxon";
-import MainController from "../core/MainController";
+import DustCalendarPlugin from "../main";
 
 
-export default function YearlyNotePattern({mainController}: { mainController: MainController }) {
+export default function YearlyNotePattern({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [pattern, setPattern] = useState(mainController.setting.yearlyNotePattern);
+    const [pattern, setPattern] = useState(plugin.database.setting.yearlyNotePattern);
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPattern(e.target.value);
-        mainController.setting.yearlyNotePattern = e.target.value;
+        plugin.database.setting.yearlyNotePattern = e.target.value;
     };
 
     const text = DateTime.now().toFormat(pattern);

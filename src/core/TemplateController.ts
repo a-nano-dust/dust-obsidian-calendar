@@ -1,20 +1,20 @@
 import {TAbstractFile} from 'obsidian';
 import {NoteType, TemplatePlugin} from "../base/enum";
-import MainController from "./MainController";
 import Path from "../util/Path";
 import PathUtil from "../util/PathUtil";
+import DustCalendarPlugin from "../main";
 
 
 export default class TemplateController {
 
-    private _mainController: MainController;
+    public readonly plugin: DustCalendarPlugin;
     private _templatePlugin: TemplatePlugin;
     private _noteType: NoteType;
     private _templateFolder: Path | null;
     private _templateFile: TAbstractFile | null;
 
-    constructor(mainController: MainController) {
-        this._mainController = mainController;
+    constructor(plugin: DustCalendarPlugin) {
+        this.plugin = plugin;
         this._templatePlugin = TemplatePlugin.NONE;
         this._noteType = NoteType.DAILY;
         this._templateFolder = null;
@@ -26,9 +26,6 @@ export default class TemplateController {
     }
 
     public insertTemplate() {
-
-        console.log(this._mainController.app)
-
         if (this._templateFile === null) {
             console.log("insertTemplate")
             return;
@@ -48,7 +45,7 @@ export default class TemplateController {
     }
 
     public notifyObsidian(templateController: TemplateController) {
-        if (templateController._mainController.app.workspace.activeEditor !== null) {
+        if (templateController.plugin.app.workspace.activeEditor !== null) {
             templateController.insertTemplateByObsidian();
         }
         else {
@@ -57,7 +54,7 @@ export default class TemplateController {
     }
 
     private insertTemplateByObsidian() {
-        let templatesPlugin = (this._mainController.app as any).internalPlugins.plugins.templates;
+        let templatesPlugin = (this.plugin.app as any).internalPlugins.plugins.templates;
         templatesPlugin.instance.insertTemplate(this._templateFile);
     }
 
@@ -82,9 +79,8 @@ export default class TemplateController {
     }
 
     private checkTemplatePluginObsidian(): boolean {
-        let pluginList = (this._mainController.app as any).internalPlugins.plugins;
+        let pluginList = (this.plugin.app as any).internalPlugins.plugins;
         return Object.keys(pluginList).includes("templates");
-        // Object.keys(pluginList).find((e) => e == "template");
     }
 
     private checkTemplatePluginTemplater(): boolean {
@@ -104,7 +100,7 @@ export default class TemplateController {
         let newPureFilename = new Path(newPureFilenameStr);
 
         const fullPath = this._templateFolder.append(newPureFilename);
-        return this._mainController.app.vault.getAbstractFileByPath(fullPath.string)
+        return this.plugin.app.vault.getAbstractFileByPath(fullPath.string)
     }
 
     get templatePlugin(): TemplatePlugin {
@@ -115,9 +111,9 @@ export default class TemplateController {
     set templatePlugin(templatePlugin: TemplatePlugin) {
         if (templatePlugin === TemplatePlugin.OBSIDIAN && this.checkTemplatePluginObsidian()) {
             this._templatePlugin = TemplatePlugin.OBSIDIAN;
-            this._templateFolder = new Path((this._mainController.app as any).internalPlugins.plugins.templates.instance.options.folder);
+            this._templateFolder = new Path((this.plugin.app as any).internalPlugins.plugins.templates.instance.options.folder);
             console.log(this._templateFolder.string)
-            if (this._templateFolder.string.length === 0 || !PathUtil.exists(this._templateFolder, this._mainController.app.vault)) {
+            if (this._templateFolder.string.length === 0 || !PathUtil.exists(this._templateFolder, this.plugin.app.vault)) {
                 this._templateFolder = null;
             }
             return;
@@ -139,8 +135,8 @@ export default class TemplateController {
         this._noteType = noteType;
         if (this._noteType === NoteType.DAILY) {
 
-            const dailyNoteOption = this._mainController.setting.dailyNoteOption;
-            const filename = this._mainController.setting.dailyTemplateFilename;
+            const dailyNoteOption = this.plugin.database.setting.dailyNoteOption;
+            const filename = this.plugin.database.setting.dailyTemplateFilename;
             if (!dailyNoteOption || filename.length === 0) {
                 this._templateFile = null;
             }

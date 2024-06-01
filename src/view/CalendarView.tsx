@@ -2,10 +2,10 @@ import {StrictMode} from "react";
 import {createRoot, Root} from "react-dom/client";
 import {Provider} from "react-redux";
 import {ItemView, WorkspaceLeaf} from "obsidian";
-import {MainControllerContext} from "../base/context";
 import {store} from "../redux/store";
 import CalendarViewImpl from "./calendar_view/CalendarViewImpl";
-import MainController from "../core/MainController";
+import DustCalendarPlugin from "../main";
+import {PluginContext} from "./context";
 
 
 export const VIEW_TYPE_CALENDAR = "calendar-view";
@@ -13,12 +13,15 @@ export const VIEW_TYPE_CALENDAR = "calendar-view";
 
 export class CalendarView extends ItemView {
 
-    private readonly mainController: MainController;
+    private readonly plugin: DustCalendarPlugin;
+    // private readonly mainController: MainController;
     private root: Root | null = null;
 
-    constructor(leaf: WorkspaceLeaf, mainController: MainController) {
+    constructor(leaf: WorkspaceLeaf, plugin: DustCalendarPlugin) {
+        // constructor(leaf: WorkspaceLeaf, mainController: MainController) {
         super(leaf);
-        this.mainController = mainController;
+        this.plugin = plugin;
+        // this.mainController = mainController;
         this.icon = "lucide-calendar-check";
     }
 
@@ -36,11 +39,13 @@ export class CalendarView extends ItemView {
         this.root = createRoot(this.containerEl.children[1]);
         this.root.render(
             <StrictMode>
-                <MainControllerContext.Provider value={this.mainController}>
+                <PluginContext.Provider value={this.plugin}>
+                    {/*<MainControllerContext.Provider value={this.mainController}>*/}
                     <Provider store={store}>
                         <CalendarViewImpl/>
                     </Provider>
-                </MainControllerContext.Provider>
+                </PluginContext.Provider>
+                {/*</MainControllerContext.Provider>*/}
             </StrictMode>,
         );
     }
@@ -51,11 +56,13 @@ export class CalendarView extends ItemView {
         }
         this.root.render(
             <StrictMode>
-                <MainControllerContext.Provider value={this.mainController}>
+                <PluginContext.Provider value={this.plugin}>
+                    {/*<MainControllerContext.Provider value={this.mainController}>*/}
                     <Provider store={store}>
                         <CalendarViewImpl/>
                     </Provider>
-                </MainControllerContext.Provider>
+                </PluginContext.Provider>
+                {/*</MainControllerContext.Provider>*/}
             </StrictMode>,
         );
     }

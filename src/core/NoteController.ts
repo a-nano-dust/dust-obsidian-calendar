@@ -1,19 +1,19 @@
 import {MarkdownView, TAbstractFile, TFile, WorkspaceLeaf} from "obsidian";
 import {DateTime} from "luxon";
-import MainController from "./MainController";
 import {NoteType, SelectedItemType} from "../base/enum";
 import SelectedItem from "../entity/SelectedItem";
 import Path from "../util/Path";
 import PathUtil from "../util/PathUtil";
 import ConfirmCreatingNoteModal from "../view/modal/ConfirmCreatingNoteModal";
+import DustCalendarPlugin from "../main";
 
 
 export default class NoteController {
 
-    private _mainController: MainController;
+    public readonly plugin: DustCalendarPlugin;
 
-    constructor(mainController: MainController) {
-        this._mainController = mainController;
+    constructor(plugin: DustCalendarPlugin) {
+        this.plugin = plugin;
     }
 
     public hasNote(date: DateTime, noteType: NoteType): boolean {
@@ -21,7 +21,7 @@ export default class NoteController {
         if (noteFilename === null) {
             return false;
         }
-        const abstractFile = this._mainController.app.vault.getAbstractFileByPath(noteFilename);
+        const abstractFile = this.plugin.app.vault.getAbstractFileByPath(noteFilename);
         return abstractFile instanceof TFile;
     }
 
@@ -49,33 +49,30 @@ export default class NoteController {
         if (noteFilename === null) {
             return;
         }
-        this._mainController.templateController.noteType = noteType;
+        this.plugin.templateController.noteType = noteType;
         this.openNoteByFilename(new Path(noteFilename));
     }
 
     public openNoteByFilename(filename: Path): void {
-        const vault = this._mainController.app.vault;
+        const vault = this.plugin.app.vault;
         const file = vault.getAbstractFileByPath(filename.string);
         if (file !== null) {
             this.openNoteTabView(file as TFile);
             return;
         }
 
-        const modal = new ConfirmCreatingNoteModal(filename, this);
+        const modal = new ConfirmCreatingNoteModal(filename, this.plugin);
         modal.open();
     }
 
     public async createNote(filename: Path): Promise<void> {
-        let abstractFile: TAbstractFile = await PathUtil.create(filename, this._mainController.app.vault);
+        let abstractFile: TAbstractFile = await PathUtil.create(filename, this.plugin.app.vault);
         this.openNoteTabView(abstractFile as TFile);
-        this._mainController.flushCalendarView();
-        this._mainController.templateController.insertTemplate();
+        this.plugin.flushCalendarView();
+        this.plugin.templateController.insertTemplate();
     }
 
     private openNoteTabView(tFile: TFile): void {
-
-        const app = this.mainController.app;
-
         // 寻找已打开的标签页
         let targetView: MarkdownView | null = null;
         app.workspace.iterateRootLeaves(leaf => {
@@ -99,8 +96,6 @@ export default class NoteController {
         app.workspace.setActiveLeaf(targetView.leaf, {focus: true});
 
         console.log("app.workspace.activeEditor: ", app.workspace.activeEditor);
-
-        // this.insertTemplateExecutor(this);
     }
 
     private getNoteFilename(date: DateTime, noteType: NoteType): string | null {
@@ -116,26 +111,27 @@ export default class NoteController {
 
         let noteOption: boolean = false;
         let notePattern: string = "";
+        const {setting} = this.plugin.database;
 
         if (noteType === NoteType.DAILY) {
-            noteOption = this._mainController.setting.dailyNoteOption;
-            notePattern = this._mainController.setting.dailyNotePattern;
+            noteOption = setting.dailyNoteOption;
+            notePattern = setting.dailyNotePattern;
         }
         else if (noteType === NoteType.WEEKLY) {
-            noteOption = this._mainController.setting.weeklyNoteOption;
-            notePattern = this._mainController.setting.weeklyNotePattern;
+            noteOption = setting.weeklyNoteOption;
+            notePattern = setting.weeklyNotePattern;
         }
         else if (noteType === NoteType.MONTHLY) {
-            noteOption = this._mainController.setting.monthlyNoteOption;
-            notePattern = this._mainController.setting.monthlyNotePattern;
+            noteOption = setting.monthlyNoteOption;
+            notePattern = setting.monthlyNotePattern;
         }
         else if (noteType === NoteType.QUARTERLY) {
-            noteOption = this._mainController.setting.quarterlyNoteOption;
-            notePattern = this._mainController.setting.quarterlyNotePattern;
+            noteOption = setting.quarterlyNoteOption;
+            notePattern = setting.quarterlyNotePattern;
         }
         else if (noteType === NoteType.YEARLY) {
-            noteOption = this._mainController.setting.yearlyNoteOption;
-            notePattern = this._mainController.setting.yearlyNotePattern;
+            noteOption = setting.yearlyNoteOption;
+            notePattern = setting.yearlyNotePattern;
         }
 
         if (!noteOption || notePattern.length === 0) {
@@ -143,10 +139,6 @@ export default class NoteController {
         }
 
         return notePattern;
-    }
-
-    get mainController(): MainController {
-        return this._mainController;
     }
 }
 

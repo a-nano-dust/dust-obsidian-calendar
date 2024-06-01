@@ -7,13 +7,13 @@ import YearView from "./YearView";
 import {selectCalendarViewType} from "../../redux/calendarViewType";
 import {CalendarViewType, FontSizeChangeMode} from "../../base/enum"
 import {selectSelectedItem} from "../../redux/selectedItemSlice";
-import {MainControllerContext} from "../../base/context";
+import {PluginContext} from "../context";
 
 export default function CalendarViewImpl() {
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
     const calendarViewType = useAppSelector(selectCalendarViewType);
-    const mainController = useContext(MainControllerContext)!;
+    const plugin = useContext(PluginContext)!;
 
     const widthRef = useRef(null);
     const [width, setWidth] = useState(168);
@@ -41,8 +41,8 @@ export default function CalendarViewImpl() {
         };
     });
 
-    const fontSizeChangeMode = mainController.setting.fontSizeChangeMode;
-    let fontSizeFactor = mainController.setting.immutableFontSizeFactor / 10;
+    const fontSizeChangeMode = plugin.database.setting.fontSizeChangeMode;
+    let fontSizeFactor = plugin.database.setting.immutableFontSizeFactor / 10;
 
     let fontSizeCustomEnable = 1;
     let fontSizeFollowObsidian = 0;

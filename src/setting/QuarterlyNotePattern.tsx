@@ -1,15 +1,15 @@
 import React, {ChangeEvent, useState} from "react";
 import {DateTime} from "luxon";
-import MainController from "../core/MainController";
+import DustCalendarPlugin from "../main";
 
 
-export default function QuarterlyNotePattern({mainController}: { mainController: MainController }) {
+export default function QuarterlyNotePattern({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [pattern, setPattern] = useState(mainController.setting.quarterlyNotePattern);
+    const [pattern, setPattern] = useState(plugin.database.setting.quarterlyNotePattern);
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPattern(e.target.value);
-        mainController.setting.quarterlyNotePattern = e.target.value;
+        plugin.database.setting.quarterlyNotePattern = e.target.value;
     };
 
     const text = DateTime.now().toFormat(pattern);

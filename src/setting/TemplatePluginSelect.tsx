@@ -1,22 +1,17 @@
 import React, {ChangeEvent, useState} from "react";
-import MainController from "../core/MainController";
-import MainSettingTable from "./MainSettingTable";
+import DustCalendarPlugin from "../main";
 
 
-export default function TemplatePluginSelect({
-                                                 mainController,
-                                                 mainSettingTable
-                                             }: { mainController: MainController, mainSettingTable: MainSettingTable }) {
+export default function TemplatePluginSelect({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [templatePlugin, setTemplatePlugin] = useState(mainController.setting.templatePlugin);
-
+    const [templatePlugin, setTemplatePlugin] = useState(plugin.database.setting.templatePlugin);
 
     const onInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const ret = parseInt(e.target.value);
         setTemplatePlugin(ret);
-        mainController.setting.templatePlugin = ret;
-        mainController.templateController.templatePlugin = ret;
-        mainSettingTable.display();
+        plugin.database.setting.templatePlugin = ret;
+        plugin.templateController.templatePlugin = ret;
+        plugin.mainSettingTab.display();
     };
 
     return <>

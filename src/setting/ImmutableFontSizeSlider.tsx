@@ -1,15 +1,15 @@
 import React, {ChangeEvent, useState} from "react";
-import MainController from "../core/MainController";
+import DustCalendarPlugin from "../main";
 
 
-export default function ImmutableFontSizeSlider({mainController}: { mainController: MainController }) {
+export default function ImmutableFontSizeSlider({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [immutableFontSizeFactor, setImmutableFontSizeFactor] = useState<number>(mainController.setting.immutableFontSizeFactor);
+    const [immutableFontSizeFactor, setImmutableFontSizeFactor] = useState<number>(plugin.database.setting.immutableFontSizeFactor);
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const ret = parseInt(e.target.value);
         setImmutableFontSizeFactor(ret);
-        mainController.setting.immutableFontSizeFactor = ret;
+        plugin.database.setting.immutableFontSizeFactor = ret;
     };
 
     return <>

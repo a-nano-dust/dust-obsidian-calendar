@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {selectSelectedItem, updateSelectedItem} from "../../redux/selectedItemSlice";
-import {MainControllerContext} from "../../base/context";
+import {PluginContext} from "../context";
 import {NoteType, SelectedItemType} from "../../base/enum";
 import {DateTime} from "luxon";
 import SelectedItem from "../../entity/SelectedItem";
@@ -11,7 +11,7 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
 
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
-    const mainController = useContext(MainControllerContext)!;
+    const plugin = useContext(PluginContext)!;
 
     // 每个月份都可能被选中，提前创建对象以便更新
     const newSelectItem = new SelectedItem();
@@ -26,12 +26,12 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.noteController.hasNote(DateTime.local(showYear, showMonth), NoteType.MONTHLY)) {
+    if (plugin.noteController.hasNote(DateTime.local(showYear, showMonth), NoteType.MONTHLY)) {
         dotStyle = "calendar-view-dot";
     }
 
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
-                onDoubleClick={() => mainController.noteController.openNoteBySelectedItem(newSelectItem)}>
+                onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div>{showMonth}月</div>
         <div className={dotStyle}/>
     </div>
@@ -41,7 +41,7 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
 
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
-    const mainController = useContext(MainControllerContext)!;
+    const plugin = useContext(PluginContext)!;
 
     // 每个月份都可能被选中，提前创建对象以便更新
     const newSelectItem = new SelectedItem();
@@ -56,13 +56,13 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.noteController.hasNote(DateTime.local(showYear, showQuarter * 3 - 2), NoteType.QUARTERLY)) {
+    if (plugin.noteController.hasNote(DateTime.local(showYear, showQuarter * 3 - 2), NoteType.QUARTERLY)) {
         dotStyle = "calendar-view-dot";
     }
 
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
-                onDoubleClick={() => mainController.noteController.openNoteBySelectedItem(newSelectItem)}>
-        <div>{mainController.getQuarterName(showQuarter)}</div>
+                onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
+        <div>{plugin.database.parseQuarterName(showQuarter)}</div>
         <div className={dotStyle}/>
     </div>
 }

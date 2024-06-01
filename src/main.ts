@@ -1,25 +1,35 @@
 import {App, Plugin, PluginManifest, WorkspaceLeaf} from 'obsidian';
 import {CalendarView, VIEW_TYPE_CALENDAR} from './view/CalendarView';
-import MainSettingTable from "./setting/MainSettingTable";
-import MainController from "./core/MainController";
+import Database from "./core/Database";
+import NoteController from "./core/NoteController";
+import TemplateController from "./core/TemplateController";
+import MainSettingTab from "./setting/MainSettingTab";
 
 
 // 插件对象
 export default class DustCalendarPlugin extends Plugin {
 
-    private readonly mainController: MainController;
+    public readonly database: Database;
+    public readonly noteController: NoteController;
+    public readonly templateController: TemplateController;
+    public readonly mainSettingTab: MainSettingTab;
 
     constructor(app: App, manifest: PluginManifest) {
         super(app, manifest);
-        this.mainController = new MainController(this);
+        // this.mainController = new MainController(this);
+        this.database = new Database(this);
+        this.noteController = new NoteController(this);
+        this.templateController = new TemplateController(this);
+        this.mainSettingTab = new MainSettingTab(this);
     }
 
     // 插件开启时执行初始化操作
     async onload() {
         // 加载插件设置
-        await this.mainController.loadSettings();
+        await this.database.loadSetting();
+
         // 注册日历视图
-        this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.mainController));
+        this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this));
 
         this.addCommand({
             id: "active-calendar-view",
@@ -29,36 +39,18 @@ export default class DustCalendarPlugin extends Plugin {
             }
         });
 
-        this.addSettingTab(new MainSettingTable(this.mainController));
+        this.addSettingTab(this.mainSettingTab);
 
         if (this.app.workspace.layoutReady) {
             await DustCalendarPlugin.activateCalendarView(this);
         }
-
-        // const commandId = "ID";
-        // const commands = (this.app as any).commands;
-        // const commandExist = commands.listCommands().some((cmd: any) => cmd.id === commandId);
-        // commands.executeCommandById("ID");
-
-        // console.log("app: ",this.app);
-        // console.log("app.commands: ",(this.app as any).commands);
-        // console.log("app.commands.commands: ",(this.app as any).commands.commands);
-        //
-        // for (let key of Object.keys((this.app as any).commands.commands)) {
-        //     console.log(key);
-        // }
-
-        // const commands = (this.app as any).commands.commands;
-        //
-        // console.log(commands.commands);
-        // commands.forEach((e: any) => console.log(e.id));
     }
 
     // 关闭插件的时候执行释放资源的操作
     onunload() {
+        this.database.saveSetting();
         this.app.workspace.getLeavesOfType(VIEW_TYPE_CALENDAR).forEach((leaf) => leaf.detach());
     }
-
 
     private static async activateCalendarView(plugin: Plugin): Promise<void> {
         const {workspace} = plugin.app;
@@ -78,5 +70,17 @@ export default class DustCalendarPlugin extends Plugin {
         workspace.revealLeaf(leaf);
     }
 
+    // 强制刷新日历页面
+    public flushCalendarView(): void {
+        const {workspace} = this.app;
+
+        // 检查该类型的视图是否存在，如果不存在，则创建
+        let leaf: WorkspaceLeaf | null = null;
+        const leaves = workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
+        if (leaves.length > 0) {
+            leaf = leaves[0];
+            (leaf.view as CalendarView).flush();
+        }
+    }
 }
 

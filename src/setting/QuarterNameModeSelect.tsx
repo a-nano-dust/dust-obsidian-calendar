@@ -1,18 +1,15 @@
 import React, {ChangeEvent, useState} from "react";
-import MainController from "../core/MainController";
+import DustCalendarPlugin from "../main";
 
 
-export default function QuarterNameModeSelect({
-                                                  mainController
-                                              }: { mainController: MainController }) {
+export default function QuarterNameModeSelect({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [quarterNameMode, setQuarterNameMode] = useState(mainController.setting.quarterNameMode);
-
+    const [quarterNameMode, setQuarterNameMode] = useState(plugin.database.setting.quarterNameMode);
 
     const onInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const ret = parseInt(e.target.value);
         setQuarterNameMode(ret);
-        mainController.setting.quarterNameMode = ret;
+        plugin.database.setting.quarterNameMode = ret;
     };
 
     return <>

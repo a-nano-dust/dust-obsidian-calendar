@@ -1,22 +1,22 @@
 import React, {ChangeEvent, useState} from "react";
-import MainController from "../core/MainController";
 import Path from "../util/Path";
+import DustCalendarPlugin from "../main";
 
 
-export default function DailyNoteTemplate({mainController}: { mainController: MainController }) {
+export default function DailyNoteTemplate({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [dailyTemplateFilename, setDailyTemplateFilename] = useState(mainController.setting.dailyTemplateFilename);
+    const [dailyTemplateFilename, setDailyTemplateFilename] = useState(plugin.database.setting.dailyTemplateFilename);
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setDailyTemplateFilename(e.target.value);
-        mainController.setting.dailyTemplateFilename = e.target.value;
+        plugin.database.setting.dailyTemplateFilename = e.target.value;
     };
 
-    const templateFolder: Path | null = mainController.templateController.templateFolder;
+    const templateFolder: Path | null = plugin.templateController.templateFolder;
 
     let isExistTemplateFile = true
     if (templateFolder !== null && dailyTemplateFilename.length !== 0) {
-        isExistTemplateFile = mainController.templateController.isTemplateFile(new Path(dailyTemplateFilename));
+        isExistTemplateFile = plugin.templateController.isTemplateFile(new Path(dailyTemplateFilename));
     }
 
     return <>

@@ -6,7 +6,7 @@ import {DateTime} from "luxon";
 import {ChevronLeft, ChevronRight} from 'lucide-react';
 import SelectedItem from "../../entity/SelectedItem";
 import {CalendarViewType, NoteType, SelectedItemType} from "../../base/enum";
-import {MainControllerContext} from "../../base/context";
+import {PluginContext} from "../context";
 
 function YearItem() {
 
@@ -14,11 +14,11 @@ function YearItem() {
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
-    const mainController = useContext(MainControllerContext)!;
+    const plugin = useContext(PluginContext)!;
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.noteController.hasNote(DateTime.local(selectedDate.year), NoteType.YEARLY)) {
+    if (plugin.noteController.hasNote(DateTime.local(selectedDate.year), NoteType.YEARLY)) {
         dotStyle = "calendar-view-dot";
     }
 
@@ -42,7 +42,7 @@ function YearItem() {
             <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastYear}/>
             <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
-                 onDoubleClick={() => mainController.noteController.openNoteByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
+                 onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
                 <div style={{width: "4em"}}>{selectedDate.year}年</div>
             </div>
             <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
@@ -58,11 +58,11 @@ function MonthItem() {
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
-    const mainController = useContext(MainControllerContext)!;
+    const plugin = useContext(PluginContext)!;
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.noteController.hasNote(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)) {
+    if (plugin.noteController.hasNote(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)) {
         dotStyle = "calendar-view-dot";
     }
 
@@ -87,7 +87,7 @@ function MonthItem() {
             <ChevronLeft className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastMonth}/>
             <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
-                 onDoubleClick={() => mainController.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
+                 onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
                 <div style={{width: "4em"}}>{selectedDate.month}月</div>
             </div>
             <ChevronRight className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
@@ -103,11 +103,11 @@ function QuarterItem() {
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
-    const mainController = useContext(MainControllerContext)!;
+    const plugin = useContext(PluginContext)!;
 
     // 有关联笔记的日期会使用一个点进行标注
     let dotStyle = "calendar-view-no-dot";
-    if (mainController.noteController.hasNote(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)) {
+    if (plugin.noteController.hasNote(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)) {
         dotStyle = "calendar-view-dot";
     }
 
@@ -131,8 +131,8 @@ function QuarterItem() {
             <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastQuarter}/>
             <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
-                 onDoubleClick={() => mainController.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
-                <div style={{width: "3em"}}>{mainController.getQuarterName(selectedDate.quarter)}</div>
+                 onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
+                <div style={{width: "3em"}}>{plugin.database.parseQuarterName(selectedDate.quarter)}</div>
             </div>
             <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextQuarter}/>

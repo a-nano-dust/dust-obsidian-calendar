@@ -9,8 +9,9 @@ export default function TemplatePluginSelect({plugin}: { plugin: DustCalendarPlu
     const onInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const ret = parseInt(e.target.value);
         setTemplatePlugin(ret);
-        plugin.database.setting.templatePlugin = ret;
-        plugin.templateController.templatePlugin = ret;
+        // plugin.database.setting.templatePlugin = ret;
+        // plugin.templateController.templatePlugin = ret;
+        plugin.templateController.updateTemplatePlugin(ret);
         plugin.mainSettingTab.display();
     };
 

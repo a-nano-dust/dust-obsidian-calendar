@@ -123,7 +123,6 @@ function DayItem({
 
     return <div className={bodyStyle} onClick={onClickCallback}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
-        {/*onDoubleClick={() => mainController.noteController.openNoteBySelectedItem(newSelectItem)}>*/}
         <DayItemBody targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
         <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
         <div className={dotStyle}></div>
@@ -155,7 +154,6 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
     return <div className={itemStyle} style={{fontWeight: "bold"}}
                 onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
-        {/*onDoubleClick={() => mainController.noteController.openNoteBySelectedItem(newSelectItem)}>*/}
         <div className={itemBodyStyle}>{targetDay.weekNumber}</div>
         <div className={dotStyle}/>
     </div>

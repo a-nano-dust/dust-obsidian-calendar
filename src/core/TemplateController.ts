@@ -3,153 +3,121 @@ import {NoteType, TemplatePlugin} from "../base/enum";
 import Path from "../util/Path";
 import PathUtil from "../util/PathUtil";
 import DustCalendarPlugin from "../main";
+import TemplateUtil from "../util/TemplateUtil";
+import ObsidianTemplateUtil from "../util/ObsidianTemplateUtil";
+import TemplaterUtil from "../util/TemplaterUtil";
 
 
 export default class TemplateController {
 
     public readonly plugin: DustCalendarPlugin;
-    private _templatePlugin: TemplatePlugin;
-    private _noteType: NoteType;
-    private _templateFolder: Path | null;
-    private _templateFile: TAbstractFile | null;
+    public templateUtil: TemplateUtil;
 
     constructor(plugin: DustCalendarPlugin) {
         this.plugin = plugin;
-        this._templatePlugin = TemplatePlugin.NONE;
-        this._noteType = NoteType.DAILY;
-        this._templateFolder = null;
-        this._templateFile = null;
+        this.templateUtil = new TemplateUtil(this.plugin);
     }
 
-    public isTemplateFile(pureFilename: Path): boolean {
-        return this.getTemplateFile(pureFilename) !== null;
+    public updateTemplatePlugin(templatePlugin: TemplatePlugin): void {
+        this.plugin.database.setting.templatePlugin = templatePlugin;
+        console.log(templatePlugin)
+        if (templatePlugin === TemplatePlugin.OBSIDIAN) {
+            this.templateUtil = new ObsidianTemplateUtil(this.plugin);
+        }
+        else if (templatePlugin === TemplatePlugin.TEMPLATER) {
+            this.templateUtil = new TemplaterUtil(this.plugin);
+        }
+        else {
+            this.templateUtil = new TemplateUtil(this.plugin);
+        }
     }
 
-    public insertTemplate() {
-        if (this._templateFile === null) {
-            console.log("insertTemplate")
+    public hasTemplateFolder(): boolean {
+        const folder = new Path((this.plugin.app as any).internalPlugins.plugins.templates.instance.options.folder);
+        return folder.string.length !== 0 && PathUtil.exists(folder, this.plugin.app.vault);
+    }
+
+    public getTemplateFolder(): Path {
+        return this.templateUtil.getTemplateFolder();
+    }
+
+    public hasTemplateFile(filename: string): boolean {
+        return this.getTemplateFileByFilename(filename) !== null;
+    }
+
+    public insertTemplate(noteType: NoteType) {
+
+        if (!this.templateUtil.isEnable()) {
             return;
         }
 
-        console.log("insertTemplate")
-        if (this._templatePlugin === TemplatePlugin.OBSIDIAN && this.checkTemplatePluginObsidian()) {
-            console.log("insertTemplate")
-            this.notifyObsidian(this);
+        const templateFile = this.getTemplateFileByNoteType(noteType);
+        if (templateFile === null) {
+            return;
         }
-        console.log("insertTemplate")
-        if (this._templatePlugin === TemplatePlugin.TEMPLATER && this.checkTemplatePluginTemplater()) {
-            console.log("insertTemplate")
-            this.notifyTemplater(this);
-        }
-        console.log("insertTemplate")
+
+        this.notify(this, templateFile);
     }
 
-    public notifyObsidian(templateController: TemplateController) {
+    public notify(templateController: TemplateController, templateFile: TAbstractFile) {
         if (templateController.plugin.app.workspace.activeEditor !== null) {
-            templateController.insertTemplateByObsidian();
+            templateController.insertTemplateImpl(templateFile);
         }
         else {
-            setTimeout(() => templateController.notifyObsidian(templateController), 100);
+            setTimeout(() => templateController.notify(templateController, templateFile), 100);
         }
     }
 
-    private insertTemplateByObsidian() {
-        let templatesPlugin = (this.plugin.app as any).internalPlugins.plugins.templates;
-        templatesPlugin.instance.insertTemplate(this._templateFile);
+    public insertTemplateImpl(templateFile: TAbstractFile) {
+        this.templateUtil.insertTemplateImpl(templateFile);
     }
 
-    public notifyTemplater(templateController: TemplateController) {
-
-    }
-
-    private insertTemplateByTemplater() {
-
-    }
-
-    private checkTemplatePlugin(): boolean {
-        if (this._templatePlugin === TemplatePlugin.OBSIDIAN) {
-            return this.checkTemplatePluginObsidian();
-        }
-        else if (this._templatePlugin === TemplatePlugin.TEMPLATER) {
-            return this.checkTemplatePluginTemplater();
-        }
-        else {
-            return false;
-        }
-    }
-
-    private checkTemplatePluginObsidian(): boolean {
-        let pluginList = (this.plugin.app as any).internalPlugins.plugins;
-        return Object.keys(pluginList).includes("templates");
-    }
-
-    private checkTemplatePluginTemplater(): boolean {
-        return false;
-    }
-
-    private getTemplateFile(pureFilename: Path): TAbstractFile | null {
-        if (this._templateFolder === null) {
+    public getTemplateFileByFilename(filename: string): TAbstractFile | null {
+        const folder = this.getTemplateFolder();
+        if (folder.string.length === 0 || !PathUtil.exists(folder, this.plugin.app.vault)) {
             return null;
         }
 
+        return this.getTemplateFileImpl(folder, new Path(filename));
+    }
+
+    private getTemplateFileByNoteType(noteType: NoteType): TAbstractFile | null {
+
+        const folder = this.getTemplateFolder();
+        if (folder.string.length === 0 || !PathUtil.exists(folder, this.plugin.app.vault)) {
+            return null;
+        }
+
+        const {setting} = this.plugin.database;
+        if (noteType === NoteType.DAILY) {
+            return this.getTemplateFileImpl(folder, new Path(setting.dailyTemplateFilename));
+        }
+        else if (noteType === NoteType.WEEKLY) {
+            return this.getTemplateFileImpl(folder, new Path(setting.weeklyTemplateFilename));
+        }
+        else if (noteType === NoteType.MONTHLY) {
+            return this.getTemplateFileImpl(folder, new Path(setting.monthlyTemplateFilename));
+        }
+        else if (noteType === NoteType.QUARTERLY) {
+            return this.getTemplateFileImpl(folder, new Path(setting.quarterlyTemplateFilename));
+        }
+        else if (noteType === NoteType.YEARLY) {
+            return this.getTemplateFileImpl(folder, new Path(setting.yearlyTemplateFilename));
+        }
+
+        return null;
+    }
+
+    private getTemplateFileImpl(folder: Path, pureFilename: Path): TAbstractFile | null {
         // 补全文件后缀名
-        let newPureFilenameStr = pureFilename.string;
+        let newFilenameStr = pureFilename.string;
         if (pureFilename.extension.string.length === 0) {
-            newPureFilenameStr = newPureFilenameStr.concat(".md");
+            newFilenameStr = newFilenameStr.concat(".md");
         }
-        let newPureFilename = new Path(newPureFilenameStr);
+        console.log(newFilenameStr)
+        let newFilename = new Path(newFilenameStr);
 
-        const fullPath = this._templateFolder.append(newPureFilename);
+        const fullPath = folder.append(newFilename);
         return this.plugin.app.vault.getAbstractFileByPath(fullPath.string)
-    }
-
-    get templatePlugin(): TemplatePlugin {
-        return this._templatePlugin;
-    }
-
-    // 更新插件类型时需要检查插件是否存在
-    set templatePlugin(templatePlugin: TemplatePlugin) {
-        if (templatePlugin === TemplatePlugin.OBSIDIAN && this.checkTemplatePluginObsidian()) {
-            this._templatePlugin = TemplatePlugin.OBSIDIAN;
-            this._templateFolder = new Path((this.plugin.app as any).internalPlugins.plugins.templates.instance.options.folder);
-            console.log(this._templateFolder.string)
-            if (this._templateFolder.string.length === 0 || !PathUtil.exists(this._templateFolder, this.plugin.app.vault)) {
-                this._templateFolder = null;
-            }
-            return;
-        }
-        if (templatePlugin === TemplatePlugin.TEMPLATER && this.checkTemplatePluginTemplater()) {
-            this._templatePlugin = TemplatePlugin.TEMPLATER;
-            return;
-        }
-
-        this._templatePlugin = TemplatePlugin.NONE;
-    }
-
-    get noteType(): NoteType {
-        return this._noteType;
-    }
-
-    // todo 更新笔记类型时需要同时更新模板文件
-    set noteType(noteType: NoteType) {
-        this._noteType = noteType;
-        if (this._noteType === NoteType.DAILY) {
-
-            const dailyNoteOption = this.plugin.database.setting.dailyNoteOption;
-            const filename = this.plugin.database.setting.dailyTemplateFilename;
-            if (!dailyNoteOption || filename.length === 0) {
-                this._templateFile = null;
-            }
-            else {
-                this._templateFile = this.getTemplateFile(new Path(filename));
-            }
-        }
-        else {
-            this._templateFile = null;
-        }
-    }
-
-    get templateFolder(): Path | null {
-        return this._templateFolder;
     }
 }

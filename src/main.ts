@@ -27,6 +27,7 @@ export default class DustCalendarPlugin extends Plugin {
     async onload() {
         // 加载插件设置
         await this.database.loadSetting();
+        this.templateController.updateTemplatePlugin(this.database.setting.templatePlugin);
 
         // 注册日历视图
         this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this));

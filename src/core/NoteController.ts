@@ -11,9 +11,11 @@ import DustCalendarPlugin from "../main";
 export default class NoteController {
 
     public readonly plugin: DustCalendarPlugin;
+    private noteType: NoteType;
 
     constructor(plugin: DustCalendarPlugin) {
         this.plugin = plugin;
+        this.noteType = NoteType.DAILY;
     }
 
     public hasNote(date: DateTime, noteType: NoteType): boolean {
@@ -49,7 +51,7 @@ export default class NoteController {
         if (noteFilename === null) {
             return;
         }
-        this.plugin.templateController.noteType = noteType;
+        this.noteType = noteType;
         this.openNoteByFilename(new Path(noteFilename));
     }
 
@@ -66,10 +68,13 @@ export default class NoteController {
     }
 
     public async createNote(filename: Path): Promise<void> {
+
+        console.log(this.plugin.app)
+
         let abstractFile: TAbstractFile = await PathUtil.create(filename, this.plugin.app.vault);
         this.openNoteTabView(abstractFile as TFile);
         this.plugin.flushCalendarView();
-        this.plugin.templateController.insertTemplate();
+        this.plugin.templateController.insertTemplate(this.noteType);
     }
 
     private openNoteTabView(tFile: TFile): void {
@@ -90,12 +95,9 @@ export default class NoteController {
             targetLeaf.openFile(tFile).then(() => {
             });
         }
-        console.log("app.workspace.activeEditor: ", app.workspace.activeEditor);
         app.workspace.revealLeaf(targetView.leaf);
         // 移动焦点到笔记编辑区域
         app.workspace.setActiveLeaf(targetView.leaf, {focus: true});
-
-        console.log("app.workspace.activeEditor: ", app.workspace.activeEditor);
     }
 
     private getNoteFilename(date: DateTime, noteType: NoteType): string | null {

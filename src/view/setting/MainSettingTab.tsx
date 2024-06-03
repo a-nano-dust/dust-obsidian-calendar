@@ -1,6 +1,7 @@
 import {PluginSettingTab, Setting} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
-import {FontSizeChangeMode, TemplatePlugin} from "../../base/enum";
+import {FontSizeChangeMode, NoteType, TemplatePlugin} from "../../base/enum";
+import DustCalendarPlugin from "../../main";
 import DailyNotePattern from "./DailyNotePattern";
 import WeeklyNotePattern from "./WeeklyNotePattern";
 import QuarterlyNotePattern from "./QuarterlyNotePattern";
@@ -9,9 +10,8 @@ import YearlyNotePattern from "./YearlyNotePattern";
 import ImmutableFontSizeSlider from "./ImmutableFontSizeSlider";
 import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
 import QuarterNameModeSelect from "./QuarterNameModeSelect";
-import DailyNoteTemplate from "./DailyNoteTemplate";
 import TemplatePluginSelect from "./TemplatePluginSelect";
-import DustCalendarPlugin from "../../main";
+import NoteTemplate from "./NoteTemplate";
 
 
 export default class MainSettingTab extends PluginSettingTab {
@@ -24,9 +24,13 @@ export default class MainSettingTab extends PluginSettingTab {
     private dailyNotePatternRoot: Root | null;
     private dailyNoteTemplateRoot: Root | null;
     private weeklyNotePatternRoot: Root | null;
+    private weeklyNoteTemplateRoot: Root | null;
     private monthlyNotePatternRoot: Root | null;
+    private monthlyNoteTemplateRoot: Root | null;
     private quarterlyNotePatternRoot: Root | null;
+    private quarterlyNoteTemplateRoot: Root | null;
     private yearlyNotePatternRoot: Root | null;
+    private yearlyNoteTemplateRoot: Root | null;
 
     constructor(plugin: DustCalendarPlugin) {
         super(plugin.app, plugin);
@@ -38,9 +42,13 @@ export default class MainSettingTab extends PluginSettingTab {
         this.dailyNotePatternRoot = null;
         this.dailyNoteTemplateRoot = null;
         this.weeklyNotePatternRoot = null;
+        this.weeklyNoteTemplateRoot = null;
         this.monthlyNotePatternRoot = null;
+        this.monthlyNoteTemplateRoot = null;
         this.quarterlyNotePatternRoot = null;
+        this.quarterlyNoteTemplateRoot = null;
         this.yearlyNotePatternRoot = null;
+        this.yearlyNoteTemplateRoot = null;
     }
 
     display(): any {
@@ -127,11 +135,12 @@ export default class MainSettingTab extends PluginSettingTab {
         );
 
         if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
-            let dairyTemplate = new Setting(containerEl);
-            dairyTemplate.settingEl.empty();
-            this.dailyNoteTemplateRoot = createRoot(dairyTemplate.settingEl);
+            let dailyNoteTemplate = new Setting(containerEl);
+            dailyNoteTemplate.settingEl.empty();
+            this.dailyNoteTemplateRoot = createRoot(dailyNoteTemplate.settingEl);
             this.dailyNoteTemplateRoot.render(
-                <DailyNoteTemplate plugin={this.plugin}/>
+                // <DailyNoteTemplate plugin={this.plugin}/>
+                <NoteTemplate plugin={this.plugin} noteType={NoteType.DAILY}/>
             );
         }
     }
@@ -155,6 +164,15 @@ export default class MainSettingTab extends PluginSettingTab {
         this.weeklyNotePatternRoot.render(
             <WeeklyNotePattern plugin={this.plugin}/>
         );
+
+        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
+            let weeklyNoteTemplate = new Setting(containerEl);
+            weeklyNoteTemplate.settingEl.empty();
+            this.weeklyNoteTemplateRoot = createRoot(weeklyNoteTemplate.settingEl);
+            this.weeklyNoteTemplateRoot.render(
+                <NoteTemplate plugin={this.plugin} noteType={NoteType.WEEKLY}/>
+            );
+        }
     }
 
     private displayMonthlyNoteSetting(): void {
@@ -176,6 +194,15 @@ export default class MainSettingTab extends PluginSettingTab {
         this.weeklyNotePatternRoot.render(
             <MonthlyNotePattern plugin={this.plugin}/>
         );
+
+        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
+            let monthlyNoteTemplate = new Setting(containerEl);
+            monthlyNoteTemplate.settingEl.empty();
+            this.monthlyNoteTemplateRoot = createRoot(monthlyNoteTemplate.settingEl);
+            this.monthlyNoteTemplateRoot.render(
+                <NoteTemplate plugin={this.plugin} noteType={NoteType.MONTHLY}/>
+            );
+        }
     }
 
     private displayQuarterlyNoteSetting(): void {
@@ -197,6 +224,15 @@ export default class MainSettingTab extends PluginSettingTab {
         this.quarterlyNotePatternRoot.render(
             <QuarterlyNotePattern plugin={this.plugin}/>
         );
+
+        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
+            let quarterlyNoteTemplate = new Setting(containerEl);
+            quarterlyNoteTemplate.settingEl.empty();
+            this.quarterlyNoteTemplateRoot = createRoot(quarterlyNoteTemplate.settingEl);
+            this.quarterlyNoteTemplateRoot.render(
+                <NoteTemplate plugin={this.plugin} noteType={NoteType.QUARTERLY}/>
+            );
+        }
     }
 
     private displayYearlyNoteSetting(): void {
@@ -218,6 +254,15 @@ export default class MainSettingTab extends PluginSettingTab {
         this.yearlyNotePatternRoot.render(
             <YearlyNotePattern plugin={this.plugin}/>
         );
+
+        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
+            let yearlyNoteTemplate = new Setting(containerEl);
+            yearlyNoteTemplate.settingEl.empty();
+            this.yearlyNoteTemplateRoot = createRoot(yearlyNoteTemplate.settingEl);
+            this.yearlyNoteTemplateRoot.render(
+                <NoteTemplate plugin={this.plugin} noteType={NoteType.YEARLY}/>
+            );
+        }
     }
 
 

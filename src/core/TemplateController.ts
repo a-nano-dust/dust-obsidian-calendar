@@ -41,6 +41,53 @@ export default class TemplateController {
         return this.templateUtil.getTemplateFolder();
     }
 
+    public getTemplateFilename(noteType: NoteType): string | null {
+
+        if (this.plugin.database.setting.templatePlugin === TemplatePlugin.NONE) {
+            return null;
+        }
+
+        if (noteType === NoteType.DAILY) {
+            return this.plugin.database.setting.dailyTemplateFilename;
+        }
+        else if (noteType === NoteType.WEEKLY) {
+            return this.plugin.database.setting.weeklyTemplateFilename;
+        }
+        else if (noteType === NoteType.MONTHLY) {
+            return this.plugin.database.setting.monthlyTemplateFilename;
+        }
+        else if (noteType === NoteType.QUARTERLY) {
+            return this.plugin.database.setting.quarterlyTemplateFilename;
+        }
+        else if (noteType === NoteType.YEARLY) {
+            return this.plugin.database.setting.yearlyTemplateFilename;
+        }
+
+        return null;
+    }
+
+    public setTemplateFilename(noteType: NoteType, templateFilename: string): void {
+        if (this.plugin.database.setting.templatePlugin === TemplatePlugin.NONE) {
+            return;
+        }
+
+        if (noteType === NoteType.DAILY) {
+            this.plugin.database.setting.dailyTemplateFilename = templateFilename;
+        }
+        else if (noteType === NoteType.WEEKLY) {
+            this.plugin.database.setting.weeklyTemplateFilename = templateFilename;
+        }
+        else if (noteType === NoteType.MONTHLY) {
+            this.plugin.database.setting.monthlyTemplateFilename = templateFilename;
+        }
+        else if (noteType === NoteType.QUARTERLY) {
+            this.plugin.database.setting.quarterlyTemplateFilename = templateFilename;
+        }
+        else if (noteType === NoteType.YEARLY) {
+            this.plugin.database.setting.yearlyTemplateFilename = templateFilename;
+        }
+    }
+
     public hasTemplateFile(filename: string): boolean {
         return this.getTemplateFileByFilename(filename) !== null;
     }

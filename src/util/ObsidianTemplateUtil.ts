@@ -7,7 +7,6 @@ import TemplateUtil from "./TemplateUtil";
 export default class ObsidianTemplateUtil extends TemplateUtil {
 
     constructor(plugin: DustCalendarPlugin) {
-        console.log("ObsidianTemplateUtil")
         super(plugin);
     }
 

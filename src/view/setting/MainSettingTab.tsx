@@ -2,16 +2,12 @@ import {PluginSettingTab, Setting} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
 import {FontSizeChangeMode, NoteType, TemplatePlugin} from "../../base/enum";
 import DustCalendarPlugin from "../../main";
-import DailyNotePattern from "./DailyNotePattern";
-import WeeklyNotePattern from "./WeeklyNotePattern";
-import QuarterlyNotePattern from "./QuarterlyNotePattern";
-import MonthlyNotePattern from "./MonthlyNotePattern";
-import YearlyNotePattern from "./YearlyNotePattern";
 import ImmutableFontSizeSlider from "./ImmutableFontSizeSlider";
 import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
 import QuarterNameModeSelect from "./QuarterNameModeSelect";
 import TemplatePluginSelect from "./TemplatePluginSelect";
 import NoteTemplate from "./NoteTemplate";
+import NotePattern from "./NotePattern";
 
 
 export default class MainSettingTab extends PluginSettingTab {
@@ -58,11 +54,12 @@ export default class MainSettingTab extends PluginSettingTab {
         this.displayImmutableFontSizeSlider();
         this.displayQuarterNameModeSelect();
         this.displayTemplatePluginSelect();
-        this.displayDailyNoteSetting();
-        this.displayWeeklyNoteSetting();
-        this.displayMonthlyNoteSetting();
-        this.displayQuarterlyNoteSetting();
-        this.displayYearlyNoteSetting();
+
+        this.displayNoteSetting(NoteType.DAILY, "每日笔记", this.dailyNotePatternRoot, this.dailyNoteTemplateRoot);
+        this.displayNoteSetting(NoteType.WEEKLY, "每周笔记", this.weeklyNotePatternRoot, this.weeklyNoteTemplateRoot);
+        this.displayNoteSetting(NoteType.MONTHLY, "每月笔记", this.monthlyNotePatternRoot, this.monthlyNoteTemplateRoot);
+        this.displayNoteSetting(NoteType.QUARTERLY, "季度笔记", this.quarterlyNotePatternRoot, this.quarterlyNoteTemplateRoot);
+        this.displayNoteSetting(NoteType.YEARLY, "年度笔记", this.yearlyNotePatternRoot, this.yearlyNoteTemplateRoot);
     }
 
     async hide(): Promise<any> {
@@ -104,8 +101,6 @@ export default class MainSettingTab extends PluginSettingTab {
     }
 
     private displayTemplatePluginSelect(): void {
-
-        console.log("displayTemplatePluginSelect");
         const {containerEl} = this;
         let settingComponent = new Setting(containerEl);
         this.templatePluginSelectRoot = createRoot(settingComponent.settingEl);
@@ -114,156 +109,40 @@ export default class MainSettingTab extends PluginSettingTab {
         );
     }
 
-    private displayDailyNoteSetting(): void {
-
+    private displayNoteSetting(noteType: NoteType, title: string, notePatternRoot: Root | null, noteTemplateRoot: Root | null): void {
         const {containerEl} = this;
 
-        let dairyOption = new Setting(containerEl);
-        dairyOption.setName("每日笔记").setHeading();
-        dairyOption.addToggle(toggle => {
-            toggle.setValue(this.plugin.database.setting.dailyNoteOption);
+        const noteOption = this.plugin.noteController.getNoteOption(noteType);
+
+        let noteOptionElement = new Setting(containerEl);
+        noteOptionElement.setName(title).setHeading();
+        noteOptionElement.addToggle(toggle => {
+            toggle.setValue(noteOption);
             toggle.onChange(async (value) => {
-                this.plugin.database.setting.dailyNoteOption = value;
+                this.plugin.noteController.setNoteOption(noteType, value);
             });
         });
 
-        let dairyPattern = new Setting(containerEl);
-        dairyPattern.settingEl.empty();
-        this.dailyNotePatternRoot = createRoot(dairyPattern.settingEl);
-        this.dailyNotePatternRoot.render(
-            <DailyNotePattern plugin={this.plugin}/>
+        if (!noteOption) {
+            return;
+        }
+
+        let notePatternElement = new Setting(containerEl);
+        notePatternElement.settingEl.empty();
+        notePatternRoot = createRoot(notePatternElement.settingEl);
+        notePatternRoot.render(
+            <NotePattern plugin={this.plugin} noteType={noteType}/>
         );
 
-        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
-            let dailyNoteTemplate = new Setting(containerEl);
-            dailyNoteTemplate.settingEl.empty();
-            this.dailyNoteTemplateRoot = createRoot(dailyNoteTemplate.settingEl);
-            this.dailyNoteTemplateRoot.render(
-                // <DailyNoteTemplate plugin={this.plugin}/>
-                <NoteTemplate plugin={this.plugin} noteType={NoteType.DAILY}/>
-            );
+        if (this.plugin.templateController.getTemplatePlugin() === TemplatePlugin.NONE) {
+            return;
         }
-    }
 
-    private displayWeeklyNoteSetting(): void {
-
-        const {containerEl} = this;
-
-        let dairyOption = new Setting(containerEl);
-        dairyOption.setName("每周笔记").setHeading();
-        dairyOption.addToggle(toggle => {
-            toggle.setValue(this.plugin.database.setting.weeklyNoteOption);
-            toggle.onChange(async (value) => {
-                this.plugin.database.setting.weeklyNoteOption = value;
-            });
-        });
-
-        let dairyPattern = new Setting(containerEl);
-        dairyPattern.settingEl.empty();
-        this.weeklyNotePatternRoot = createRoot(dairyPattern.settingEl);
-        this.weeklyNotePatternRoot.render(
-            <WeeklyNotePattern plugin={this.plugin}/>
+        let noteTemplateElement = new Setting(containerEl);
+        noteTemplateElement.settingEl.empty();
+        noteTemplateRoot = createRoot(noteTemplateElement.settingEl);
+        noteTemplateRoot.render(
+            <NoteTemplate plugin={this.plugin} noteType={noteType}/>
         );
-
-        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
-            let weeklyNoteTemplate = new Setting(containerEl);
-            weeklyNoteTemplate.settingEl.empty();
-            this.weeklyNoteTemplateRoot = createRoot(weeklyNoteTemplate.settingEl);
-            this.weeklyNoteTemplateRoot.render(
-                <NoteTemplate plugin={this.plugin} noteType={NoteType.WEEKLY}/>
-            );
-        }
     }
-
-    private displayMonthlyNoteSetting(): void {
-
-        const {containerEl} = this;
-
-        let dairyOption = new Setting(containerEl);
-        dairyOption.setName("每月笔记").setHeading();
-        dairyOption.addToggle(toggle => {
-            toggle.setValue(this.plugin.database.setting.monthlyNoteOption);
-            toggle.onChange(async (value) => {
-                this.plugin.database.setting.monthlyNoteOption = value;
-            });
-        });
-
-        let dairyPattern = new Setting(containerEl);
-        dairyPattern.settingEl.empty();
-        this.weeklyNotePatternRoot = createRoot(dairyPattern.settingEl);
-        this.weeklyNotePatternRoot.render(
-            <MonthlyNotePattern plugin={this.plugin}/>
-        );
-
-        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
-            let monthlyNoteTemplate = new Setting(containerEl);
-            monthlyNoteTemplate.settingEl.empty();
-            this.monthlyNoteTemplateRoot = createRoot(monthlyNoteTemplate.settingEl);
-            this.monthlyNoteTemplateRoot.render(
-                <NoteTemplate plugin={this.plugin} noteType={NoteType.MONTHLY}/>
-            );
-        }
-    }
-
-    private displayQuarterlyNoteSetting(): void {
-
-        const {containerEl} = this;
-
-        let dairyOption = new Setting(containerEl);
-        dairyOption.setName("季度笔记").setHeading();
-        dairyOption.addToggle(toggle => {
-            toggle.setValue(this.plugin.database.setting.quarterlyNoteOption);
-            toggle.onChange(async (value) => {
-                this.plugin.database.setting.quarterlyNoteOption = value;
-            });
-        });
-
-        let dairyPattern = new Setting(containerEl);
-        dairyPattern.settingEl.empty();
-        this.quarterlyNotePatternRoot = createRoot(dairyPattern.settingEl);
-        this.quarterlyNotePatternRoot.render(
-            <QuarterlyNotePattern plugin={this.plugin}/>
-        );
-
-        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
-            let quarterlyNoteTemplate = new Setting(containerEl);
-            quarterlyNoteTemplate.settingEl.empty();
-            this.quarterlyNoteTemplateRoot = createRoot(quarterlyNoteTemplate.settingEl);
-            this.quarterlyNoteTemplateRoot.render(
-                <NoteTemplate plugin={this.plugin} noteType={NoteType.QUARTERLY}/>
-            );
-        }
-    }
-
-    private displayYearlyNoteSetting(): void {
-
-        const {containerEl} = this;
-
-        let dairyOption = new Setting(containerEl);
-        dairyOption.setName("年度笔记").setHeading();
-        dairyOption.addToggle(toggle => {
-            toggle.setValue(this.plugin.database.setting.yearlyNoteOption);
-            toggle.onChange(async (value) => {
-                this.plugin.database.setting.yearlyNoteOption = value;
-            });
-        });
-
-        let dairyPattern = new Setting(containerEl);
-        dairyPattern.settingEl.empty();
-        this.yearlyNotePatternRoot = createRoot(dairyPattern.settingEl);
-        this.yearlyNotePatternRoot.render(
-            <YearlyNotePattern plugin={this.plugin}/>
-        );
-
-        if (this.plugin.database.setting.templatePlugin !== TemplatePlugin.NONE) {
-            let yearlyNoteTemplate = new Setting(containerEl);
-            yearlyNoteTemplate.settingEl.empty();
-            this.yearlyNoteTemplateRoot = createRoot(yearlyNoteTemplate.settingEl);
-            this.yearlyNoteTemplateRoot.render(
-                <NoteTemplate plugin={this.plugin} noteType={NoteType.YEARLY}/>
-            );
-        }
-    }
-
-
 }

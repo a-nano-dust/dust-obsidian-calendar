@@ -1,18 +1,20 @@
 import React, {ChangeEvent, useState} from "react";
 import {DateTime} from "luxon";
 import DustCalendarPlugin from "../../main";
+import {NoteType} from "../../base/enum";
 
 
-export default function DailyNotePattern({plugin}: { plugin: DustCalendarPlugin }) {
+export default function NotePattern({plugin, noteType}: { plugin: DustCalendarPlugin, noteType: NoteType }) {
 
-    const [pattern, setPattern] = useState(plugin.database.setting.dailyNotePattern);
+    const [notePattern, setNotePattern] = useState(plugin.noteController.getNotePattern(noteType)!);
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setPattern(e.target.value);
-        plugin.database.setting.dailyNotePattern = e.target.value;
+        setNotePattern(e.target.value);
+        // plugin.database.setting.dailyNotePattern = e.target.value;
+        plugin.noteController.setNotePattern(noteType, notePattern);
     };
 
-    const text = DateTime.now().toFormat(pattern);
+    const text = DateTime.now().toFormat(notePattern);
 
     return <>
         <div className="setting-item-info">
@@ -27,8 +29,8 @@ export default function DailyNotePattern({plugin}: { plugin: DustCalendarPlugin 
             </div>
         </div>
         <div className="setting-item-control">
-            <input type="text" value={pattern} spellCheck="false" onChange={onInputChange}
-                   placeholder="日记/yyyy-MM-dd"/>
+            <input type="text" value={notePattern} spellCheck="false" onChange={onInputChange}
+                   placeholder={plugin.noteController.getNotePatternPlaceHolder(noteType)}/>
         </div>
     </>
 }

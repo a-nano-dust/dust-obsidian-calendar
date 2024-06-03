@@ -18,9 +18,12 @@ export default class TemplateController {
         this.templateUtil = new TemplateUtil(this.plugin);
     }
 
+    public getTemplatePlugin(): TemplatePlugin {
+        return this.plugin.database.setting.templatePlugin;
+    }
+
     public updateTemplatePlugin(templatePlugin: TemplatePlugin): void {
         this.plugin.database.setting.templatePlugin = templatePlugin;
-        console.log(templatePlugin)
         if (templatePlugin === TemplatePlugin.OBSIDIAN) {
             this.templateUtil = new ObsidianTemplateUtil(this.plugin);
         }
@@ -161,7 +164,6 @@ export default class TemplateController {
         if (pureFilename.extension.string.length === 0) {
             newFilenameStr = newFilenameStr.concat(".md");
         }
-        console.log(newFilenameStr)
         let newFilename = new Path(newFilenameStr);
 
         const fullPath = folder.append(newFilename);

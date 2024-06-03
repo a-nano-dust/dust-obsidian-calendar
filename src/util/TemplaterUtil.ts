@@ -6,7 +6,6 @@ import Path from "./Path";
 
 export default class TemplaterUtil extends TemplateUtil {
     constructor(plugin: DustCalendarPlugin) {
-        console.log("TemplaterUtil")
         super(plugin);
     }
 

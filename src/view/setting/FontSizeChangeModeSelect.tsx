@@ -1,21 +1,16 @@
 import React, {ChangeEvent, useState} from "react";
-import MainController from "../core/MainController";
-import MainSettingTable from "./MainSettingTable";
+import DustCalendarPlugin from "../../main";
 
 
-export default function FontSizeChangeModeSelect({
-                                                     mainController,
-                                                     mainSettingTable
-                                                 }: { mainController: MainController, mainSettingTable: MainSettingTable }) {
+export default function FontSizeChangeModeSelect({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [fontSizeChangeMode, setFontSizeChangeMode] = useState(mainController.setting.fontSizeChangeMode);
-
+    const [fontSizeChangeMode, setFontSizeChangeMode] = useState(plugin.database.setting.fontSizeChangeMode);
 
     const onInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const ret = parseInt(e.target.value);
         setFontSizeChangeMode(ret);
-        mainController.setting.fontSizeChangeMode = ret;
-        mainSettingTable.display();
+        plugin.database.setting.fontSizeChangeMode = ret;
+        plugin.mainSettingTab.display();
     };
 
     return <>

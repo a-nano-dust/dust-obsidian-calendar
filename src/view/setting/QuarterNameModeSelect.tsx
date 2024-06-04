@@ -1,18 +1,15 @@
 import React, {ChangeEvent, useState} from "react";
-import MainController from "../core/MainController";
+import DustCalendarPlugin from "../../main";
 
 
-export default function QuarterNameModeSelect({
-                                                  mainController
-                                              }: { mainController: MainController }) {
+export default function QuarterNameModeSelect({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [quarterNameMode, setQuarterNameMode] = useState(mainController.setting.quarterNameMode);
-
+    const [quarterNameMode, setQuarterNameMode] = useState(plugin.database.setting.quarterNameMode);
 
     const onInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const ret = parseInt(e.target.value);
         setQuarterNameMode(ret);
-        mainController.setting.quarterNameMode = ret;
+        plugin.database.setting.quarterNameMode = ret;
     };
 
     return <>
@@ -21,7 +18,7 @@ export default function QuarterNameModeSelect({
                 季度命名方式
             </div>
             <div className="setting-item-description">
-                <div>这将影响日历头部季度区域和年视图中的季度名称</div>
+                <div>这将影响日历头部季度区域和年视图中的季度名称。</div>
             </div>
         </div>
         <div className="setting-item-control">

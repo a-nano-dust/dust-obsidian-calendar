@@ -1,18 +1,18 @@
 import {Modal, Setting} from "obsidian";
 import Path from "../../util/Path";
-import MainController from "../../core/MainController";
+import DustCalendarPlugin from "../../main";
 
 export default class ConfirmCreatingNoteModal extends Modal {
 
     private _filename: Path;       // 要创建的文件名，可以包含路径
     private _canCreateFile: boolean;
-    private _dairyController: MainController;
+    private plugin: DustCalendarPlugin;
 
-    constructor(filename: Path, dairyController: MainController) {
-        super(dairyController.plugin.app);
+    constructor(filename: Path, plugin: DustCalendarPlugin) {
+        super(plugin.app);
         this._filename = filename;
         this._canCreateFile = false;
-        this._dairyController = dairyController;
+        this.plugin = plugin;
     }
 
     onOpen(): void {
@@ -33,12 +33,10 @@ export default class ConfirmCreatingNoteModal extends Modal {
         });
     }
 
-    onClose(): void {
+    async onClose(): Promise<void> {
         if (this._canCreateFile) {
-            setTimeout(() => this._dairyController.createFile(this._filename), 100);
+            await this.plugin.noteController.createNote(this._filename);
         }
     }
-
-
 
 }

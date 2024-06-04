@@ -1,12 +1,13 @@
-<h1 align="center">Dust Obsidian Calendar</h1>
+<h1 align="center">Dust Calendar</h1>
 
 <p align="center">
     <img alt="Release version" src="https://img.shields.io/github/v/release/a-nano-dust/dust-obsidian-calendar?style=for-the-badge">
     <img alt="Download count" src="https://img.shields.io/github/downloads/a-nano-dust/dust-obsidian-calendar/total?style=for-the-badge">
 </p>
 <p align="center">
-    <span>Dust Obsidian Calendar 更符合中国习惯的 Obsidian 插件，它提供了日历浏览以及与日历联动的周期性笔记功能。</span>
+    <span>Dust Calendar 是一款更符合中国习惯的 Obsidian 插件，它提供了日历浏览以及与日历联动的周期性笔记功能。</span>
 </p>
+
 
 ## 关于插件
 
@@ -21,7 +22,7 @@
 1. 打开 `设置/第三方插件`；
 2. 关闭 `安全模式`；
 3. 点击 `浏览` 按钮来查看第三方插件市场；
-4. 输入搜索：**Image Toolkit**；
+4. 输入搜索：**Dust Calendar**；
 5. 点击 `安装` 按钮；
 6. 一旦安装成功，先关闭当前社区插件窗口，然后在已安装插件列表下激活刚安装的插件；
 
@@ -61,6 +62,8 @@
 首先，我们需要在插件设置中打开对应的选项。
 
 然后，我们需要配置周期性笔记的模板路径（包含笔记所在文件夹和笔记文件名），模板控制字符与 [luxon](https://moment.github.io/luxon/#/formatting?id=table-of-tokens) 相同。
+
+除此之外，Dust Calendar 支持与一些模板插件进行联动，在创建笔记的时候自动应用模板。为了使用这项功能，我们需要选择指定一款模板插件，并为需要使用模板功能的周期性笔记配置模板文件。目前，Dust Calendar 支持 Obsidian 核心插件中的模板和 [Templater](https://github.com/SilentVoid13/Templater) 。
 
 如下展示了一个可能的配置内容：
 

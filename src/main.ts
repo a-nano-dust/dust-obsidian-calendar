@@ -30,6 +30,7 @@ export default class DustCalendarPlugin extends Plugin {
         // 加载插件设置
         await this.database.loadSetting();
         this.templateController.updateTemplatePlugin(this.database.setting.templatePlugin);
+        this.viewController.setQuarterNameMode(this.database.setting.quarterNameMode);
 
         // 注册日历视图
         this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this));

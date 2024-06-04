@@ -24,7 +24,10 @@ export default function NotePattern({plugin, noteType}: { plugin: DustCalendarPl
                 <div>请使用&nbsp;<a
                     href="src/view/setting/DailyNotePattern#/formatting?id=table-of-tokens">luxon语法</a>&nbsp;指定笔记文件的生成路径。
                 </div>
-                <div>规则应用后的文件路径为（基于当前日期）：{text}</div>
+                {notePattern.length === 0
+                    ? <div className="d-color-error">尚未配置文件命名规则，Dust Calendar 将无法为您创建笔记文件。</div>
+                    : <div>规则应用后的文件路径为（基于当前日期）：{text}</div>
+                }
             </div>
         </div>
         <div className="setting-item-control">

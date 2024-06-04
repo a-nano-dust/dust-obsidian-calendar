@@ -120,6 +120,7 @@ export default class MainSettingTab extends PluginSettingTab {
             toggle.setValue(noteOption);
             toggle.onChange(async (value) => {
                 this.plugin.noteController.setNoteOption(noteType, value);
+                this.display();
             });
         });
 

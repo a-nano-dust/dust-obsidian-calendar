@@ -158,7 +158,6 @@ export default class NoteController {
     }
 
     public openNoteByNoteType(date: DateTime, noteType: NoteType): void {
-
         const noteFilename = this.getNoteFilename(date, noteType);
         if (noteFilename === null) {
             return;
@@ -211,7 +210,7 @@ export default class NoteController {
 
     private getNoteFilename(date: DateTime, noteType: NoteType): string | null {
         const notePattern: string | null = this.getNotePattern(noteType);
-        if (notePattern === null) {
+        if (notePattern.length === 0) {
             return null;
         }
 

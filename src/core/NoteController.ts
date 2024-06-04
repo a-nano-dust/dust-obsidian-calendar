@@ -66,7 +66,7 @@ export default class NoteController {
         }
     }
 
-    public getNotePattern(noteType: NoteType): string | null {
+    public getNotePattern(noteType: NoteType): string {
 
         let noteOption: boolean = false;
         let notePattern: string = "";
@@ -94,7 +94,7 @@ export default class NoteController {
         }
 
         if (!noteOption || notePattern.length === 0) {
-            return null;
+            return "";
         }
 
         return notePattern;

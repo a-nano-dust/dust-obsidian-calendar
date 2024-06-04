@@ -36,7 +36,7 @@ export default class TemplateController {
     }
 
     public hasTemplateFolder(): boolean {
-        const folder = new Path((this.plugin.app as any).internalPlugins.plugins.templates.instance.options.folder);
+        const folder = this.templateUtil.getTemplateFolder();
         return folder.string.length !== 0 && PathUtil.exists(folder, this.plugin.app.vault);
     }
 

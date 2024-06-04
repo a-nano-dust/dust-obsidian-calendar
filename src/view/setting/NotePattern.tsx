@@ -6,12 +6,11 @@ import {NoteType} from "../../base/enum";
 
 export default function NotePattern({plugin, noteType}: { plugin: DustCalendarPlugin, noteType: NoteType }) {
 
-    const [notePattern, setNotePattern] = useState(plugin.noteController.getNotePattern(noteType)!);
+    const [notePattern, setNotePattern] = useState(plugin.noteController.getNotePattern(noteType));
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setNotePattern(e.target.value);
-        // plugin.database.setting.dailyNotePattern = e.target.value;
-        plugin.noteController.setNotePattern(noteType, notePattern);
+        plugin.noteController.setNotePattern(noteType, e.target.value);
     };
 
     const text = DateTime.now().toFormat(notePattern);

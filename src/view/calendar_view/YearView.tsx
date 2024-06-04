@@ -62,7 +62,7 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
 
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
-        <div>{plugin.database.parseQuarterName(showQuarter)}</div>
+        <div>{plugin.viewController.parseQuarterName(showQuarter)}</div>
         <div className={dotStyle}/>
     </div>
 }

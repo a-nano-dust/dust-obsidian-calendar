@@ -4,12 +4,12 @@ import DustCalendarPlugin from "../../main";
 
 export default function FontSizeChangeModeSelect({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [fontSizeChangeMode, setFontSizeChangeMode] = useState(plugin.database.setting.fontSizeChangeMode);
+    const [fontSizeChangeMode, setFontSizeChangeMode] = useState(plugin.viewController.getFontSizeChangeMode());
 
     const onInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const ret = parseInt(e.target.value);
         setFontSizeChangeMode(ret);
-        plugin.database.setting.fontSizeChangeMode = ret;
+        plugin.viewController.setFontSizeChangeMode(ret);
         plugin.mainSettingTab.display();
     };
 

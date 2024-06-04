@@ -4,12 +4,12 @@ import DustCalendarPlugin from "../../main";
 
 export default function QuarterNameModeSelect({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [quarterNameMode, setQuarterNameMode] = useState(plugin.database.setting.quarterNameMode);
+    const [quarterNameMode, setQuarterNameMode] = useState(plugin.viewController.getQuarterNameMode());
 
     const onInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const ret = parseInt(e.target.value);
         setQuarterNameMode(ret);
-        plugin.database.setting.quarterNameMode = ret;
+        plugin.viewController.setQuarterNameMode(ret);
     };
 
     return <>

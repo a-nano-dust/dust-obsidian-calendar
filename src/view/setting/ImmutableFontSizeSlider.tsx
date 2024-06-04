@@ -4,12 +4,12 @@ import DustCalendarPlugin from "../../main";
 
 export default function ImmutableFontSizeSlider({plugin}: { plugin: DustCalendarPlugin }) {
 
-    const [immutableFontSizeFactor, setImmutableFontSizeFactor] = useState<number>(plugin.database.setting.immutableFontSizeFactor);
+    const [immutableFontSizeFactor, setImmutableFontSizeFactor] = useState<number>(plugin.viewController.getImmutableFontSizeFactor());
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const ret = parseInt(e.target.value);
         setImmutableFontSizeFactor(ret);
-        plugin.database.setting.immutableFontSizeFactor = ret;
+        plugin.viewController.setImmutableFontSizeFactor(ret);
     };
 
     return <>

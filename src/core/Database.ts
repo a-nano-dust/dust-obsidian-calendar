@@ -18,7 +18,8 @@ export default class Database {
     }
 
     public async loadSetting(): Promise<void> {
-        this.setting = await this.plugin.loadData() as PluginSetting;
+        // this.setting = await this.plugin.loadData() as PluginSetting;
+        this.setting = Object.assign({}, this.setting, await this.plugin.loadData());
         this.updateQuarterNameMap();
     }
 

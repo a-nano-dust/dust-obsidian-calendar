@@ -18,7 +18,7 @@ export default function QuarterNameModeSelect({plugin}: { plugin: DustCalendarPl
                 季度命名方式
             </div>
             <div className="setting-item-description">
-                <div>这将影响日历头部季度区域和年视图中的季度名称</div>
+                <div>这将影响日历头部季度区域和年视图中的季度名称。</div>
             </div>
         </div>
         <div className="setting-item-control">

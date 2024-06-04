@@ -23,7 +23,7 @@ export default function NotePattern({plugin, noteType}: { plugin: DustCalendarPl
             </div>
             <div className="setting-item-description">
                 <div>请使用&nbsp;<a
-                    href="src/view/setting/DailyNotePattern#/formatting?id=table-of-tokens">luxon语法</a>&nbsp;指定笔记文件的生成路径
+                    href="src/view/setting/DailyNotePattern#/formatting?id=table-of-tokens">luxon语法</a>&nbsp;指定笔记文件的生成路径。
                 </div>
                 <div>规则应用后的文件路径为（基于当前日期）：{text}</div>
             </div>

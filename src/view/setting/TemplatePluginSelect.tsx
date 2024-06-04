@@ -21,7 +21,7 @@ export default function TemplatePluginSelect({plugin}: { plugin: DustCalendarPlu
                 模板插件
             </div>
             <div className="setting-item-description">
-                <div>将使用选中的模板插件填充初始的笔记内容</div>
+                <div>将使用选中的模板插件填充初始的笔记内容。</div>
             </div>
         </div>
         <div className="setting-item-control">

@@ -132,7 +132,7 @@ function QuarterItem() {
                          onClick={toLastQuarter}/>
             <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
                  onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
-                <div style={{width: "3em"}}>{plugin.database.parseQuarterName(selectedDate.quarter)}</div>
+                <div style={{width: "3em"}}>{plugin.viewController.parseQuarterName(selectedDate.quarter)}</div>
             </div>
             <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextQuarter}/>

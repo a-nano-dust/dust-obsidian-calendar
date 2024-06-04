@@ -4,6 +4,7 @@ import Database from "./core/Database";
 import NoteController from "./core/NoteController";
 import TemplateController from "./core/TemplateController";
 import MainSettingTab from "./view/setting/MainSettingTab";
+import ViewController from "./core/ViewController";
 
 
 // 插件对象
@@ -12,14 +13,15 @@ export default class DustCalendarPlugin extends Plugin {
     public readonly database: Database;
     public readonly noteController: NoteController;
     public readonly templateController: TemplateController;
+    public readonly viewController: ViewController;
     public readonly mainSettingTab: MainSettingTab;
 
     constructor(app: App, manifest: PluginManifest) {
         super(app, manifest);
-        // this.mainController = new MainController(this);
         this.database = new Database(this);
         this.noteController = new NoteController(this);
         this.templateController = new TemplateController(this);
+        this.viewController = new ViewController(this);
         this.mainSettingTab = new MainSettingTab(this);
     }
 

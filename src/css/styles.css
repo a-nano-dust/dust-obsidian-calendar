@@ -99,6 +99,10 @@
     opacity: 0.2;
 }
 
+.d-color-accent {
+    color: var(--text-accent);
+}
+
 .d-color-error {
     color: var(--text-error);
 }

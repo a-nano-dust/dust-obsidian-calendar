@@ -135,7 +135,13 @@ export default class MainSettingTab extends PluginSettingTab {
             <NotePattern plugin={this.plugin} noteType={noteType}/>
         );
 
+        // 是否选择了模板插件
         if (this.plugin.templateController.getTemplatePlugin() === TemplatePlugin.NONE) {
+            return;
+        }
+
+        // 指定的模板插件是否启用
+        if (!this.plugin.templateController.isTemplatePluginEnable()) {
             return;
         }
 

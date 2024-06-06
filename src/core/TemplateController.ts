@@ -8,6 +8,9 @@ import ObsidianTemplateUtil from "../util/ObsidianTemplateUtil";
 import TemplaterUtil from "../util/TemplaterUtil";
 
 
+/**
+ * 封装模板操作
+ */
 export default class TemplateController {
 
     public readonly plugin: DustCalendarPlugin;
@@ -20,6 +23,10 @@ export default class TemplateController {
 
     public getTemplatePlugin(): TemplatePlugin {
         return this.plugin.database.setting.templatePlugin;
+    }
+
+    public isTemplatePluginEnable(): boolean {
+        return this.templateUtil.isEnable();
     }
 
     public updateTemplatePlugin(templatePlugin: TemplatePlugin): void {

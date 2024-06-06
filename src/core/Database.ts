@@ -2,6 +2,9 @@ import DustCalendarPlugin from "../main";
 import PluginSetting from "../entity/PluginSetting";
 
 
+/**
+ * 类似于底层数据库，不允许界面直接读写，只能通过 controller 间接控制
+ */
 export default class Database {
 
     public readonly plugin: DustCalendarPlugin;

@@ -1,5 +1,6 @@
 import React, {ChangeEvent, useState} from "react";
 import DustCalendarPlugin from "../../main";
+import {TemplatePlugin} from "../../base/enum";
 
 
 export default function TemplatePluginSelect({plugin}: { plugin: DustCalendarPlugin }) {
@@ -9,11 +10,12 @@ export default function TemplatePluginSelect({plugin}: { plugin: DustCalendarPlu
     const onInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const ret = parseInt(e.target.value);
         setTemplatePlugin(ret);
-        // plugin.database.setting.templatePlugin = ret;
-        // plugin.templateController.templatePlugin = ret;
         plugin.templateController.updateTemplatePlugin(ret);
         plugin.mainSettingTab.display();
     };
+
+    // 如果选择了模板插件，需要检查其是否启用
+    let isTemplatePluginEnable = templatePlugin === TemplatePlugin.NONE || plugin.templateController.isTemplatePluginEnable();
 
     return <>
         <div className="setting-item-info">
@@ -21,7 +23,11 @@ export default function TemplatePluginSelect({plugin}: { plugin: DustCalendarPlu
                 模板插件
             </div>
             <div className="setting-item-description">
-                <div>将使用选中的模板插件填充初始的笔记内容。</div>
+                {
+                    isTemplatePluginEnable
+                        ? <div>将使用选中的模板插件填充初始的笔记内容。</div>
+                        : <div className="d-color-error">指定的模板插件尚未启用！</div>
+                }
             </div>
         </div>
         <div className="setting-item-control">

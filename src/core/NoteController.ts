@@ -8,6 +8,9 @@ import ConfirmCreatingNoteModal from "../view/modal/ConfirmCreatingNoteModal";
 import DustCalendarPlugin from "../main";
 
 
+/**
+ * 封装笔记操作
+ */
 export default class NoteController {
 
     public readonly plugin: DustCalendarPlugin;

@@ -2,6 +2,9 @@ import DustCalendarPlugin from "../main";
 import {FontSizeChangeMode, QuarterNameMode} from "../base/enum";
 
 
+/**
+ * 封装界面所需的操作
+ */
 export default class ViewController {
 
     public readonly plugin: DustCalendarPlugin;

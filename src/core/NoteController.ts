@@ -2,7 +2,6 @@ import {MarkdownView, TAbstractFile, TFile, WorkspaceLeaf} from "obsidian";
 import {DateTime} from "luxon";
 import {NoteType, SelectedItemType} from "../base/enum";
 import SelectedItem from "../entity/SelectedItem";
-import {countWords} from "../util/util"
 import Path from "../util/Path";
 import PathUtil from "../util/PathUtil";
 import ConfirmCreatingNoteModal from "../view/modal/ConfirmCreatingNoteModal";
@@ -149,30 +148,6 @@ export default class NoteController {
             return null;
         }
         return date.toFormat(notePattern).concat(".md");
-    }
-
-    public async countNoteWords(date: DateTime, noteType: NoteType): Promise<number | null> {
-        const filename = this.getNoteFilename(date, noteType);
-        if (filename === null) {
-            return null;
-        }
-
-        const {vault} = this.plugin.app;
-        const file = vault.getAbstractFileByPath(filename);
-        if (file === null) {
-            return null;
-        }
-
-        const content = await vault.cachedRead(file as TFile);
-        return countWords(content);
-    }
-
-    public async countNoteDots(date: DateTime, noteType: NoteType): Promise<number | null> {
-        const totalWords = await this.countNoteWords(date, noteType);
-        if (totalWords === null) {
-            return null;
-        }
-        return Math.ceil(totalWords / 200);
     }
 
     public openNoteBySelectedItem(selectedItem: SelectedItem): void {

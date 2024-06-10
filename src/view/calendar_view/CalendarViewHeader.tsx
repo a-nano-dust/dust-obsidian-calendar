@@ -7,6 +7,7 @@ import {ChevronLeft, ChevronRight} from 'lucide-react';
 import SelectedItem from "../../entity/SelectedItem";
 import {CalendarViewType, NoteType, SelectedItemType} from "../../base/enum";
 import {PluginContext} from "../context";
+import StatisticLabel from "./StatisticLabel";
 
 function YearItem() {
 
@@ -15,12 +16,6 @@ function YearItem() {
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
     const plugin = useContext(PluginContext)!;
-
-    // 有关联笔记的日期会使用一个点进行标注
-    let dotStyle = "calendar-view-no-dot";
-    if (plugin.noteController.hasNote(DateTime.local(selectedDate.year), NoteType.YEARLY)) {
-        dotStyle = "calendar-view-dot";
-    }
 
     const toLastYear = () => {
         const newSelectedItem = new SelectedItem();
@@ -48,7 +43,7 @@ function YearItem() {
             <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextYear}/>
         </div>
-        <div className={dotStyle}></div>
+        <StatisticLabel date={DateTime.local(selectedDate.year)} noteType={NoteType.YEARLY}/>
     </div>
 }
 
@@ -59,12 +54,6 @@ function MonthItem() {
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
     const plugin = useContext(PluginContext)!;
-
-    // 有关联笔记的日期会使用一个点进行标注
-    let dotStyle = "calendar-view-no-dot";
-    if (plugin.noteController.hasNote(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)) {
-        dotStyle = "calendar-view-dot";
-    }
 
     const toLastMonth = () => {
         const newSelectedItem = new SelectedItem();
@@ -93,7 +82,7 @@ function MonthItem() {
             <ChevronRight className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextMonth}/>
         </div>
-        <div className={dotStyle}></div>
+        <StatisticLabel date={DateTime.local(selectedDate.year, selectedDate.month)} noteType={NoteType.MONTHLY}/>
     </div>
 }
 
@@ -104,12 +93,6 @@ function QuarterItem() {
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
     const plugin = useContext(PluginContext)!;
-
-    // 有关联笔记的日期会使用一个点进行标注
-    let dotStyle = "calendar-view-no-dot";
-    if (plugin.noteController.hasNote(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)) {
-        dotStyle = "calendar-view-dot";
-    }
 
     const toLastQuarter = () => {
         const newSelectedItem = new SelectedItem();
@@ -137,7 +120,8 @@ function QuarterItem() {
             <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextQuarter}/>
         </div>
-        <div className={dotStyle}></div>
+        <StatisticLabel date={DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2)}
+                        noteType={NoteType.QUARTERLY}/>
     </div>
 }
 

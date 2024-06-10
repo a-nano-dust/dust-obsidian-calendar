@@ -64,7 +64,8 @@ export default class MainSettingTab extends PluginSettingTab {
 
     async hide(): Promise<any> {
         await this.plugin.database.saveSetting();
-        this.plugin.flushCalendarView();
+        this.plugin.calendarViewFlushController.forceFlush();
+        // this.plugin.flushCalendarView();
         return super.hide();
     }
 

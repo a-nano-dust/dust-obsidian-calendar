@@ -117,6 +117,7 @@ export default class TemplateController {
     }
 
     public notify(templateController: TemplateController, templateFile: TAbstractFile) {
+        // 循环等待新创建的文件可被编辑，再插入模板
         if (templateController.plugin.app.workspace.activeEditor !== null) {
             templateController.insertTemplateImpl(templateFile);
         }
@@ -125,6 +126,7 @@ export default class TemplateController {
         }
     }
 
+    // 真正执行模板插入的函数
     public insertTemplateImpl(templateFile: TAbstractFile) {
         this.templateUtil.insertTemplateImpl(templateFile);
     }

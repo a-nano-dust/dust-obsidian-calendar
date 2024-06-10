@@ -2,6 +2,7 @@ import {MarkdownView, TAbstractFile, TFile, WorkspaceLeaf} from "obsidian";
 import {DateTime} from "luxon";
 import {NoteType, SelectedItemType} from "../base/enum";
 import SelectedItem from "../entity/SelectedItem";
+import {countWords} from "../util/util"
 import Path from "../util/Path";
 import PathUtil from "../util/PathUtil";
 import ConfirmCreatingNoteModal from "../view/modal/ConfirmCreatingNoteModal";
@@ -19,15 +20,6 @@ export default class NoteController {
     constructor(plugin: DustCalendarPlugin) {
         this.plugin = plugin;
         this.noteType = NoteType.DAILY;
-    }
-
-    public hasNote(date: DateTime, noteType: NoteType): boolean {
-        const noteFilename = this.getNoteFilename(date, noteType);
-        if (noteFilename === null) {
-            return false;
-        }
-        const abstractFile = this.plugin.app.vault.getAbstractFileByPath(noteFilename);
-        return abstractFile instanceof TFile;
     }
 
     public getNoteOption(noteType: NoteType): boolean {
@@ -142,6 +134,47 @@ export default class NoteController {
         return "";
     }
 
+    public hasNote(date: DateTime, noteType: NoteType): boolean {
+        const noteFilename = this.getNoteFilename(date, noteType);
+        if (noteFilename === null) {
+            return false;
+        }
+        const abstractFile = this.plugin.app.vault.getAbstractFileByPath(noteFilename);
+        return abstractFile instanceof TFile;
+    }
+
+    public getNoteFilename(date: DateTime, noteType: NoteType): string | null {
+        const notePattern: string | null = this.getNotePattern(noteType);
+        if (notePattern.length === 0) {
+            return null;
+        }
+        return date.toFormat(notePattern).concat(".md");
+    }
+
+    public async countNoteWords(date: DateTime, noteType: NoteType): Promise<number | null> {
+        const filename = this.getNoteFilename(date, noteType);
+        if (filename === null) {
+            return null;
+        }
+
+        const {vault} = this.plugin.app;
+        const file = vault.getAbstractFileByPath(filename);
+        if (file === null) {
+            return null;
+        }
+
+        const content = await vault.cachedRead(file as TFile);
+        return countWords(content);
+    }
+
+    public async countNoteDots(date: DateTime, noteType: NoteType): Promise<number | null> {
+        const totalWords = await this.countNoteWords(date, noteType);
+        if (totalWords === null) {
+            return null;
+        }
+        return Math.ceil(totalWords / 200);
+    }
+
     public openNoteBySelectedItem(selectedItem: SelectedItem): void {
         if (selectedItem.type === SelectedItemType.DAY_ITEM) {
             this.openNoteByNoteType(selectedItem.date, NoteType.DAILY);
@@ -182,10 +215,11 @@ export default class NoteController {
     }
 
     public async createNote(filename: Path): Promise<void> {
-        let abstractFile: TAbstractFile = await PathUtil.create(filename, this.plugin.app.vault);
+        const abstractFile: TAbstractFile = await PathUtil.create(filename, this.plugin.app.vault);
         this.openNoteTabView(abstractFile as TFile);
-        this.plugin.flushCalendarView();
         this.plugin.templateController.insertTemplate(this.noteType);
+        // 新建文件之后，需要更新统计信息
+        this.plugin.noteStatisticController.addTaskByFile(abstractFile);
     }
 
     private openNoteTabView(tFile: TFile): void {
@@ -210,16 +244,6 @@ export default class NoteController {
         // 移动焦点到笔记编辑区域
         app.workspace.setActiveLeaf(targetView.leaf, {focus: true});
     }
-
-    private getNoteFilename(date: DateTime, noteType: NoteType): string | null {
-        const notePattern: string | null = this.getNotePattern(noteType);
-        if (notePattern.length === 0) {
-            return null;
-        }
-
-        return date.toFormat(notePattern).concat(".md");
-    }
-
 
 }
 

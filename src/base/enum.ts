@@ -47,9 +47,21 @@ export enum FontSizeChangeMode {
     IMMUTABLE = 3                   // 固定大小
 }
 
+/**
+ * 季度命名方式
+ */
 export enum QuarterNameMode {
     NUMBER = 1,                     // 数字：1、2、3、4
     CHINESE = 2                     // 中文：春、夏、秋、冬
+}
+
+/**
+ * 待办标注方式
+ */
+export enum TodoAnnotationMode {
+    NONE = 1,
+    COLOR = 2,
+    HOLE = 3
 }
 
 /**

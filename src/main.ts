@@ -6,7 +6,7 @@ import TemplateController from "./core/TemplateController";
 import MainSettingTab from "./view/setting/MainSettingTab";
 import ViewController from "./core/ViewController";
 import NoteStatisticController from "./core/NoteStatisticController";
-import {CalendarViewFlushController} from "./core/CalendarViewFlushController";
+import {CalendarViewController} from "./core/CalendarViewController";
 
 
 // 插件对象
@@ -16,7 +16,7 @@ export default class DustCalendarPlugin extends Plugin {
     public readonly noteController: NoteController;
     public readonly templateController: TemplateController;
     public readonly noteStatisticController: NoteStatisticController;
-    public readonly calendarViewFlushController: CalendarViewFlushController;
+    public readonly calendarViewController: CalendarViewController;
     public readonly viewController: ViewController;
     public readonly mainSettingTab: MainSettingTab;
 
@@ -26,7 +26,7 @@ export default class DustCalendarPlugin extends Plugin {
         this.noteController = new NoteController(this);
         this.templateController = new TemplateController(this);
         this.noteStatisticController = new NoteStatisticController(this);
-        this.calendarViewFlushController = new CalendarViewFlushController(this);
+        this.calendarViewController = new CalendarViewController(this);
         this.viewController = new ViewController(this);
         this.mainSettingTab = new MainSettingTab(this);
     }

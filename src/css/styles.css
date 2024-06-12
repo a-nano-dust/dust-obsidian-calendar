@@ -55,7 +55,7 @@
 
 .statistic-label {
     max-width: calc((16px + var(--d-font-size-factor) * 4px) * var(--d-font-size-custom-enable) + (12px + 0.4 * var(--font-text-size)) * var(--d-font-size-follow-obsidian));
-    /*max-width: 16px;*/
+    min-height: 8px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

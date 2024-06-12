@@ -59,6 +59,8 @@ export default class MainSettingTab extends PluginSettingTab {
     display(): any {
         const {containerEl} = this;
         containerEl.empty();
+        this.displayShouldDisplayLunarInfo();
+        this.displayShouldDisplayHolidayInfo();
         this.displayFontSizeChangeModeSelect();
         this.displayImmutableFontSizeSlider();
         this.displayQuarterNameModeSelect();
@@ -76,7 +78,7 @@ export default class MainSettingTab extends PluginSettingTab {
 
     async hide(): Promise<any> {
         await this.plugin.database.saveSetting();
-        this.plugin.calendarViewFlushController.forceFlush();
+        this.plugin.calendarViewController.forceFlush();
         // this.plugin.flushCalendarView();
         return super.hide();
     }
@@ -88,6 +90,30 @@ export default class MainSettingTab extends PluginSettingTab {
         this.fontSizeChangeModeSelectRoot.render(
             <FontSizeChangeModeSelect plugin={this.plugin}/>
         );
+    }
+
+    private displayShouldDisplayLunarInfo(): void {
+        const {containerEl} = this;
+        let noteOptionElement = new Setting(containerEl);
+        noteOptionElement.setName("是否显示农历信息").setDesc("关闭后不再显示农历月份、日期、节气、节日。");
+        noteOptionElement.addToggle(toggle => {
+            toggle.setValue(this.plugin.calendarViewController.getShouldDisplayLunarInfo());
+            toggle.onChange(async (value) => {
+                this.plugin.calendarViewController.setShouldDisplayLunarInfo(value);
+            });
+        });
+    }
+
+    private displayShouldDisplayHolidayInfo(): void {
+        const {containerEl} = this;
+        let noteOptionElement = new Setting(containerEl);
+        noteOptionElement.setName("是否显示调休信息").setDesc("关闭后不再显示调休信息。");
+        noteOptionElement.addToggle(toggle => {
+            toggle.setValue(this.plugin.calendarViewController.getShouldDisplayHolidayInfo());
+            toggle.onChange(async (value) => {
+                this.plugin.calendarViewController.setShouldDisplayHolidayInfo(value);
+            });
+        });
     }
 
     private displayImmutableFontSizeSlider(): void {

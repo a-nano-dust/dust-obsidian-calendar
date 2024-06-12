@@ -126,7 +126,7 @@ export default class NoteStatisticController {
         this.noteStatisticRegistry.set(filename, newNoteStatistic);
         // 判断信息有没有更新，如果有更新，就需要刷新界面
         if (isUpdated) {
-            this.plugin.calendarViewFlushController.requestFlush();
+            this.plugin.calendarViewController.requestFlush();
         }
     }
 
@@ -143,7 +143,7 @@ export default class NoteStatisticController {
             return;
         }
         // 如果成功从注册表中删除了文件，则需要刷新日历界面
-        this.plugin.calendarViewFlushController.requestFlush();
+        this.plugin.calendarViewController.requestFlush();
     }
 
     private static countWords(text: string): number {

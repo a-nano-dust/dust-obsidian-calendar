@@ -2,6 +2,9 @@ import {FontSizeChangeMode, QuarterNameMode, TemplatePlugin, TodoAnnotationMode}
 
 export default class PluginSetting {
 
+    shouldDisplayLunarInfo: boolean;                        // 是否显示农历信息
+    shouldDisplayHolidayInfo: boolean;                      // 是否显示调休信息
+
     fontSizeChangeMode: FontSizeChangeMode;                 // 字体大小调整方式
     immutableFontSizeFactor: number;                        // 固定字体的大小
 
@@ -34,6 +37,9 @@ export default class PluginSetting {
     yearlyTemplateFilename: string;                         // 年度笔记模板文件名称
 
     constructor() {
+
+        this.shouldDisplayLunarInfo = true;
+        this.shouldDisplayHolidayInfo = true;
 
         this.fontSizeChangeMode = FontSizeChangeMode.IMMUTABLE;
         this.immutableFontSizeFactor = 1;

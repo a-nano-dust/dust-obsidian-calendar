@@ -18,6 +18,9 @@ function DayItemBody({
                          isSelected
                      }: { targetDay: DateTime, dayListOfMonthView: DayListOfMonthView, isSelected: boolean }) {
 
+
+    const plugin = useContext(PluginContext)!;
+
     const today = DateTime.now();
 
     let style = "d-normal-font";
@@ -33,7 +36,11 @@ function DayItemBody({
 
     return <div className={style}>
         {targetDay.day}
-        <DayItemSuperscript targetDate={targetDay} dayListOfMonthView={dayListOfMonthView}/>
+        {
+            plugin.calendarViewController.getShouldDisplayHolidayInfo()
+                ? <DayItemSuperscript targetDate={targetDay} dayListOfMonthView={dayListOfMonthView}/>
+                : <></>
+        }
     </div>
 }
 
@@ -119,7 +126,11 @@ function DayItem({
     return <div className={bodyStyle} onClick={onClickCallback}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <DayItemBody targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
-        <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
+        {
+            plugin.calendarViewController.getShouldDisplayLunarInfo()
+                ? <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
+                : <></>
+        }
         <StatisticLabel date={DateTime.local(targetDay.year, targetDay.month, targetDay.day)}
                         noteType={NoteType.DAILY}/>
     </div>

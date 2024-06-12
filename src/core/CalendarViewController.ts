@@ -5,9 +5,9 @@ import {CalendarView, VIEW_TYPE_CALENDAR} from "../view/CalendarView";
 
 /**
  * 有很多逻辑都需要刷新日历界面，为避免刷新过快，带来性能方面的影响
- * 所有的刷新请求都需要交给 CalendarViewFlushController 处理，由它来控制刷新的频率
+ * 所有的刷新请求都需要交给 CalendarViewController 处理，由它来控制刷新的频率
  */
-export class CalendarViewFlushController {
+export class CalendarViewController {
 
     public readonly plugin: DustCalendarPlugin;
     private requestCounter: number;                             // 请求刷新的次数
@@ -18,6 +18,23 @@ export class CalendarViewFlushController {
         this.requestCounter = 0;
         this.lastRequestTime = 0;
     }
+
+    public getShouldDisplayLunarInfo(): boolean {
+        return this.plugin.database.setting.shouldDisplayLunarInfo;
+    }
+
+    public setShouldDisplayLunarInfo(shouldDisplayLunarInfo: boolean) {
+        this.plugin.database.setting.shouldDisplayLunarInfo = shouldDisplayLunarInfo;
+    }
+
+    public getShouldDisplayHolidayInfo(): boolean {
+        return this.plugin.database.setting.shouldDisplayHolidayInfo;
+    }
+
+    public setShouldDisplayHolidayInfo(shouldDisplayHolidayInfo: boolean): boolean {
+        return this.plugin.database.setting.shouldDisplayHolidayInfo = shouldDisplayHolidayInfo;
+    }
+
 
     // 立即刷新
     public forceFlush(): void {

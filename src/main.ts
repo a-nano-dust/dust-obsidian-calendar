@@ -5,6 +5,8 @@ import NoteController from "./core/NoteController";
 import TemplateController from "./core/TemplateController";
 import MainSettingTab from "./view/setting/MainSettingTab";
 import ViewController from "./core/ViewController";
+import NoteStatisticController from "./core/NoteStatisticController";
+import {CalendarViewFlushController} from "./core/CalendarViewFlushController";
 
 
 // 插件对象
@@ -13,6 +15,8 @@ export default class DustCalendarPlugin extends Plugin {
     public readonly database: Database;
     public readonly noteController: NoteController;
     public readonly templateController: TemplateController;
+    public readonly noteStatisticController: NoteStatisticController;
+    public readonly calendarViewFlushController: CalendarViewFlushController;
     public readonly viewController: ViewController;
     public readonly mainSettingTab: MainSettingTab;
 
@@ -21,6 +25,8 @@ export default class DustCalendarPlugin extends Plugin {
         this.database = new Database(this);
         this.noteController = new NoteController(this);
         this.templateController = new TemplateController(this);
+        this.noteStatisticController = new NoteStatisticController(this);
+        this.calendarViewFlushController = new CalendarViewFlushController(this);
         this.viewController = new ViewController(this);
         this.mainSettingTab = new MainSettingTab(this);
     }
@@ -72,19 +78,6 @@ export default class DustCalendarPlugin extends Plugin {
 
         // 显示视图
         workspace.revealLeaf(leaf);
-    }
-
-    // 强制刷新日历页面
-    public flushCalendarView(): void {
-        const {workspace} = this.app;
-
-        // 检查该类型的视图是否存在，如果不存在，则创建
-        let leaf: WorkspaceLeaf | null = null;
-        const leaves = workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
-        if (leaves.length > 0) {
-            leaf = leaves[0];
-            (leaf.view as CalendarView).flush();
-        }
     }
 }
 

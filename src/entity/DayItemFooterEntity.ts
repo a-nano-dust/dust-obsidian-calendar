@@ -15,6 +15,9 @@ export class DayItemFooterEntity {
         let festivals = lunar.getFestivals();
         if (festivals.length !== 0) {
             this.text = festivals[0];
+            if (this.text.length >= 3) {
+                this.text = this.text.substring(0, 2);
+            }
             this.type = DayItemFooterType.FESTIVAL;
             return;
         }

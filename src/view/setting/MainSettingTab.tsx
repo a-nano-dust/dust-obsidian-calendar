@@ -8,6 +8,9 @@ import QuarterNameModeSelect from "./QuarterNameModeSelect";
 import TemplatePluginSelect from "./TemplatePluginSelect";
 import NoteTemplate from "./NoteTemplate";
 import NotePattern from "./NotePattern";
+import DotUpperLimitSelect from "./DotUpperLimitSelect";
+import TodoAnnotationModeSelect from "./TodoAnnotationModeSelect";
+import WordsPerDotInput from "./WordsPerDotInput";
 
 
 export default class MainSettingTab extends PluginSettingTab {
@@ -16,6 +19,9 @@ export default class MainSettingTab extends PluginSettingTab {
     private fontSizeChangeModeSelectRoot: Root | null;
     private immutableFontSizeSliderRoot: Root | null;
     private quarterNameModeSelectRoot: Root | null;
+    private wordsPerDotInputRoot: Root | null;
+    private dotUpperLimitSelectRoot: Root | null;
+    private todoAnnotationModeSelectRoot: Root | null;
     private templatePluginSelectRoot: Root | null;
     private dailyNotePatternRoot: Root | null;
     private dailyNoteTemplateRoot: Root | null;
@@ -34,6 +40,9 @@ export default class MainSettingTab extends PluginSettingTab {
         this.fontSizeChangeModeSelectRoot = null;
         this.immutableFontSizeSliderRoot = null;
         this.quarterNameModeSelectRoot = null;
+        this.wordsPerDotInputRoot = null;
+        this.dotUpperLimitSelectRoot = null;
+        this.todoAnnotationModeSelectRoot = null;
         this.templatePluginSelectRoot = null;
         this.dailyNotePatternRoot = null;
         this.dailyNoteTemplateRoot = null;
@@ -53,6 +62,9 @@ export default class MainSettingTab extends PluginSettingTab {
         this.displayFontSizeChangeModeSelect();
         this.displayImmutableFontSizeSlider();
         this.displayQuarterNameModeSelect();
+        this.displayWordsPerDotInput();
+        this.displayDotUpperLimitSelect();
+        this.displayTodoAnnotationModeSelect();
         this.displayTemplatePluginSelect();
 
         this.displayNoteSetting(NoteType.DAILY, "每日笔记", this.dailyNotePatternRoot, this.dailyNoteTemplateRoot);
@@ -64,7 +76,8 @@ export default class MainSettingTab extends PluginSettingTab {
 
     async hide(): Promise<any> {
         await this.plugin.database.saveSetting();
-        this.plugin.flushCalendarView();
+        this.plugin.calendarViewFlushController.forceFlush();
+        // this.plugin.flushCalendarView();
         return super.hide();
     }
 
@@ -97,6 +110,33 @@ export default class MainSettingTab extends PluginSettingTab {
         this.quarterNameModeSelectRoot = createRoot(settingComponent.settingEl);
         this.quarterNameModeSelectRoot.render(
             <QuarterNameModeSelect plugin={this.plugin}/>
+        );
+    }
+
+    private displayWordsPerDotInput(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.wordsPerDotInputRoot = createRoot(settingComponent.settingEl);
+        this.wordsPerDotInputRoot.render(
+            <WordsPerDotInput plugin={this.plugin}/>
+        );
+    }
+
+    private displayDotUpperLimitSelect(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.dotUpperLimitSelectRoot = createRoot(settingComponent.settingEl);
+        this.dotUpperLimitSelectRoot.render(
+            <DotUpperLimitSelect plugin={this.plugin}/>
+        );
+    }
+
+    private displayTodoAnnotationModeSelect(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        this.todoAnnotationModeSelectRoot = createRoot(settingComponent.settingEl);
+        this.todoAnnotationModeSelectRoot.render(
+            <TodoAnnotationModeSelect plugin={this.plugin}/>
         );
     }
 

@@ -5,6 +5,7 @@ import {PluginContext} from "../context";
 import {NoteType, SelectedItemType} from "../../base/enum";
 import {DateTime} from "luxon";
 import SelectedItem from "../../entity/SelectedItem";
+import StatisticLabel from "./StatisticLabel";
 
 
 function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number }) {
@@ -24,16 +25,11 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
         bodyStyle = "d-normal-font calendar-view-item d-bg-color-blue";
     }
 
-    // 有关联笔记的日期会使用一个点进行标注
-    let dotStyle = "calendar-view-no-dot";
-    if (plugin.noteController.hasNote(DateTime.local(showYear, showMonth), NoteType.MONTHLY)) {
-        dotStyle = "calendar-view-dot";
-    }
-
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div>{showMonth}月</div>
-        <div className={dotStyle}/>
+        {/*<div className={dotStyle}/>*/}
+        <StatisticLabel date={DateTime.local(showYear, showMonth)} noteType={NoteType.MONTHLY}/>
     </div>
 }
 
@@ -54,16 +50,11 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
         bodyStyle = "d-normal-font calendar-view-item d-bg-color-blue";
     }
 
-    // 有关联笔记的日期会使用一个点进行标注
-    let dotStyle = "calendar-view-no-dot";
-    if (plugin.noteController.hasNote(DateTime.local(showYear, showQuarter * 3 - 2), NoteType.QUARTERLY)) {
-        dotStyle = "calendar-view-dot";
-    }
-
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div>{plugin.viewController.parseQuarterName(showQuarter)}</div>
-        <div className={dotStyle}/>
+        {/*<div className={dotStyle}/>*/}
+        <StatisticLabel date={DateTime.local(showYear, showQuarter * 3 - 2)} noteType={NoteType.QUARTERLY}/>
     </div>
 }
 

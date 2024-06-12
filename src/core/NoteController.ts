@@ -21,15 +21,6 @@ export default class NoteController {
         this.noteType = NoteType.DAILY;
     }
 
-    public hasNote(date: DateTime, noteType: NoteType): boolean {
-        const noteFilename = this.getNoteFilename(date, noteType);
-        if (noteFilename === null) {
-            return false;
-        }
-        const abstractFile = this.plugin.app.vault.getAbstractFileByPath(noteFilename);
-        return abstractFile instanceof TFile;
-    }
-
     public getNoteOption(noteType: NoteType): boolean {
 
         if (noteType === NoteType.DAILY) {
@@ -142,6 +133,23 @@ export default class NoteController {
         return "";
     }
 
+    public hasNote(date: DateTime, noteType: NoteType): boolean {
+        const noteFilename = this.getNoteFilename(date, noteType);
+        if (noteFilename === null) {
+            return false;
+        }
+        const abstractFile = this.plugin.app.vault.getAbstractFileByPath(noteFilename);
+        return abstractFile instanceof TFile;
+    }
+
+    public getNoteFilename(date: DateTime, noteType: NoteType): string | null {
+        const notePattern: string | null = this.getNotePattern(noteType);
+        if (notePattern.length === 0) {
+            return null;
+        }
+        return date.toFormat(notePattern).concat(".md");
+    }
+
     public openNoteBySelectedItem(selectedItem: SelectedItem): void {
         if (selectedItem.type === SelectedItemType.DAY_ITEM) {
             this.openNoteByNoteType(selectedItem.date, NoteType.DAILY);
@@ -182,10 +190,11 @@ export default class NoteController {
     }
 
     public async createNote(filename: Path): Promise<void> {
-        let abstractFile: TAbstractFile = await PathUtil.create(filename, this.plugin.app.vault);
+        const abstractFile: TAbstractFile = await PathUtil.create(filename, this.plugin.app.vault);
         this.openNoteTabView(abstractFile as TFile);
-        this.plugin.flushCalendarView();
         this.plugin.templateController.insertTemplate(this.noteType);
+        // 新建文件之后，需要更新统计信息
+        this.plugin.noteStatisticController.addTaskByFile(abstractFile);
     }
 
     private openNoteTabView(tFile: TFile): void {
@@ -210,16 +219,6 @@ export default class NoteController {
         // 移动焦点到笔记编辑区域
         app.workspace.setActiveLeaf(targetView.leaf, {focus: true});
     }
-
-    private getNoteFilename(date: DateTime, noteType: NoteType): string | null {
-        const notePattern: string | null = this.getNotePattern(noteType);
-        if (notePattern.length === 0) {
-            return null;
-        }
-
-        return date.toFormat(notePattern).concat(".md");
-    }
-
 
 }
 

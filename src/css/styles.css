@@ -20,7 +20,8 @@
 .calendar-view-row {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
+    /*align-items: center;*/
     /*gap: 1px;*/
 }
 
@@ -50,6 +51,37 @@
     width: 5px;
     margin-bottom: 2px;
     border-radius: 50%;
+}
+
+.statistic-label {
+    max-width: calc((16px + var(--d-font-size-factor) * 4px) * var(--d-font-size-custom-enable) + (12px + 0.4 * var(--font-text-size)) * var(--d-font-size-follow-obsidian));
+    /*max-width: 16px;*/
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.statistic-label-dot, .statistic-label-hole, .statistic-label-placeholder {
+    height: 6px;
+    width: 6px;
+    margin: 1px;
+}
+
+.statistic-label-dot {
+    fill: var(--color-base-100);
+}
+
+.statistic-label-dot-with-todo {
+    fill: var(--text-warning);
+}
+
+.statistic-label-hole {
+    fill: none;
+    stroke: var(--color-base-100);
+}
+
+.statistic-label-placeholder {
+    background-color: rgba(255, 255, 255, 0.0);
 }
 
 .enable-label {

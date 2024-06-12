@@ -9,6 +9,7 @@ import DayListOfMonthView from "../../entity/DayListOfMonthView";
 import {DayItemFooterType, NoteType, SelectedItemType, WeekEnum} from "../../base/enum";
 import {PluginContext} from "../context";
 import {range} from "../../util/util";
+import StatisticLabel from "./StatisticLabel";
 
 
 function DayItemBody({
@@ -115,17 +116,12 @@ function DayItem({
         bodyStyle = "calendar-view-item d-bg-color-blue";
     }
 
-    // 有关联笔记的日期会使用一个点进行标注
-    let dotStyle = "calendar-view-no-dot";
-    if (plugin.noteController.hasNote(DateTime.local(targetDay.year, targetDay.month, targetDay.day), NoteType.DAILY)) {
-        dotStyle = "calendar-view-dot";
-    }
-
     return <div className={bodyStyle} onClick={onClickCallback}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <DayItemBody targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
         <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
-        <div className={dotStyle}></div>
+        <StatisticLabel date={DateTime.local(targetDay.year, targetDay.month, targetDay.day)}
+                        noteType={NoteType.DAILY}/>
     </div>
 }
 
@@ -145,17 +141,12 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
         itemStyle = "calendar-view-item d-bg-color-blue";
     }
 
-    // 有关联笔记的日期会使用一个点进行标注
-    let dotStyle = "calendar-view-no-dot";
-    if (plugin.noteController.hasNote(DateTime.local(targetDay.year, targetDay.month, targetDay.day), NoteType.WEEKLY)) {
-        dotStyle = "calendar-view-dot";
-    }
-
     return <div className={itemStyle} style={{fontWeight: "bold"}}
                 onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div className={itemBodyStyle}>{targetDay.weekNumber}</div>
-        <div className={dotStyle}/>
+        <StatisticLabel date={DateTime.local(targetDay.year, targetDay.month, targetDay.day)}
+                        noteType={NoteType.WEEKLY}/>
     </div>
 }
 

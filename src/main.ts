@@ -1,3 +1,4 @@
+import {DateTime} from "luxon";
 import {App, Plugin, PluginManifest, WorkspaceLeaf} from 'obsidian';
 import {CalendarView, VIEW_TYPE_CALENDAR} from './view/CalendarView';
 import Database from "./core/Database";
@@ -7,6 +8,7 @@ import MainSettingTab from "./view/setting/MainSettingTab";
 import ViewController from "./core/ViewController";
 import NoteStatisticController from "./core/NoteStatisticController";
 import {CalendarViewController} from "./core/CalendarViewController";
+import {NoteType} from "./base/enum";
 
 
 // 插件对象
@@ -46,6 +48,48 @@ export default class DustCalendarPlugin extends Plugin {
             name: "打开日历视图",
             callback: () => {
                 DustCalendarPlugin.activateCalendarView(this);
+            }
+        });
+        this.addCommand({
+            id: "open-daily-note",
+            name: "打开/创建每日笔记",
+            callback: () => {
+                const now = DateTime.now();
+                this.noteController.openNoteByNoteType(DateTime.local(now.year, now.month, now.day), NoteType.DAILY);
+            }
+        });
+        this.addCommand({
+            id: "open-weekly-note",
+            name: "打开/创建每周笔记",
+            callback: () => {
+                const now = DateTime.now();
+                const monday = now.minus({day: now.weekday - 1});
+                this.noteController.openNoteByNoteType(DateTime.local(monday.year, monday.month, monday.day), NoteType.WEEKLY);
+            }
+        });
+        this.addCommand({
+            id: "open-monthly-note",
+            name: "打开/创建每月笔记",
+            callback: () => {
+                const now = DateTime.now();
+                this.noteController.openNoteByNoteType(DateTime.local(now.year, now.month), NoteType.MONTHLY);
+            }
+        });
+        this.addCommand({
+            id: "open-quarterly-note",
+            name: "打开/创建季度笔记",
+            callback: () => {
+                const now = DateTime.now();
+
+                this.noteController.openNoteByNoteType(DateTime.local(now.year, now.quarter * 3 - 2), NoteType.QUARTERLY);
+            }
+        });
+        this.addCommand({
+            id: "open-yearly-note",
+            name: "打开/创建年度笔记",
+            callback: () => {
+                const now = DateTime.now();
+                this.noteController.openNoteByNoteType(DateTime.local(now.year), NoteType.YEARLY);
             }
         });
 

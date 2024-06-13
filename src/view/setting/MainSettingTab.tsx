@@ -59,7 +59,7 @@ export default class MainSettingTab extends PluginSettingTab {
     display(): any {
         const {containerEl} = this;
         containerEl.empty();
-        this.displayShouldDisplayLunarInfo();
+        this.displayShouldDisplayLunarInfoToggle();
         this.displayShouldDisplayHolidayInfo();
         this.displayFontSizeChangeModeSelect();
         this.displayImmutableFontSizeSlider();
@@ -67,6 +67,7 @@ export default class MainSettingTab extends PluginSettingTab {
         this.displayWordsPerDotInput();
         this.displayDotUpperLimitSelect();
         this.displayTodoAnnotationModeSelect();
+        this.displayShouldConfirmBeforeCreatingNoteToggle();
         this.displayTemplatePluginSelect();
 
         this.displayNoteSetting(NoteType.DAILY, "每日笔记", this.dailyNotePatternRoot, this.dailyNoteTemplateRoot);
@@ -92,11 +93,11 @@ export default class MainSettingTab extends PluginSettingTab {
         );
     }
 
-    private displayShouldDisplayLunarInfo(): void {
+    private displayShouldDisplayLunarInfoToggle(): void {
         const {containerEl} = this;
-        let noteOptionElement = new Setting(containerEl);
-        noteOptionElement.setName("是否显示农历信息").setDesc("关闭后不再显示农历月份、日期、节气、节日。");
-        noteOptionElement.addToggle(toggle => {
+        let element = new Setting(containerEl);
+        element.setName("是否显示农历信息").setDesc("关闭后不再显示农历月份、日期、节气、节日。");
+        element.addToggle(toggle => {
             toggle.setValue(this.plugin.calendarViewController.getShouldDisplayLunarInfo());
             toggle.onChange(async (value) => {
                 this.plugin.calendarViewController.setShouldDisplayLunarInfo(value);
@@ -164,6 +165,18 @@ export default class MainSettingTab extends PluginSettingTab {
         this.todoAnnotationModeSelectRoot.render(
             <TodoAnnotationModeSelect plugin={this.plugin}/>
         );
+    }
+
+    private displayShouldConfirmBeforeCreatingNoteToggle(): void {
+        const {containerEl} = this;
+        let element = new Setting(containerEl);
+        element.setName("创建新笔记之前是否需要确认").setDesc("关闭后不再弹窗提示创建新笔记的信息。");
+        element.addToggle(toggle => {
+            toggle.setValue(this.plugin.noteController.getShouldConfirmBeforeCreatingNote());
+            toggle.onChange(async (value) => {
+                this.plugin.noteController.setShouldConfirmBeforeCreatingNote(value);
+            });
+        });
     }
 
     private displayTemplatePluginSelect(): void {

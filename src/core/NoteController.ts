@@ -112,6 +112,14 @@ export default class NoteController {
         }
     }
 
+    public getShouldConfirmBeforeCreatingNote(): boolean {
+        return this.plugin.database.setting.shouldConfirmBeforeCreatingNote;
+    }
+
+    public setShouldConfirmBeforeCreatingNote(shouldConfirmBeforeCreatingNote: boolean): void {
+        this.plugin.database.setting.shouldConfirmBeforeCreatingNote = shouldConfirmBeforeCreatingNote;
+    }
+
     public getNotePatternPlaceHolder(noteType: NoteType): string {
 
         if (noteType === NoteType.DAILY) {
@@ -185,8 +193,14 @@ export default class NoteController {
             return;
         }
 
-        const modal = new ConfirmCreatingNoteModal(filename, this.plugin);
-        modal.open();
+        // 检查新建笔记时是否需要弹窗
+        if (this.plugin.database.setting.shouldConfirmBeforeCreatingNote) {
+            const modal = new ConfirmCreatingNoteModal(filename, this.plugin);
+            modal.open();
+        }
+        else {
+            setTimeout(() => this.createNote(filename), 0);
+        }
     }
 
     public async createNote(filename: Path): Promise<void> {

@@ -14,6 +14,7 @@ export default class PluginSetting {
     dotUpperLimit: number;                                  // 最多几个点
     todoAnnotationMode: TodoAnnotationMode;                 // 待办呈现方式：不展示、颜色标注、圆孔标注
 
+    shouldConfirmBeforeCreatingNote: boolean;               // 创建新笔记之前是否需要确认
     templatePlugin: TemplatePlugin;                         // 模板插件
 
     dailyNoteOption: boolean;                               // 每日笔记开关
@@ -50,6 +51,7 @@ export default class PluginSetting {
         this.dotUpperLimit = 3;
         this.todoAnnotationMode = TodoAnnotationMode.HOLE;
 
+        this.shouldConfirmBeforeCreatingNote = true;
         this.templatePlugin = TemplatePlugin.NONE;
 
         this.dailyNoteOption = false;

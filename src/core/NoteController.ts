@@ -155,7 +155,7 @@ export default class NoteController {
         if (notePattern.length === 0) {
             return null;
         }
-        return date.toFormat(notePattern).concat(".md");
+        return date.setLocale(navigator.language).toFormat(notePattern).concat(".md");
     }
 
     public openNoteBySelectedItem(selectedItem: SelectedItem): void {

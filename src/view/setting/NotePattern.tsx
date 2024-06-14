@@ -13,7 +13,7 @@ export default function NotePattern({plugin, noteType}: { plugin: DustCalendarPl
         plugin.noteController.setNotePattern(noteType, e.target.value);
     };
 
-    const text = DateTime.now().toFormat(notePattern);
+    const text = DateTime.now().setLocale(navigator.language).toFormat(notePattern);
 
     return <>
         <div className="setting-item-info">
@@ -29,7 +29,8 @@ export default function NotePattern({plugin, noteType}: { plugin: DustCalendarPl
                     : <div>规则应用后的文件路径为（基于当前日期）：<b className="d-color-accent">{text}</b></div>
                 }
                 <div><b>注意：</b>使用单引号可以进行转义，例如：yyyy 'year' MM 'month' dd 'day'
-                    格式化结果为 {DateTime.now().toFormat("yyyy 'year' MM 'month' dd 'day'")}</div>
+                    格式化结果为 {DateTime.now().setLocale(navigator.language).toFormat("yyyy 'year' MM 'month' dd 'day'")}
+                </div>
             </div>
         </div>
         <div className="setting-item-control">

@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import {MouseEvent, useContext} from "react";
 import {DateTime} from "luxon";
 import {HolidayUtil} from "lunar-typescript";
 import {useAppDispatch, useAppSelector} from "../redux/hooks";
@@ -112,8 +112,11 @@ function DayItem({
     newSelectItem.date = targetDay;
 
     // 点击日期会更新已选中对象
-    let onClickCallback = () => {
-        dispatch(updateSelectedItem(newSelectItem));
+    const onClickCallback = (e: MouseEvent<HTMLDivElement>) => {
+        // 如果发生连击，只有第一次点击才会切换选中对象，并且能够避免干扰双击事件
+        if (e.detail === 1) {
+            dispatch(updateSelectedItem(newSelectItem));
+        }
     }
 
     // 被选中和未被选中日期的背景颜色不同
@@ -124,7 +127,7 @@ function DayItem({
     }
 
     return <div className={bodyStyle} onClick={onClickCallback}
-                onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
+                onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(selectedItem)}>
         <DayItemBody targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
         {
             plugin.calendarViewController.getShouldDisplayLunarInfo()
@@ -145,6 +148,13 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
     newSelectItem.type = SelectedItemType.WEEK_INDEX_ITEM;
     newSelectItem.date = targetDay;
 
+    // 点击日期会更新已选中对象
+    const onClickCallback = (e: MouseEvent<HTMLDivElement>) => {
+        // 如果发生连击，只有第一次点击才会切换选中对象，并且能够避免干扰双击事件
+        if (e.detail === 1) {
+            dispatch(updateSelectedItem(newSelectItem));
+        }
+    }
 
     let itemStyle = "calendar-view-item d-hover-bg-color-base-50";
     let itemBodyStyle = "d-bold-font";
@@ -152,8 +162,7 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
         itemStyle = "calendar-view-item d-bg-color-blue";
     }
 
-    return <div className={itemStyle} style={{fontWeight: "bold"}}
-                onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    return <div className={itemStyle} style={{fontWeight: "bold"}} onClick={onClickCallback}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div className={itemBodyStyle}>{targetDay.weekNumber}</div>
         <StatisticLabel date={DateTime.local(targetDay.year, targetDay.month, targetDay.day)}

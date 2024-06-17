@@ -3,11 +3,11 @@
     font-size: calc((15px + var(--d-font-size-factor) * 5px) * var(--d-font-size-custom-enable) + (10px + 0.5 * var(--font-text-size)) * var(--d-font-size-follow-obsidian));
 }
 
-.d-normal-font, .d-bold-font {
+.d-normal-font, .d-bold-font, .month-view-header-item, .month-view-week-index-item, .year-view-month-item, .year-view-quarter-item, .today-label, .view-selector-label {
     font-size: calc((12px + var(--d-font-size-factor) * 4px) * var(--d-font-size-custom-enable) + (8px + 0.4 * var(--font-text-size)) * var(--d-font-size-follow-obsidian));
 }
 
-.d-bold-font {
+.d-bold-font, .month-view-header-item, .month-view-week-index-item {
     font-weight: bold;
 }
 
@@ -32,11 +32,11 @@
     color: var(--interactive-accent);
 }
 
-.d-unselected-item {
+.d-unselected-item, .calendar-header-content-year, .calendar-header-content-month {
     color: var(--text-normal);
 }
 
-.d-unselected-item:hover {
+.d-unselected-item:hover, .calendar-header-content-year:hover, .calendar-header-content-month:hover {
     background-color: var(--interactive-hover);
 }
 
@@ -49,7 +49,19 @@
     background-color: var(--interactive-accent-hover);
 }
 
-.calendar-header-item {
+.calendar-header-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.calendar-header-row {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.calendar-header-block, .calendar-header-block-year, .calendar-header-block-quarter, .calendar-header-block-month {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -57,6 +69,28 @@
     text-align: center;
     min-width: 40px;
     border-radius: 4px;
+}
+
+.calendar-header-block-label {
+    display: flex;
+    justify-content: space-around;
+    width: 5em;
+    align-items: center;
+}
+
+.calendar-header-body, .calendar-header-body-year, .calendar-header-body-quarter, .calendar-header-body-month {
+    display: flex;
+    align-items: center;
+}
+
+.calendar-header-content-year, .calendar-header-content-month {
+    border-radius: 4px;
+    width: 4em;
+}
+
+.calendar-header-content-quarter {
+    border-radius: 4px;
+    width: 3em;
 }
 
 .calendar-view-body {
@@ -67,19 +101,27 @@
     gap: 4px;
 }
 
-.calendar-view-row {
+.month-view-header {
+    margin-bottom: 6px;
+}
+
+.calendar-view-row, .month-view-header {
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
 }
 
-.calendar-view-item {
+.calendar-view-item, .month-view-header-item, .month-view-week-index-item, .month-view-day-item, .year-view-month-item, .year-view-quarter-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     min-width: 25px;
     border-radius: 2px;
+}
+
+.year-view-month-item, .year-view-quarter-item {
+    width: 3em;
 }
 
 .calendar-view-item-body {
@@ -132,7 +174,7 @@
     stroke: var(--text-normal);
 }
 
-.circular-label {
+.circular-label, .today-label, .view-selector-label {
     width: 1.5em;
     height: 1.5em;
     line-height: 1.5em;

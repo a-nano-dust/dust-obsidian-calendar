@@ -31,17 +31,15 @@ function YearItem() {
         dispatch(updateSelectedItem(newSelectedItem));
     }
 
-    return <div className="calendar-header-item">
-        <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
+    return <div className="calendar-header-block-year">
+        <div className="calendar-header-body-year" onMouseEnter={() => setHidden(false)}
              onMouseLeave={() => setHidden(true)}>
-            <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                         onClick={toLastYear}/>
-            <div className="d-unselected-item" style={{borderRadius: "4px"}}
+            <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toLastYear}/>
+            <div className="calendar-header-content-year"
                  onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
-                <div style={{width: "4em"}}>{selectedDate.year}年</div>
+                <div>{selectedDate.year}年</div>
             </div>
-            <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                          onClick={toNextYear}/>
+            <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toNextYear}/>
         </div>
         <StatisticLabel date={DateTime.local(selectedDate.year)} noteType={NoteType.YEARLY}/>
     </div>
@@ -69,18 +67,15 @@ function MonthItem() {
         dispatch(updateSelectedItem(newSelectedItem));
     }
 
-    return <div className="calendar-header-item">
-        <div className="d-header-font" style={{display: "flex", alignItems: "center"}}
-             onMouseEnter={() => setHidden(false)}
+    return <div className="calendar-header-block-month">
+        <div className="calendar-header-body-month" onMouseEnter={() => setHidden(false)}
              onMouseLeave={() => setHidden(true)}>
-            <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                         onClick={toLastMonth}/>
-            <div className="d-unselected-item" style={{borderRadius: "4px"}}
+            <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toLastMonth}/>
+            <div className="calendar-header-content-month"
                  onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
-                <div style={{width: "4em"}}>{selectedDate.month}月</div>
+                <div>{selectedDate.month}月</div>
             </div>
-            <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                          onClick={toNextMonth}/>
+            <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toNextMonth}/>
         </div>
         <StatisticLabel date={DateTime.local(selectedDate.year, selectedDate.month)} noteType={NoteType.MONTHLY}/>
     </div>
@@ -108,14 +103,14 @@ function QuarterItem() {
         dispatch(updateSelectedItem(newSelectedItem));
     }
 
-    return <div className="calendar-header-item">
-        <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
+    return <div className="calendar-header-block-quarter">
+        <div className="calendar-header-body-quarter" onMouseEnter={() => setHidden(false)}
              onMouseLeave={() => setHidden(true)}>
             <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastQuarter}/>
-            <div className="d-unselected-item" style={{borderRadius: "4px"}}
+            <div className="calendar-header-content-quarter"
                  onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
-                <div style={{width: "3em"}}>{plugin.viewController.parseQuarterName(selectedDate.quarter)}</div>
+                <div>{plugin.viewController.parseQuarterName(selectedDate.quarter)}</div>
             </div>
             <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextQuarter}/>
@@ -159,10 +154,10 @@ function TodayItem() {
     }
 
     if (isSelected) {
-        return <div className="d-normal-font d-selected-item circular-label">今</div>
+        return <div className="today-label d-selected-item">今</div>
     }
     else {
-        return <div className="d-normal-font d-unselected-item circular-label" onClick={clickCallback}>今</div>
+        return <div className="today-label d-unselected-item" onClick={clickCallback}>今</div>
     }
 }
 
@@ -191,29 +186,23 @@ function ViewSelector() {
     }
 
     if (calendarViewType === CalendarViewType.MONTH) {
-        return <div className="d-normal-font d-unselected-item circular-label"
-                    onClick={clickMonthCallback}>月</div>
+        return <div className="view-selector-label d-unselected-item" onClick={clickMonthCallback}>月</div>
     }
     else {
-        return <div className="d-normal-font d-unselected-item circular-label"
-                    onClick={clickYearCallback}>年</div>
+        return <div className="view-selector-label d-unselected-item" onClick={clickYearCallback}>年</div>
     }
 
 }
 
 export default function CalendarViewHeader() {
-    return <div className="d-header-font" style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-    }}>
-        <div style={{display: "flex", justifyContent: "space-around", flexWrap: "wrap"}}>
+    return <div className="d-header-font calendar-header-container">
+        <div className="calendar-header-row">
             <YearItem/>
             <QuarterItem/>
         </div>
-        <div style={{display: "flex", justifyContent: "space-around", flexWrap: "wrap"}}>
+        <div className="calendar-header-row">
             <MonthItem/>
-            <div style={{display: "flex", justifyContent: "space-around", width: "5em", alignItems: "center"}}>
+            <div className="calendar-header-block-label">
                 <TodayItem/>
                 <ViewSelector/>
             </div>

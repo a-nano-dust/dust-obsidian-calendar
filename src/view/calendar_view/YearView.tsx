@@ -20,15 +20,14 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
     newSelectItem.date = DateTime.local(showYear, showMonth);
 
     // 被选中和未被选中月份的背景颜色不同
-    let bodyStyle = "d-normal-font calendar-view-item d-unselected-item";
+    let bodyStyle = "year-view-month-item d-unselected-item";
     if (selectedItem.type === SelectedItemType.MONTH_ITEM && selectedItem.date.year === showYear && selectedItem.date.month === showMonth) {
-        bodyStyle = "d-normal-font calendar-view-item d-selected-item";
+        bodyStyle = "year-view-month-item d-selected-item";
     }
 
-    return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div>{showMonth}月</div>
-        {/*<div className={dotStyle}/>*/}
         <StatisticLabel date={DateTime.local(showYear, showMonth)} noteType={NoteType.MONTHLY}/>
     </div>
 }
@@ -45,15 +44,14 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
     newSelectItem.date = DateTime.local(showYear, showQuarter * 3 - 2);
 
     // 被选中和未被选中月份的背景颜色不同
-    let bodyStyle = "d-normal-font calendar-view-item d-unselected-item";
+    let bodyStyle = "year-view-quarter-item d-unselected-item";
     if (selectedItem.type === SelectedItemType.QUARTER_ITEM && selectedItem.date.year === showYear && selectedItem.date.quarter === showQuarter) {
-        bodyStyle = "d-normal-font calendar-view-item d-selected-item";
+        bodyStyle = "year-view-quarter-item d-selected-item";
     }
 
-    return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    return <div className={bodyStyle} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div>{plugin.viewController.parseQuarterName(showQuarter)}</div>
-        {/*<div className={dotStyle}/>*/}
         <StatisticLabel date={DateTime.local(showYear, showQuarter * 3 - 2)} noteType={NoteType.QUARTERLY}/>
     </div>
 }

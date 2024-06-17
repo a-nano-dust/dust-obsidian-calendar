@@ -132,10 +132,10 @@ function DayItem({
     }
 
     // 被选中和未被选中日期的背景颜色不同
-    let bodyStyle = "calendar-view-item d-unselected-item";
+    let bodyStyle = "month-view-day-item d-unselected-item";
     const isSelected: boolean = selectedItem.type === SelectedItemType.DAY_ITEM && selectedItem.date.year === targetDay.year && selectedItem.date.month === targetDay.month && selectedItem.date.day === targetDay.day;
     if (isSelected) {
-        bodyStyle = "calendar-view-item d-selected-item";
+        bodyStyle = "month-view-day-item d-selected-item";
     }
 
     return <div className={bodyStyle} onClick={onClickCallback}
@@ -168,15 +168,14 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
         }
     }
 
-    let itemStyle = "calendar-view-item d-unselected-item";
-    let itemBodyStyle = "d-bold-font";
+    let itemStyle = "month-view-week-index-item d-unselected-item";
     if (selectedItem.type === SelectedItemType.WEEK_INDEX_ITEM && selectedItem.date.weekNumber === targetDay.weekNumber) {
-        itemStyle = "calendar-view-item d-selected-item";
+        itemStyle = "month-view-week-index-item d-selected-item";
     }
 
     return <div className={itemStyle} onClick={onClickCallback}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
-        <div className={itemBodyStyle}>{targetDay.weekNumber}</div>
+        <div>{targetDay.weekNumber}</div>
         <StatisticLabel date={DateTime.local(targetDay.year, targetDay.month, targetDay.day)}
                         noteType={NoteType.WEEKLY}/>
     </div>
@@ -210,15 +209,15 @@ function MonthViewRow({
 }
 
 function MonthViewHeader() {
-    return <div className='calendar-view-row'>
-        <div className="calendar-view-item d-bold-font">周</div>
-        <div className="calendar-view-item d-bold-font">一</div>
-        <div className="calendar-view-item d-bold-font">二</div>
-        <div className="calendar-view-item d-bold-font">三</div>
-        <div className="calendar-view-item d-bold-font">四</div>
-        <div className="calendar-view-item d-bold-font">五</div>
-        <div className="calendar-view-item d-bold-font">六</div>
-        <div className="calendar-view-item d-bold-font">日</div>
+    return <div className='month-view-header'>
+        <div className="month-view-header-item">周</div>
+        <div className="month-view-header-item">一</div>
+        <div className="month-view-header-item">二</div>
+        <div className="month-view-header-item">三</div>
+        <div className="month-view-header-item">四</div>
+        <div className="month-view-header-item">五</div>
+        <div className="month-view-header-item">六</div>
+        <div className="month-view-header-item">日</div>
     </div>
 }
 

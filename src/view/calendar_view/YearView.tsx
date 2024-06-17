@@ -20,9 +20,9 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
     newSelectItem.date = DateTime.local(showYear, showMonth);
 
     // 被选中和未被选中月份的背景颜色不同
-    let bodyStyle = "d-normal-font calendar-view-item d-hover-bg-color-base-50";
+    let bodyStyle = "d-normal-font calendar-view-item d-unselected-item";
     if (selectedItem.type === SelectedItemType.MONTH_ITEM && selectedItem.date.year === showYear && selectedItem.date.month === showMonth) {
-        bodyStyle = "d-normal-font calendar-view-item d-bg-color-blue";
+        bodyStyle = "d-normal-font calendar-view-item d-selected-item";
     }
 
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}
@@ -45,9 +45,9 @@ function QuarterItem({showYear, showQuarter}: { showYear: number, showQuarter: n
     newSelectItem.date = DateTime.local(showYear, showQuarter * 3 - 2);
 
     // 被选中和未被选中月份的背景颜色不同
-    let bodyStyle = "d-normal-font calendar-view-item d-hover-bg-color-base-50";
+    let bodyStyle = "d-normal-font calendar-view-item d-unselected-item";
     if (selectedItem.type === SelectedItemType.QUARTER_ITEM && selectedItem.date.year === showYear && selectedItem.date.quarter === showQuarter) {
-        bodyStyle = "d-normal-font calendar-view-item d-bg-color-blue";
+        bodyStyle = "d-normal-font calendar-view-item d-selected-item";
     }
 
     return <div className={bodyStyle} style={{width: "3em"}} onClick={() => dispatch(updateSelectedItem(newSelectItem))}

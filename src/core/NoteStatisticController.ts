@@ -18,6 +18,7 @@ export default class NoteStatisticController {
 
         // 关联文件修改也删除事件，保证界面信息及时更新
         this.plugin.app.vault.on("modify", (file) => this.onFileModify(file));
+        this.plugin.app.vault.on("rename", (file, oldPath) => this.onFileRename(file, oldPath));
         this.plugin.app.vault.on("delete", (file) => this.onFileDelete(file));
     }
 
@@ -126,12 +127,26 @@ export default class NoteStatisticController {
         this.noteStatisticRegistry.set(filename, newNoteStatistic);
         // 判断信息有没有更新，如果有更新，就需要刷新界面
         if (isUpdated) {
-            this.plugin.calendarViewFlushController.requestFlush();
+            this.plugin.calendarViewController.requestFlush();
         }
     }
 
     private onFileModify(file: TAbstractFile): void {
         this.addTaskByFile(file);
+    }
+
+    private onFileRename(file: TAbstractFile, oldPath: string) {
+        if (!(file instanceof TFile)) {
+            return;
+        }
+        // 添加新文件的统计信息
+        this.addTaskByFile(file);
+        // 删除旧文件的统计信息
+        if (!this.noteStatisticRegistry.delete(oldPath)) {
+            return;
+        }
+        // 如果成功从注册表中删除了文件，则需要刷新日历界面
+        this.plugin.calendarViewController.requestFlush();
     }
 
     private onFileDelete(file: TAbstractFile): void {
@@ -143,7 +158,7 @@ export default class NoteStatisticController {
             return;
         }
         // 如果成功从注册表中删除了文件，则需要刷新日历界面
-        this.plugin.calendarViewFlushController.requestFlush();
+        this.plugin.calendarViewController.requestFlush();
     }
 
     private static countWords(text: string): number {

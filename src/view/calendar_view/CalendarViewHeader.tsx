@@ -34,13 +34,13 @@ function YearItem() {
     return <div className="calendar-header-item">
         <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
              onMouseLeave={() => setHidden(true)}>
-            <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+            <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastYear}/>
-            <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
+            <div className="d-unselected-item" style={{borderRadius: "4px"}}
                  onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
                 <div style={{width: "4em"}}>{selectedDate.year}年</div>
             </div>
-            <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+            <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextYear}/>
         </div>
         <StatisticLabel date={DateTime.local(selectedDate.year)} noteType={NoteType.YEARLY}/>
@@ -73,13 +73,13 @@ function MonthItem() {
         <div className="d-header-font" style={{display: "flex", alignItems: "center"}}
              onMouseEnter={() => setHidden(false)}
              onMouseLeave={() => setHidden(true)}>
-            <ChevronLeft className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+            <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastMonth}/>
-            <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
+            <div className="d-unselected-item" style={{borderRadius: "4px"}}
                  onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
                 <div style={{width: "4em"}}>{selectedDate.month}月</div>
             </div>
-            <ChevronRight className="d-hover-color-blue  d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+            <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextMonth}/>
         </div>
         <StatisticLabel date={DateTime.local(selectedDate.year, selectedDate.month)} noteType={NoteType.MONTHLY}/>
@@ -111,13 +111,13 @@ function QuarterItem() {
     return <div className="calendar-header-item">
         <div style={{display: "flex", alignItems: "center"}} onMouseEnter={() => setHidden(false)}
              onMouseLeave={() => setHidden(true)}>
-            <ChevronLeft className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+            <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                          onClick={toLastQuarter}/>
-            <div className="d-hover-bg-color-base-50" style={{borderRadius: "4px"}}
+            <div className="d-unselected-item" style={{borderRadius: "4px"}}
                  onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
                 <div style={{width: "3em"}}>{plugin.viewController.parseQuarterName(selectedDate.quarter)}</div>
             </div>
-            <ChevronRight className="d-hover-color-blue d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
+            <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
                           onClick={toNextQuarter}/>
         </div>
         <StatisticLabel date={DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2)}
@@ -159,10 +159,10 @@ function TodayItem() {
     }
 
     if (isSelected) {
-        return <div className="d-normal-font d-bg-color-blue circular-label">今</div>
+        return <div className="d-normal-font d-selected-item circular-label">今</div>
     }
     else {
-        return <div className="d-normal-font d-hover-bg-color-base-50 circular-label" onClick={clickCallback}>今</div>
+        return <div className="d-normal-font d-unselected-item circular-label" onClick={clickCallback}>今</div>
     }
 }
 
@@ -191,11 +191,11 @@ function ViewSelector() {
     }
 
     if (calendarViewType === CalendarViewType.MONTH) {
-        return <div className="d-normal-font d-hover-bg-color-base-50 circular-label"
+        return <div className="d-normal-font d-unselected-item circular-label"
                     onClick={clickMonthCallback}>月</div>
     }
     else {
-        return <div className="d-normal-font d-hover-bg-color-base-50 circular-label"
+        return <div className="d-normal-font d-unselected-item circular-label"
                     onClick={clickYearCallback}>年</div>
     }
 

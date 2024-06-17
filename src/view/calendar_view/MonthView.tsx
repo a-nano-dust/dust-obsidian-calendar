@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import {MouseEvent, useContext} from "react";
 import {DateTime} from "luxon";
 import {HolidayUtil} from "lunar-typescript";
 import {useAppDispatch, useAppSelector} from "../redux/hooks";
@@ -18,30 +18,38 @@ function DayItemBody({
                          isSelected
                      }: { targetDay: DateTime, dayListOfMonthView: DayListOfMonthView, isSelected: boolean }) {
 
+
+    const plugin = useContext(PluginContext)!;
+
     const today = DateTime.now();
 
     let style = "d-normal-font";
     if (isSelected) {
-        style = style.concat(" d-color-base-100");
+        style = style.concat(" month-view-today-selected");
     }
     else if (targetDay.month !== dayListOfMonthView.month) {
-        style = style.concat(" d-opacity-20");
+        style = style.concat(" month-view-other-month");
     }
     else if (targetDay.hasSame(today, 'year') && targetDay.hasSame(today, 'month') && targetDay.hasSame(today, 'day')) {
-        style = style.concat(" d-color-blue");
+        style = style.concat(" month-view-today");
     }
 
     return <div className={style}>
         {targetDay.day}
-        <DayItemSuperscript targetDate={targetDay} dayListOfMonthView={dayListOfMonthView}/>
+        {
+            plugin.calendarViewController.getShouldDisplayHolidayInfo()
+                ? <DayItemSuperscript targetDate={targetDay} dayListOfMonthView={dayListOfMonthView}
+                                      isSelected={isSelected}/>
+                : <></>
+        }
     </div>
 }
 
 function DayItemSuperscript({
                                 targetDate,
                                 dayListOfMonthView,
-
-                            }: { targetDate: DateTime, dayListOfMonthView: DayListOfMonthView }) {
+                                isSelected
+                            }: { targetDate: DateTime, dayListOfMonthView: DayListOfMonthView, isSelected: boolean }) {
 
     let holiday = HolidayUtil.getHoliday(targetDate.year, targetDate.month, targetDate.day);
     if (holiday === null) {
@@ -52,17 +60,28 @@ function DayItemSuperscript({
     let style = "d-script-font";
     let text: string;
     if (targetDate.month !== dayListOfMonthView.month) {
-        style = style.concat(" d-opacity-20");
+        style = style.concat(" month-view-other-month");
     }
 
-    if (holiday.isWork()) {
-        style = style.concat(" d-color-red");
-        text = "班";
+    if (isSelected) {
+        if (holiday.isWork()) {
+            text = "班";
+        }
+        else {
+            text = "休";
+        }
     }
     else {
-        style = style.concat(" d-color-green");
-        text = "休";
+        if (holiday.isWork()) {
+            style = style.concat(" month-view-work");
+            text = "班";
+        }
+        else {
+            style = style.concat(" month-view-rest");
+            text = "休";
+        }
     }
+
 
     return <sup className={style}>{text}</sup>
 }
@@ -78,13 +97,13 @@ function DayItemFooter({
 
     let style = "d-script-font";
     if (isSelected) {
-        style = style.concat(" d-color-base-100");
+        style = style.concat(" month-view-today-selected");
     }
     else if (targetDay.month !== dayListOfMonthView.month) {
-        style = style.concat(" d-opacity-20");
+        style = style.concat(" month-view-other-month");
     }
     else if (dayItemFooter.type === DayItemFooterType.FESTIVAL || dayItemFooter.type === DayItemFooterType.SOLAR_TERM) {
-        style = style.concat(" d-color-blue");
+        style = style.concat(" month-view-special-date");
     }
 
     return <div className={style}>{dayItemFooter.text}</div>
@@ -105,21 +124,28 @@ function DayItem({
     newSelectItem.date = targetDay;
 
     // 点击日期会更新已选中对象
-    let onClickCallback = () => {
-        dispatch(updateSelectedItem(newSelectItem));
+    const onClickCallback = (e: MouseEvent<HTMLDivElement>) => {
+        // 如果发生连击，只有第一次点击才会切换选中对象，并且能够避免干扰双击事件
+        if (e.detail === 1) {
+            dispatch(updateSelectedItem(newSelectItem));
+        }
     }
 
     // 被选中和未被选中日期的背景颜色不同
-    let bodyStyle = "calendar-view-item d-hover-bg-color-base-50";
+    let bodyStyle = "calendar-view-item d-unselected-item";
     const isSelected: boolean = selectedItem.type === SelectedItemType.DAY_ITEM && selectedItem.date.year === targetDay.year && selectedItem.date.month === targetDay.month && selectedItem.date.day === targetDay.day;
     if (isSelected) {
-        bodyStyle = "calendar-view-item d-bg-color-blue";
+        bodyStyle = "calendar-view-item d-selected-item";
     }
 
     return <div className={bodyStyle} onClick={onClickCallback}
-                onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
+                onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(selectedItem)}>
         <DayItemBody targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
-        <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
+        {
+            plugin.calendarViewController.getShouldDisplayLunarInfo()
+                ? <DayItemFooter targetDay={targetDay} dayListOfMonthView={dayListOfMonthView} isSelected={isSelected}/>
+                : <></>
+        }
         <StatisticLabel date={DateTime.local(targetDay.year, targetDay.month, targetDay.day)}
                         noteType={NoteType.DAILY}/>
     </div>
@@ -134,15 +160,21 @@ function WeekIndexItem({targetDay}: { targetDay: DateTime }) {
     newSelectItem.type = SelectedItemType.WEEK_INDEX_ITEM;
     newSelectItem.date = targetDay;
 
-
-    let itemStyle = "calendar-view-item d-hover-bg-color-base-50";
-    let itemBodyStyle = "d-bold-font";
-    if (selectedItem.type === SelectedItemType.WEEK_INDEX_ITEM && selectedItem.date.weekNumber === targetDay.weekNumber) {
-        itemStyle = "calendar-view-item d-bg-color-blue";
+    // 点击日期会更新已选中对象
+    const onClickCallback = (e: MouseEvent<HTMLDivElement>) => {
+        // 如果发生连击，只有第一次点击才会切换选中对象，并且能够避免干扰双击事件
+        if (e.detail === 1) {
+            dispatch(updateSelectedItem(newSelectItem));
+        }
     }
 
-    return <div className={itemStyle} style={{fontWeight: "bold"}}
-                onClick={() => dispatch(updateSelectedItem(newSelectItem))}
+    let itemStyle = "calendar-view-item d-unselected-item";
+    let itemBodyStyle = "d-bold-font";
+    if (selectedItem.type === SelectedItemType.WEEK_INDEX_ITEM && selectedItem.date.weekNumber === targetDay.weekNumber) {
+        itemStyle = "calendar-view-item d-selected-item";
+    }
+
+    return <div className={itemStyle} onClick={onClickCallback}
                 onDoubleClick={() => plugin.noteController.openNoteBySelectedItem(newSelectItem)}>
         <div className={itemBodyStyle}>{targetDay.weekNumber}</div>
         <StatisticLabel date={DateTime.local(targetDay.year, targetDay.month, targetDay.day)}
@@ -179,14 +211,14 @@ function MonthViewRow({
 
 function MonthViewHeader() {
     return <div className='calendar-view-row'>
-        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">周</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">一</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">二</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">三</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">四</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">五</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">六</div>
-        <div className="calendar-view-item d-hover-bg-color-base-50 d-bold-font">日</div>
+        <div className="calendar-view-item d-bold-font">周</div>
+        <div className="calendar-view-item d-bold-font">一</div>
+        <div className="calendar-view-item d-bold-font">二</div>
+        <div className="calendar-view-item d-bold-font">三</div>
+        <div className="calendar-view-item d-bold-font">四</div>
+        <div className="calendar-view-item d-bold-font">五</div>
+        <div className="calendar-view-item d-bold-font">六</div>
+        <div className="calendar-view-item d-bold-font">日</div>
     </div>
 }
 

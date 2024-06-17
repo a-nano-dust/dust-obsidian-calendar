@@ -13,7 +13,7 @@ export default function NotePattern({plugin, noteType}: { plugin: DustCalendarPl
         plugin.noteController.setNotePattern(noteType, e.target.value);
     };
 
-    const text = DateTime.now().toFormat(notePattern);
+    const text = DateTime.now().setLocale(navigator.language).toFormat(notePattern);
 
     return <>
         <div className="setting-item-info">
@@ -25,11 +25,12 @@ export default function NotePattern({plugin, noteType}: { plugin: DustCalendarPl
                     href="https://moment.github.io/luxon/#/formatting?id=table-of-tokens">luxon语法</a>&nbsp;指定笔记文件的生成路径。
                 </div>
                 {notePattern.length === 0
-                    ? <div className="d-color-error">尚未配置文件命名规则，Dust Calendar 将无法为您创建笔记文件。</div>
-                    : <div>规则应用后的文件路径为（基于当前日期）：<b className="d-color-accent">{text}</b></div>
+                    ? <div className="d-setting-error">尚未配置文件命名规则，Dust Calendar 将无法为您创建笔记文件。</div>
+                    : <div>规则应用后的文件路径为（基于当前日期）：<b className="d-setting-accent">{text}</b></div>
                 }
                 <div><b>注意：</b>使用单引号可以进行转义，例如：yyyy 'year' MM 'month' dd 'day'
-                    格式化结果为 {DateTime.now().toFormat("yyyy 'year' MM 'month' dd 'day'")}</div>
+                    格式化结果为 {DateTime.now().setLocale(navigator.language).toFormat("yyyy 'year' MM 'month' dd 'day'")}
+                </div>
             </div>
         </div>
         <div className="setting-item-control">

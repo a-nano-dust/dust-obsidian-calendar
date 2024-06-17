@@ -1,6 +1,6 @@
 {
 	"name": "@nano-dust/dust-calendar",
-	"version": "1.2.1",
+	"version": "1.4.0",
 	"description": "a calendar plugin for obsidian",
 	"main": "main.js",
 	"scripts": {

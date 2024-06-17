@@ -26,7 +26,7 @@ export default function TemplatePluginSelect({plugin}: { plugin: DustCalendarPlu
                 {
                     isTemplatePluginEnable
                         ? <div>将使用选中的模板插件填充初始的笔记内容。</div>
-                        : <div className="d-color-error">指定的模板插件尚未启用！</div>
+                        : <div className="d-setting-error">指定的模板插件尚未启用！</div>
                 }
             </div>
         </div>
